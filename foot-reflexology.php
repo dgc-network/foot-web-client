@@ -33,6 +33,8 @@ include_once dirname( __FILE__ ) . '/build/gen/KeyValueEntry.php';
 add_shortcode( 'course_shortcode', 'course_shortcode_callback' );
 function course_shortcode_callback() {
 
+    create_courses_table();
+
     //$AgentList = new AgentList();
     //$Agent = new Agent();
     
@@ -51,11 +53,11 @@ function course_shortcode_callback() {
         }
 */
         global $wpdb;
-        $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = 1", OBJECT );
+        $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_course_id']}", OBJECT );
         $output  = '<form method="post">';
         $output .= '<figure class="wp-block-table"><table><tbody>';
-        $output .= '<tr><td>'.'CourseId:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_CourseId" value="'.$row->CourseId.'"></td></tr>';
-        $output .= '<tr><td>'.'CourseName:'.'</td><td><input style="width: 100%" type="text" name="_CourseName" value="'.$_POST['_item'].'"></td></tr>';
+        $output .= '<tr><td>'.'Course ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
+        $output .= '<tr><td>'.'Course Name:'.'</td><td><input style="width: 100%" type="text" name="_course_name" value="'.$row->course_name.'"></td></tr>';
         $output .= '</tbody></table></figure>';
 
         $output .= '<div class="wp-block-buttons">';
@@ -89,7 +91,7 @@ function course_shortcode_callback() {
                 ",
                 array(
                     10,
-                    $metakey,
+                    $_POST['_course_name'],
                     $metavalue,
                 )
             )
@@ -189,7 +191,7 @@ function course_shortcode_callback() {
     
     $output  = '<form method="post">';
     $output .= '<figure class="wp-block-table"><table><tbody>';
-    $output .= '<tr><td>CourseId</td><td>CourseName</td><td></td><td></td></tr>';
+    $output .= '<tr><td>Course ID</td><td>Course Name</td><td></td><td></td></tr>';
 
     //$metadata = '';
     //$agents = $AgentList->getAgents();
@@ -201,11 +203,13 @@ function course_shortcode_callback() {
             if ($KeyValueEntry->getKey()=='email') 
                 $LoginName = $KeyValueEntry->getValue();
 */
-        $CourseId = $results[$index]['CourseId'];
-        $CourseName = $results[$index]['CourseName'];
+        //$CourseId = $results[$index]['CourseId'];
+        //$CourseName = $results[$index]['CourseName'];
+        $CourseId = $results[$index]->course_id;
+        $CourseName = $results[$index]->course_name;
 
         $output .= '<tr><td>'.$CourseId.'</td><td>'.$CourseName.'</td>';
-        $output .= '<input type="hidden" value="item_'.$index.'" name="_item">';
+        $output .= '<input type="hidden" value="'.$CourseId.'" name="_course_id">';
         $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
         $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
         $output .= '</tr>';
@@ -226,4 +230,22 @@ function course_shortcode_callback() {
     return $output;    
 }
 
+function create_courses_table() {
+
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
+        public_key varchar(255) NOT NULL,
+        private_key varchar(255) NOT NULL,
+        course_id bigint(20) UNSIGNED NOT NULL,
+        course_name varchar(255) NOT NULL,
+        created_at datetime NOT NULL,
+        expires_at datetime NOT NULL,
+        PRIMARY KEY  (course_id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
 ?>
