@@ -90,7 +90,7 @@ function course_shortcode_callback() {
                 VALUES ( %d, %s )
                 ",
                 array(
-                    10,
+                    $_POST['_course_id'],
                     $_POST['_course_name'],
                 )
             )
