@@ -60,7 +60,10 @@ function course_shortcode_callback() {
 
         $output .= '<div class="wp-block-buttons">';
         $output .= '<div class="wp-block-button">';
-        $output .= '<input class="wp-block-button__link" type="submit" value="OK" name="create_action">';
+        $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+        if( $_POST['edit_mode']=='Update' ) {
+            $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+        }
         $output .= '</div>';
         $output .= '<div class="wp-block-button">';
         $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
@@ -73,6 +76,24 @@ function course_shortcode_callback() {
     }
     
     if( isset($_POST['create_action']) ) {
+
+        $metakey   = 'Funny Phrases';
+        $metavalue = "WordPress' database interface is like Sunday Morning: Easy.";
+ 
+        $wpdb->query(
+            $wpdb->prepare(
+                "
+                INSERT INTO {$wpdb->prefix}courses
+                ( course_id, course_name, meta_value )
+                VALUES ( %d, %s, %s )
+                ",
+                array(
+                    10,
+                    $metakey,
+                    $metavalue,
+                )
+            )
+        );
 
         $Roles = array();
         $KeyValueEntries = array();
