@@ -86,13 +86,12 @@ function course_shortcode_callback() {
             $wpdb->prepare(
                 "
                 INSERT INTO {$wpdb->prefix}courses
-                ( course_id, course_name, meta_value )
-                VALUES ( %d, %s, %s )
+                ( course_id, course_name )
+                VALUES ( %d, %s )
                 ",
                 array(
                     10,
                     $_POST['_course_name'],
-                    $metavalue,
                 )
             )
         );
