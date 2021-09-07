@@ -252,5 +252,5 @@ function remove_courses_table() {
     $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}courses" );
     delete_option("my_plugin_db_version");
 }    
-register_deactivation_hook( __FILE__, 'remove_courses_table' );
+//register_deactivation_hook( __FILE__, 'remove_courses_table' );
 ?>
