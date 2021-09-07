@@ -235,12 +235,8 @@ function create_courses_table() {
     $charset_collate = $wpdb->get_charset_collate();
 
     $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
-        public_key varchar(255) NOT NULL,
-        private_key varchar(255) NOT NULL,
         course_id bigint(20) UNSIGNED NOT NULL,
         course_name varchar(255) NOT NULL,
-        created_at datetime NOT NULL,
-        expires_at datetime NOT NULL,
         PRIMARY KEY  (course_id)
     ) $charset_collate;";
 
