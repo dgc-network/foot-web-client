@@ -33,6 +33,7 @@ include_once dirname( __FILE__ ) . '/build/gen/KeyValueEntry.php';
 add_shortcode( 'course_shortcode', 'course_shortcode_callback' );
 function course_shortcode_callback() {
 
+    remove_courses_table();
     create_courses_table();
 
     //$AgentList = new AgentList();
@@ -243,4 +244,13 @@ function create_courses_table() {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
 }
+
+// Delete table when deactivate
+function remove_courses_table() {
+    if( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
+    global $wpdb;
+    $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}courses" );
+    delete_option("my_plugin_db_version");
+}    
+register_deactivation_hook( __FILE__, 'remove_courses_table' );
 ?>
