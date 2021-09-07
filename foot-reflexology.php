@@ -33,7 +33,7 @@ include_once dirname( __FILE__ ) . '/build/gen/KeyValueEntry.php';
 add_shortcode( 'course_shortcode', 'course_shortcode_callback' );
 function course_shortcode_callback() {
 
-    remove_courses_table();
+    //remove_courses_table();
     create_courses_table();
 
     //$AgentList = new AgentList();
