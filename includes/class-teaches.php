@@ -233,7 +233,7 @@ if (!class_exists('teaches')) {
                 //$TeachDate = $results[$index]->teach_date;
                 $TeachDate = wp_date( get_option( 'date_format' ), $results[$index]->teach_date );
         
-                $output .= '<form method="post">';
+                $output .= '<form method="post" name="'.$index.'">';
                 $output .= '<tr>';
                 $output .= '<td>'.$TeachTitle.'</td>';
                 $output .= '<td>'.$TeachDate.'</td>';
