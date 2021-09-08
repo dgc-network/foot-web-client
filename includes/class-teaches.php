@@ -28,8 +28,12 @@ if (!class_exists('teaches')) {
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
-                $output .= '<tr><td>'.'1'.'</td><td>'.$TeachDate.'</td></tr>';
+                $results = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
+                foreach ($results as $index => $result) {
+                    $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
+                    $output .= '<tr><td>'.$index.'</td><td>'.$results[$index]->course_id.'</td></tr>';
+                }
+                $output .= '<tr><td>'.'new'.'</td><td>'.'<select><option>吳神父</option></select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 return $output;
