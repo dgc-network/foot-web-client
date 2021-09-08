@@ -75,10 +75,9 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $data = array(
                     'create_date' => current_time('timestamp'), 
-                    'course_id' => $_POST['_course_id'], 
                     'course_title' => $_POST['_course_title']
                 );
-                $format = array('%d', '%d', '%s');
+                $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
 /*                
                 $my_id = $wpdb->insert_id;
