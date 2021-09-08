@@ -14,7 +14,6 @@ if (!class_exists('courses')) {
             self::create_table();
         }
 
-
         function shortcode_callback() {
 
             //$AgentList = new AgentList();
@@ -258,6 +257,19 @@ if (!class_exists('courses')) {
             return $output;    
         }
         
+        function select_options() {
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
+            $output = '<option>-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                $output = '<option value="'.$results[$index]->course_id.'">';
+                $output .= $results[$index]->course_title;
+                $output .= '</option>';        
+            }
+            return $output;    
+        }
+
+
         function create_table() {
         
             global $wpdb;

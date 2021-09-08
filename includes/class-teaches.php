@@ -28,12 +28,12 @@ if (!class_exists('teaches')) {
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
                 $results = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
                     $output .= '<tr><td>'.$index.'</td><td>'.$results[$index]->course_id.'</td></tr>';
                 }
-                $output .= '<tr><td>'.'new'.'</td><td>'.'<select><option>吳神父</option></select>'.'</td></tr>';
+                $output .= '<tr><td>'.($index+1).'</td><td>'.'<select>'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 return $output;
@@ -250,7 +250,7 @@ if (!class_exists('teaches')) {
         
                 $output .= '<form method="post" name="'.$index.'">';
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=detail&_id='.$TeachId.'">'.$TeachTitle.'</a></td>';
+                $output .= '<td><a href="?view_mode=true&_id='.$TeachId.'">'.$TeachTitle.'</a></td>';
                 $output .= '<td>'.$TeachDate.'</td>';
                 $output .= '<input type="hidden" value="'.$TeachId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
