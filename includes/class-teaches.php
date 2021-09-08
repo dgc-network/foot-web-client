@@ -126,9 +126,13 @@ if (!class_exists('teaches')) {
         
             if( isset($_POST['update_action']) ) {
         
+                //get_post_timestamp();
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
-                $data = array('teach_title' => $_POST['_teach_title']);
+                $data = array(
+                    'teach_title' => $_POST['_teach_title'],
+                    'teach_date' => get_post_timestamp($_POST['_teach_date'])
+                );
                 $where = array('teach_id' => $_POST['_teach_id']);
                 //$format = array('%d', '%s');
                 $updated = $wpdb->update( $table, $data, $where );
@@ -196,8 +200,6 @@ if (!class_exists('teaches')) {
             /**
              * List Mode
              */        
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teaches", OBJECT );
             
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -205,6 +207,8 @@ if (!class_exists('teaches')) {
         
             //$metadata = '';
             //$agents = $AgentList->getAgents();
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teaches", OBJECT );
             foreach ($results as $index => $result) {
         /*
                 $PublicKey = $agents[$index]->getPublicKey();
@@ -217,7 +221,8 @@ if (!class_exists('teaches')) {
                 //$CourseName = $results[$index]['CourseName'];
                 $TeachId = $results[$index]->teach_id;
                 $TeachTitle = $results[$index]->teach_title;
-                $TeachDate = $results[$index]->teach_date;
+                //$TeachDate = $results[$index]->teach_date;
+                $TeachDate = wp_date( get_option( 'date_format' ), $results[$index]->teach_date );
         
                 $output .= '<tr>';
                 $output .= '<td>'.$TeachTitle.'</td>';
