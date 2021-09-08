@@ -51,12 +51,12 @@ if (!class_exists('teaches')) {
                     $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
                     $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'" disabled></td></tr>';
                     $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'" disabled></td></tr>';
                 }
@@ -140,15 +140,13 @@ if (!class_exists('teaches')) {
         
             if( isset($_POST['update_action']) ) {
         
-                //get_post_timestamp();
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
                 $data = array(
                     'teach_title' => $_POST['_teach_title'],
                     'teach_date' => strtotime($_POST['_teach_date'])
                 );
-                $where = array('teach_id' => intval($_POST['_teach_id']));
-                //$format = array('%d', '%s');
+                $where = array('teach_id' => $_POST['_teach_id']);
                 $updated = $wpdb->update( $table, $data, $where );
 /*         
                 if ( false === $updated ) {
@@ -206,7 +204,7 @@ if (!class_exists('teaches')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
-                $where = array('teach_id' => intval($_POST['_teach_id']));
+                $where = array('teach_id' => $_POST['_teach_id']);
                 $deleted = $wpdb->delete( $table, $where );
             }
 
