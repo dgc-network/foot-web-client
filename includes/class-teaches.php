@@ -39,11 +39,11 @@ if (!class_exists('teaches')) {
         */
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teaches WHERE teach_id = {$_POST['_id']}", OBJECT );
+                $TeachDate = wp_date( get_option( 'date_format' ), $row->teach_date );
                 if( $_POST['edit_mode']=='Create New' ) {
                     $row=array();
                 }
                 //$TeachDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
-                $TeachDate = wp_date( get_option( 'date_format' ), $row->teach_date );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
@@ -77,7 +77,10 @@ if (!class_exists('teaches')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
-                $data = array('teach_id' => $_POST['_teach_id'], 'teach_title' => $_POST['_teach_title']);
+                $data = array(
+                    'teach_date' => get_post_timestamp($_POST['_teach_date']), 
+                    'teach_title' => $_POST['_teach_title']
+                );
                 $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
                 $my_id = $wpdb->insert_id;
@@ -136,7 +139,7 @@ if (!class_exists('teaches')) {
                 $where = array('teach_id' => $_POST['_teach_id']);
                 //$format = array('%d', '%s');
                 $updated = $wpdb->update( $table, $data, $where );
-         
+/*         
                 if ( false === $updated ) {
                     // There was an error.
                 } else {
@@ -145,7 +148,7 @@ if (!class_exists('teaches')) {
                 
                 $Roles = array();
                 $KeyValueEntries = array();
-        /*
+        
                 $KeyValueEntry = new KeyValueEntry();
                 $KeyValueEntry->setKey('email');
                 $KeyValueEntry->setValue($_GET['_Name']);
@@ -191,21 +194,16 @@ if (!class_exists('teaches')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
-                //$data = array('course_name' => $_POST['_course_name']);
                 $where = array('teach_id' => $_POST['_teach_id']);
-                //$format = array('%d', '%s');
                 $deleted = $wpdb->delete( $table, $where );
             }
 
             /**
              * List Mode
-             */        
-            
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
+             */                    
+            $output  = '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Date</td><td>--</td><td>--</td></tr>';
         
-            //$metadata = '';
             //$agents = $AgentList->getAgents();
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teaches", OBJECT );
@@ -224,6 +222,7 @@ if (!class_exists('teaches')) {
                 //$TeachDate = $results[$index]->teach_date;
                 $TeachDate = wp_date( get_option( 'date_format' ), $results[$index]->teach_date );
         
+                $output .= '<form method="post">';
                 $output .= '<tr>';
                 $output .= '<td>'.$TeachTitle.'</td>';
                 $output .= '<td>'.$TeachDate.'</td>';
@@ -231,10 +230,11 @@ if (!class_exists('teaches')) {
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
-            }
-        
+                $output .= '</form>';
+            }        
             $output .= '</tbody></table></figure>';
         
+            $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Create New" name="edit_mode">';
@@ -254,9 +254,9 @@ if (!class_exists('teaches')) {
             $charset_collate = $wpdb->get_charset_collate();
         
             $sql = "CREATE TABLE `{$wpdb->prefix}teaches` (
-                teach_id bigint(20) UNSIGNED NOT NULL,
+                teach_id int NOT NULL AUTO_INCREMENT,
                 teach_title varchar(255) NOT NULL,
-                teach_date bigint(20) UNSIGNED NOT NULL,
+                teach_date int NOT NULL,
                 PRIMARY KEY  (teach_id)
             ) $charset_collate;";
         
