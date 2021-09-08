@@ -80,11 +80,19 @@ function course_shortcode_callback() {
     
     if( isset($_POST['create_action']) ) {
 
-        return $_POST['create_action'].$_POST['_course_id'].$_POST['_course_name'];
+        //return $_POST['create_action'].$_POST['_course_id'].$_POST['_course_name'];
 
+        global $wpdb;
+        $table = $wpdb->prefix.'courses';
+        $data = array('course_id' => $_POST['_course_id'], 'course_name' => $_POST['_course_name']);
+        $format = array('%d', '%s');
+        $wpdb->insert($table,$data,$format);
+        $my_id = $wpdb->insert_id;
+/*
         $metakey   = 'Funny Phrases';
         $metavalue = "WordPress' database interface is like Sunday Morning: Easy.";
  
+        global $wpdb;
         $wpdb->query(
             $wpdb->prepare(
                 "
@@ -98,7 +106,7 @@ function course_shortcode_callback() {
                 )
             )
         );
-
+*/
         $Roles = array();
         $KeyValueEntries = array();
 /*
