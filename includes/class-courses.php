@@ -36,7 +36,7 @@ if (!class_exists('courses')) {
         */
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_id']}", OBJECT );
-                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+                //$CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
                 if( $_POST['edit_mode']=='Create New' ) {
                     $row=array();
                 }
@@ -199,8 +199,7 @@ if (!class_exists('courses')) {
             /**
              * List Mode
              */                    
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output  = '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Date</td><td>--</td><td>--</td></tr>';
         
             //$metadata = '';
@@ -222,6 +221,7 @@ if (!class_exists('courses')) {
                 //$CourseDate = $results[$index]->course_date;
                 $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->create_date );
         
+                $output .= '<form method="post" name="form_'.$index.'">';
                 $output .= '<tr>';
                 $output .= '<td>'.$CourseTitle.'</td>';
                 $output .= '<td>'.$CreateDate.'</td>';
@@ -229,10 +229,12 @@ if (!class_exists('courses')) {
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
+                $output .= '</form>';
             }
         
             $output .= '</tbody></table></figure>';
         
+            $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Create New" name="edit_mode">';
