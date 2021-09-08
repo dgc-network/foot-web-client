@@ -78,7 +78,7 @@ if (!class_exists('teaches')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
                 $data = array(
-                    'teach_date' => get_post_timestamp($_POST['_teach_date']), 
+                    'teach_date' => date_i18n($_POST['_teach_date']), 
                     'teach_title' => $_POST['_teach_title']
                 );
                 $format = array('%d', '%s');
@@ -134,7 +134,7 @@ if (!class_exists('teaches')) {
                 $table = $wpdb->prefix.'teaches';
                 $data = array(
                     'teach_title' => $_POST['_teach_title'],
-                    'teach_date' => get_post_timestamp($_POST['_teach_date'])
+                    'teach_date' => date_i18n($_POST['_teach_date'])
                 );
                 $where = array('teach_id' => $_POST['_teach_id']);
                 //$format = array('%d', '%s');
