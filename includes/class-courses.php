@@ -36,10 +36,10 @@ if (!class_exists('courses')) {
         */
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_id']}", OBJECT );
+                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
                 if( $_POST['edit_mode']=='Create New' ) {
                     $row=array();
                 }
-                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
@@ -73,14 +73,19 @@ if (!class_exists('courses')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'courses';
-                $data = array('course_id' => $_POST['_course_id'], 'course_title' => $_POST['_course_title']);
+                $data = array(
+                    'create_date' => current_time('timestamp'), 
+                    'course_id' => $_POST['_course_id'], 
+                    'course_title' => $_POST['_course_title']
+                );
                 $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
+/*                
                 $my_id = $wpdb->insert_id;
         
                 $Roles = array();
                 $KeyValueEntries = array();
-        /*
+        
                 $KeyValueEntry = new KeyValueEntry();
                 $KeyValueEntry->setKey('email');
                 $KeyValueEntry->setValue($_POST['_LoginName']);
@@ -132,7 +137,7 @@ if (!class_exists('courses')) {
                 $where = array('course_id' => $_POST['_course_id']);
                 //$format = array('%d', '%s');
                 $updated = $wpdb->update( $table, $data, $where );
-         
+/*         
                 if ( false === $updated ) {
                     // There was an error.
                 } else {
@@ -141,7 +146,7 @@ if (!class_exists('courses')) {
                 
                 $Roles = array();
                 $KeyValueEntries = array();
-        /*
+        
                 $KeyValueEntry = new KeyValueEntry();
                 $KeyValueEntry->setKey('email');
                 $KeyValueEntry->setValue($_GET['_Name']);
@@ -187,7 +192,6 @@ if (!class_exists('courses')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'courses';
-                //$data = array('course_name' => $_POST['_course_name']);
                 $where = array('course_id' => $_POST['_course_id']);
                 //$format = array('%d', '%s');
                 $deleted = $wpdb->delete( $table, $where );
@@ -195,8 +199,7 @@ if (!class_exists('courses')) {
 
             /**
              * List Mode
-             */        
-            
+             */                    
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Date</td><td>--</td><td>--</td></tr>';
