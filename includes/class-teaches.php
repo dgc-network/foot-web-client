@@ -42,10 +42,13 @@ if (!class_exists('teaches')) {
                 if( $_POST['edit_mode']=='Create New' ) {
                     $row=array();
                 }
+                //$TeachDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
+                $TeachDate = wp_date( get_option( 'date_format' ), $row->teach_date );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'Teach ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
-                $output .= '<tr><td>'.'Teach Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
+                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
+                $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
                 $output .= '</tbody></table></figure>';
         
                 $output .= '<div class="wp-block-buttons">';
@@ -189,13 +192,16 @@ if (!class_exists('teaches')) {
                 //$format = array('%d', '%s');
                 $deleted = $wpdb->delete( $table, $where );
             }
-        
+
+            /**
+             * List Mode
+             */        
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teaches", OBJECT );
             
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Teach ID</td><td>Teach Title</td><td></td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td>Date</td><td>--</td><td>--</td></tr>';
         
             //$metadata = '';
             //$agents = $AgentList->getAgents();
@@ -211,8 +217,11 @@ if (!class_exists('teaches')) {
                 //$CourseName = $results[$index]['CourseName'];
                 $TeachId = $results[$index]->teach_id;
                 $TeachTitle = $results[$index]->teach_title;
+                $TeachDate = $results[$index]->teach_date;
         
-                $output .= '<tr><td>'.$TeachId.'</td><td>'.$TeachTitle.'</td>';
+                $output .= '<tr>';
+                $output .= '<td>'.$TeachTitle.'</td>';
+                $output .= '<td>'.$TeachDate.'</td>';
                 $output .= '<input type="hidden" value="'.$TeachId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
@@ -242,6 +251,7 @@ if (!class_exists('teaches')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}teaches` (
                 teach_id bigint(20) UNSIGNED NOT NULL,
                 teach_title varchar(255) NOT NULL,
+                teach_date bigint(20) UNSIGNED NOT NULL,
                 PRIMARY KEY  (teach_id)
             ) $charset_collate;";
         
