@@ -63,9 +63,14 @@ function course_shortcode_callback() {
 
         $output .= '<div class="wp-block-buttons">';
         $output .= '<div class="wp-block-button">';
-        $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+        if( $_POST['edit_mode']=='Create' ) {
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+        }
         if( $_POST['edit_mode']=='Update' ) {
             $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+        }
+        if( $_POST['edit_mode']=='Delete' ) {
+            $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
         }
         $output .= '</div>';
         $output .= '<div class="wp-block-button">';
@@ -86,27 +91,9 @@ function course_shortcode_callback() {
         $table = $wpdb->prefix.'courses';
         $data = array('course_id' => $_POST['_course_id'], 'course_name' => $_POST['_course_name']);
         $format = array('%d', '%s');
-        $wpdb->insert($table,$data,$format);
+        $wpdb->insert($table, $data, $format);
         $my_id = $wpdb->insert_id;
-/*
-        $metakey   = 'Funny Phrases';
-        $metavalue = "WordPress' database interface is like Sunday Morning: Easy.";
- 
-        global $wpdb;
-        $wpdb->query(
-            $wpdb->prepare(
-                "
-                INSERT INTO {$wpdb->prefix}courses
-                ( course_id, course_name )
-                VALUES ( %d, %s )
-                ",
-                array(
-                    $_POST['_course_id'],
-                    $_POST['_course_name'],
-                )
-            )
-        );
-*/
+
         $Roles = array();
         $KeyValueEntries = array();
 /*
@@ -151,6 +138,19 @@ function course_shortcode_callback() {
 
     if( isset($_POST['update_action']) ) {
 
+        global $wpdb;
+        $table = $wpdb->prefix.'courses';
+        $data = array('course_name' => $_POST['_course_name']);
+        $where = array('course_id' => $_POST['_course_id']);
+        //$format = array('%d', '%s');
+        $updated = $wpdb->update( $table, $data, $where );
+ 
+        if ( false === $updated ) {
+            // There was an error.
+        } else {
+            // No error. You can check updated to see how many rows were changed.
+        }
+        
         $Roles = array();
         $KeyValueEntries = array();
 /*
