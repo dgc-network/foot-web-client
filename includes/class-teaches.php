@@ -147,7 +147,7 @@ if (!class_exists('teaches')) {
                     'teach_title' => $_POST['_teach_title'],
                     'teach_date' => strtotime($_POST['_teach_date'])
                 );
-                $where = array('teach_id' => $_POST['_teach_id']);
+                $where = array('teach_id' => intval($_POST['_teach_id']));
                 //$format = array('%d', '%s');
                 $updated = $wpdb->update( $table, $data, $where );
 /*         
@@ -205,7 +205,7 @@ if (!class_exists('teaches')) {
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
-                $where = array('teach_id' => $_POST['_teach_id']);
+                $where = array('teach_id' => intval($_POST['_teach_id']));
                 $deleted = $wpdb->delete( $table, $where );
             }
 
