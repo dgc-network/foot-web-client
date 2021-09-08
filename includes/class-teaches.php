@@ -232,7 +232,7 @@ if (!class_exists('teaches')) {
         
                 $output .= '<form method="post" name="'.$index.'">';
                 $output .= '<tr>';
-                $output .= '<td>'.$TeachTitle.'</td>';
+                $output .= '<td><a href="/?a=1>'.$TeachTitle.'</a></td>';
                 $output .= '<td>'.$TeachDate.'</td>';
                 $output .= '<input type="hidden" value="'.$TeachId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
@@ -260,15 +260,24 @@ if (!class_exists('teaches')) {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         
             $sql = "CREATE TABLE `{$wpdb->prefix}teaches` (
                 teach_id int NOT NULL AUTO_INCREMENT,
                 teach_title varchar(255) NOT NULL,
                 teach_date int NOT NULL,
                 PRIMARY KEY  (teach_id)
-            ) $charset_collate;";
-        
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}teach_courses` (
+                t_c_id int NOT NULL AUTO_INCREMENT,
+                teach_id int NOT NULL,
+                course_id int NOT NULL,
+                create_date int NOT NULL,
+                note varchar(255),
+                PRIMARY KEY  (t_c_id)
+            ) $charset_collate;";        
             dbDelta($sql);
         }
         
@@ -278,68 +287,7 @@ if (!class_exists('teaches')) {
             global $wpdb;
             $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}teaches" );
             delete_option("my_plugin_db_version");
-        } 
 
-
-
-
-
-        /**
-         * Shortcode Wrapper.
-         *
-         * @param string[] $function Callback function.
-         * @param array    $atts     Attributes. Default to empty array.
-         *
-         * @return string
-         */
-        public static function shortcode_wrapper($function, $atts = array()) {
-            ob_start();
-            call_user_func($function, $atts);
-            return ob_get_clean();
-        }
-
-        /**
-         * Shortcode callback
-         * @param array $atts
-         * @return string
-         */
-        public static function teaches_shortcode_callback($atts) {
-            return self::shortcode_wrapper(array('teaches', 'teaches_shortcode_output'), $atts);
-        }
-
-        /**
-         * Shortcode output
-         * @param array $atts
-         */
-        public static function teaches_shortcode_output($atts) {
-
-            echo $atts.' is here!';
-/*            
-            if (!is_user_logged_in()) {
-                echo '<div class="woocommerce">';
-                wc_get_template('myaccount/form-login.php');
-                echo '</div>';
-            } else {
-                wp_enqueue_style('dashicons');
-                wp_enqueue_style('select2');
-                wp_enqueue_style('jquery-datatables-style');
-                wp_enqueue_style('jquery-datatables-responsive-style');
-                wp_enqueue_script('jquery-datatables-script');
-                wp_enqueue_script('jquery-datatables-responsive-script');
-                wp_enqueue_script('selectWoo');
-                wp_enqueue_script('dgc-wallet-endpoint');
-                if (isset($_GET['payment_action']) && !empty($_GET['payment_action'])) {
-                    if ('view_transactions' === $_GET['payment_action']) {
-                        dgc_wallet()->get_template('dgc-wallet-endpoint-transactions.php');
-                    } else if (in_array($_GET['payment_action'], apply_filters('dgc_wallet_endpoint_actions', array('add', 'transfer')))) {
-                        dgc_wallet()->get_template('dgc-wallet-endpoint.php');
-                    }
-                    do_action('dgc_wallet_shortcode_action', $_GET['payment_action']);
-                } else {
-                    dgc_wallet()->get_template('dgc-wallet-endpoint.php');
-                }
-            }
-*/            
         }        
 
     }
