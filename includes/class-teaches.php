@@ -17,14 +17,27 @@ if (!class_exists('teaches')) {
 
         function shortcode_callback() {
 
-            //remove_courses_table();
-            //create_courses_table();
-        
-            //$AgentList = new AgentList();
-            //$Agent = new Agent();
+            if( isset($_GET['view_mode']) ) {
+                global $wpdb;
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teaches WHERE teach_id = {$_GET['_id']}", OBJECT );
+                $TeachDate = wp_date( get_option( 'date_format' ), $row->teach_date );
+                $output  = '<form method="post">';
+                $output .= '<figure class="wp-block-table"><table><tbody>';
+                $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->teach_title.'</td></tr>';
+                $output .= '<tr><td>'.'Date:'.'</td><td>'.$TeachDate.'</td></tr>';
+                $output .= '</tbody></table></figure>';
+
+                $output .= '<figure class="wp-block-table"><table><tbody>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
+                $output .= '<tr><td>'.'1'.'</td><td>'.$TeachDate.'</td></tr>';
+                $output .= '</tbody></table></figure>';
+                
+            }        
             
             if( isset($_POST['edit_mode']) ) {
         
+            //$AgentList = new AgentList();
+            //$Agent = new Agent();
                 //$agents = $AgentList->getAgents();
         /*
                 foreach ($courses as $index => $course) {
@@ -232,7 +245,7 @@ if (!class_exists('teaches')) {
         
                 $output .= '<form method="post" name="'.$index.'">';
                 $output .= '<tr>';
-                $output .= '<td><a href="?mode=view">'.$TeachTitle.'</a></td>';
+                $output .= '<td><a href="?view_mode=detail&_id='.$TeachId.'">'.$TeachTitle.'</a></td>';
                 $output .= '<td>'.$TeachDate.'</td>';
                 $output .= '<input type="hidden" value="'.$TeachId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
