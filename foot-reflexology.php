@@ -55,6 +55,9 @@ function course_shortcode_callback() {
 */
         global $wpdb;
         $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_course_id']}", OBJECT );
+        if( $_POST['edit_mode']=='Create New' ) {
+            $row=array();
+        }
         $output  = '<form method="post">';
         $output .= '<figure class="wp-block-table"><table><tbody>';
         $output .= '<tr><td>'.'Course ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
@@ -195,6 +198,15 @@ function course_shortcode_callback() {
         
     }
 
+    if( isset($_POST['delete_action']) ) {
+
+        global $wpdb;
+        $table = $wpdb->prefix.'courses';
+        //$data = array('course_name' => $_POST['_course_name']);
+        $where = array('course_id' => $_POST['_course_id']);
+        //$format = array('%d', '%s');
+        $deleted = $wpdb->delete( $table, $where );
+    }
 
     global $wpdb;
     $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
