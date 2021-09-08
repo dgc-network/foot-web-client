@@ -32,6 +32,7 @@ if (!class_exists('teaches')) {
                 $output .= '<tr><td>'.'1'.'</td><td>'.$TeachDate.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
+                return $output;
             }        
             
             if( isset($_POST['edit_mode']) ) {
