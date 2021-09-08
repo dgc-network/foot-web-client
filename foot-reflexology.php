@@ -17,6 +17,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+include_once dirname( __FILE__ ) . '/includes/class-courses.php';
 include_once dirname( __FILE__ ) . '/includes/class-teaches.php';
 /*
 include_once dirname( __FILE__ ) . '/php-OP_RETURN/OP_RETURN.php';
@@ -31,7 +32,8 @@ include_once dirname( __FILE__ ) . '/build/gen/CreateAgentAction.php';
 include_once dirname( __FILE__ ) . '/build/gen/UpdateAgentAction.php';
 include_once dirname( __FILE__ ) . '/build/gen/KeyValueEntry.php';
 */
-add_shortcode( 'course_shortcode', 'course_shortcode_callback' );
+
+//add_shortcode( 'course_shortcode', 'course_shortcode_callback' );
 function course_shortcode_callback() {
 
     //remove_courses_table();
