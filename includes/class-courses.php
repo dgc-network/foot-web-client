@@ -78,7 +78,7 @@ if (!class_exists('courses')) {
                     'course_id' => $_POST['_course_id'], 
                     'course_title' => $_POST['_course_title']
                 );
-                $format = array('%d', '%s');
+                $format = array('%d', '%d', '%s');
                 $wpdb->insert($table, $data, $format);
 /*                
                 $my_id = $wpdb->insert_id;
