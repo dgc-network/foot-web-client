@@ -234,7 +234,7 @@ if (!class_exists('teaches')) {
             return $output;    
         }
         
-        function create_teaches_table() {
+        function create_table() {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
@@ -250,7 +250,7 @@ if (!class_exists('teaches')) {
         }
         
         // Delete table when deactivate
-        function remove_teaches_table() {
+        function remove_table() {
             if( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
             global $wpdb;
             $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}teaches" );
