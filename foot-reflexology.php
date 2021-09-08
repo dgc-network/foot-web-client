@@ -63,7 +63,7 @@ function course_shortcode_callback() {
 
         $output .= '<div class="wp-block-buttons">';
         $output .= '<div class="wp-block-button">';
-        if( $_POST['edit_mode']=='Create' ) {
+        if( $_POST['edit_mode']=='Create New' ) {
             $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
         }
         if( $_POST['edit_mode']=='Update' ) {
