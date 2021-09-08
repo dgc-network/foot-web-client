@@ -46,9 +46,20 @@ if (!class_exists('teaches')) {
                 //$TeachDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
-                $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
+                if( $_POST['edit_mode']=='Create New' ) {
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
+                }
+                if( $_POST['edit_mode']=='Update' ) {
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
+                }
+                if( $_POST['edit_mode']=='Delete' ) {
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'" disabled></td></tr>';
+                }
                 $output .= '</tbody></table></figure>';
         
                 $output .= '<div class="wp-block-buttons">';
@@ -78,7 +89,7 @@ if (!class_exists('teaches')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
                 $data = array(
-                    'teach_date' => date_i18n($_POST['_teach_date']), 
+                    'teach_date' => strtotime($_POST['_teach_date']), 
                     'teach_title' => $_POST['_teach_title']
                 );
                 $format = array('%d', '%s');
@@ -134,7 +145,7 @@ if (!class_exists('teaches')) {
                 $table = $wpdb->prefix.'teaches';
                 $data = array(
                     'teach_title' => $_POST['_teach_title'],
-                    'teach_date' => date_i18n($_POST['_teach_date'])
+                    'teach_date' => strtotime($_POST['_teach_date'])
                 );
                 $where = array('teach_id' => $_POST['_teach_id']);
                 //$format = array('%d', '%s');
