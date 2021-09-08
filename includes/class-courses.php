@@ -262,7 +262,7 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
             $output = '<option>-- Select an option --</option>';
             foreach ($results as $index => $result) {
-                $output = '<option value="'.$results[$index]->course_id.'">';
+                $output .= '<option value="'.$results[$index]->course_id.'">';
                 $output .= $results[$index]->course_title;
                 $output .= '</option>';        
             }
