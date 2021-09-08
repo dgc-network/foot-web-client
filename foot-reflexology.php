@@ -80,7 +80,7 @@ function course_shortcode_callback() {
     
     if( isset($_POST['create_action']) ) {
 
-        return $_POST['create_action'];
+        return $_POST['create_action'].$_POST['_course_id'].$_POST['_course_name'];
 
         $metakey   = 'Funny Phrases';
         $metavalue = "WordPress' database interface is like Sunday Morning: Easy.";
