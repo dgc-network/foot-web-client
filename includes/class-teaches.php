@@ -232,7 +232,7 @@ if (!class_exists('teaches')) {
         
                 $output .= '<form method="post" name="'.$index.'">';
                 $output .= '<tr>';
-                $output .= '<td><a href="/?mode=view">'.$TeachTitle.'</a></td>';
+                $output .= '<td><a href="?mode=view">'.$TeachTitle.'</a></td>';
                 $output .= '<td>'.$TeachDate.'</td>';
                 $output .= '<input type="hidden" value="'.$TeachId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
