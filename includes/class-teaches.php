@@ -202,6 +202,7 @@ if (!class_exists('teaches')) {
             }
         
             if( isset($_POST['delete_action']) ) {
+                return $_POST['_teach_id'];
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teaches';
