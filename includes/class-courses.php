@@ -48,12 +48,12 @@ if (!class_exists('courses')) {
                 if( $_POST['edit_mode']=='Update' ) {
                     $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'" disabled></td></tr>';
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="date" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Delete' ) {
                     $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'" disabled></td></tr>';
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
-                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="date" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
                 }
                 $output .= '</tbody></table></figure>';
         
@@ -231,7 +231,7 @@ if (!class_exists('courses')) {
                 //$CourseDate = $results[$index]->course_date;
                 $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->create_date );
         
-                $output .= '<form method="post" name="form_'.$index.'">';
+                $output .= '<form method="post">';
                 $output .= '<tr>';
                 $output .= '<td>'.$CourseTitle.'</td>';
                 $output .= '<td>'.$CreateDate.'</td>';
