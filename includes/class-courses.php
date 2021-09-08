@@ -248,15 +248,14 @@ if (!class_exists('courses')) {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         
             $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
-                course_id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+                course_id int NOT NULL AUTO_INCREMENT,
                 course_title varchar(255) NOT NULL,
-                create_date bigint(20) UNSIGNED NOT NULL,
+                create_date int NOT NULL,
                 PRIMARY KEY  (course_id)
-            ) $charset_collate;";
-        
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            ) $charset_collate;";        
             dbDelta($sql);
         }
         
