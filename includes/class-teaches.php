@@ -21,15 +21,26 @@ if (!class_exists('teaches')) {
                 //return $_POST['submit_action'];
         
                 global $wpdb;
-                $table = $wpdb->prefix.'teach_courses';
-                $data = array(
-                    //'create_date' => strtotime($_POST['_create_date']), 
-                    'teach_id' => $_POST['_teach_id'],
-                    'course_id' => $_POST['_course_id']
-                );
-                $format = array('%d', '%d');
-                $wpdb->insert($table, $data, $format);
-                //$wpdb->insert($table, $data);
+                if ($_POST['_course_id']<>''){
+                    $table = $wpdb->prefix.'teach_courses';
+                    $data = array(
+                        //'create_date' => strtotime($_POST['_create_date']), 
+                        'teach_id' => $_POST['_teach_id'],
+                        'course_id' => $_POST['_course_id']
+                    );
+                    $format = array('%d', '%d');
+                    $wpdb->insert($table, $data, $format);    
+                }
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
+                foreach ($results as $index => $result) {
+                    $table = $wpdb->prefix.'teach_courses';
+                    $data = array(
+                        'teach_date' => strtotime($_POST['_teach_date']),
+                        'course_id' => $_POST['_course_id_'.$index]
+                    );
+                    $where = array('teach_id' => $results[$index]->course_id);
+                    $updated = $wpdb->update( $table, $data, $where );
+                }
             }
             
             if( isset($_GET['view_mode']) ) {
@@ -47,6 +58,7 @@ if (!class_exists('teaches')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
+                    //$output .= '<input type="hidden" value="'.$index.'" name="_index">';
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
