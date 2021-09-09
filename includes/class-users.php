@@ -21,7 +21,7 @@ if (!class_exists('users')) {
                 //return $_POST['submit_action'];
         
                 global $wpdb;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE user_id = {$_GET['_id']}", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $table = $wpdb->prefix.'user_courses';
                     $data = array(
@@ -38,7 +38,7 @@ if (!class_exists('users')) {
                     $table = $wpdb->prefix.'user_courses';
                     $data = array(
                         //'create_date' => strtotime($_POST['_create_date']), 
-                        'user_id' => $_POST['_user_id'],
+                        'student_id' => $_GET['_id'],
                         'course_id' => $_POST['_course_id']
                     );
                     $format = array('%d', '%d');
@@ -56,7 +56,7 @@ if (!class_exists('users')) {
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE user_id = {$_GET['_id']}", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
                 }
@@ -65,7 +65,7 @@ if (!class_exists('users')) {
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_user_id">';
+                //$output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_student_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
@@ -195,28 +195,23 @@ if (!class_exists('users')) {
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         
-            $sql = "CREATE TABLE `{$wpdb->prefix}users` (
-                user_id int NOT NULL AUTO_INCREMENT,
-                user_title varchar(255) NOT NULL,
-                user_date int NOT NULL,
-                PRIMARY KEY  (user_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-
             $sql = "CREATE TABLE `{$wpdb->prefix}user_courses` (
-                t_c_id int NOT NULL AUTO_INCREMENT,
-                user_id int NOT NULL,
+                u_c_id int NOT NULL AUTO_INCREMENT,
+                student_id int NOT NULL,
                 course_id int NOT NULL,
-                PRIMARY KEY  (t_c_id)
+                lecturer_id int,
+                witness_id int,
+                certification_date int,
+                PRIMARY KEY  (u_c_id)
             ) $charset_collate;";        
             dbDelta($sql);
         }
         
         // Delete table when deactivate
-        function remove_table() {
+        function remove_tables() {
             if( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
             global $wpdb;
-            $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}users" );
+            $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}user_courses" );
             delete_option("my_plugin_db_version");
 
         }        
