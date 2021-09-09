@@ -11,7 +11,7 @@ if (!class_exists('users')) {
          */
         public function __construct() {
             add_shortcode('user_shortcode', __CLASS__ . '::shortcode_callback');
-            self::remove_tables();
+            //self::remove_tables();
             self::create_tables();
         }
 
