@@ -25,7 +25,7 @@ if (!class_exists('teaches')) {
                 foreach ($results as $index => $result) {
                     $table = $wpdb->prefix.'teach_courses';
                     $data = array(
-                        'teach_date' => strtotime($_POST['_teach_date']),
+                        //'teach_date' => strtotime($_POST['_teach_date']),
                         'course_id' => $_POST['_course_id_'.$index]
                     );
                     $where = array(
@@ -34,7 +34,7 @@ if (!class_exists('teaches')) {
                     );
                     $updated = $wpdb->update( $table, $data, $where );
                 }
-                if (( $_POST['_course_id']='no_select' ) || ( $_POST['_course_id']='delete_select' ) ){
+                if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) ){
                 } else {
                     $table = $wpdb->prefix.'teach_courses';
                     $data = array(
