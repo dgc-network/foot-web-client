@@ -47,6 +47,7 @@ if (!class_exists('users')) {
             }
             
             if( isset($_GET['view_mode']) ) {
+                return $_GET['view_mode'];
 
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
