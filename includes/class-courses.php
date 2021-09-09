@@ -38,7 +38,7 @@ if (!class_exists('courses')) {
                     $data = array(
                         'expired_date' => strtotime($_POST['_expired_date']), 
                         'lecturer_id' => $_POST['_lecturer_id'],
-                        'course_id' => $_POST['_course_id']
+                        'course_id' => $_GET['_id']
                     );
                     $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
@@ -51,12 +51,12 @@ if (!class_exists('courses')) {
                 $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->teach_title.'</td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td></tr>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired</td></tr>';
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td>';
