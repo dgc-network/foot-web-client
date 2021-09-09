@@ -54,7 +54,6 @@ if (!class_exists('users')) {
                 $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_GET['_id'])->display_name.'</td></tr>';
                 $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_GET['_id'])->user_email.'</td></tr>';
                 $output .= '</tbody></table></figure>';
-                return $output;
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
@@ -64,6 +63,7 @@ if (!class_exists('users')) {
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
+                return $output;
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
