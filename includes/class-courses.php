@@ -260,7 +260,7 @@ if (!class_exists('courses')) {
         function select_options( $default_id=null ) {
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
-            $output = '<option>-- Select an option --</option>';
+            $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
                 if ( $results[$index]->course_id == $default_id ) {
                     $output .= '<option value="'.$results[$index]->course_id.'" selected>';
@@ -270,6 +270,7 @@ if (!class_exists('courses')) {
                 $output .= $results[$index]->course_title;
                 $output .= '</option>';        
             }
+            $output = '<option value="delete_select">-- Remove this Select --</option>';
             return $output;    
         }
 
