@@ -24,7 +24,7 @@ if (!class_exists('courses')) {
                 foreach ($results as $index => $result) {
                     $table = $wpdb->prefix.'course_lecturers';
                     $data = array(
-                        'expire_date' => strtotime($_POST['_expire_date']),
+                        'expired_date' => strtotime($_POST['_expired_date']),
                         'lecturer_id' => $_POST['_lecturer_id_'.$index]
                     );
                     $where = array(
@@ -36,7 +36,7 @@ if (!class_exists('courses')) {
                 } else {
                     $table = $wpdb->prefix.'course_lecturers';
                     $data = array(
-                        'expire_date' => strtotime($_POST['_expire_date']), 
+                        'expired_date' => strtotime($_POST['_expired_date']), 
                         'lecturer_id' => $_POST['_lecturer_id'],
                         'course_id' => $_POST['_course_id']
                     );
@@ -61,12 +61,12 @@ if (!class_exists('courses')) {
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td>';
                     $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</td>';
-                    $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expire_date );
+                    $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                     $output .= '<td>'.$ExpireDate.'</td></tr>';
                 }
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
-                $output .= '<td><input type="date" name="_expire_date"></td></tr>';
+                $output .= '<td><input type="date" name="_expired_date"></td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 $output .= '<div class="wp-block-buttons">';
