@@ -22,15 +22,23 @@ if (!class_exists('courses')) {
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $table = $wpdb->prefix.'course_lecturers';
-                    $data = array(
-                        'expired_date' => strtotime($_POST['_expired_date_'.$index]),
-                        'lecturer_id' => $_POST['_lecturer_id_'.$index]
-                    );
-                    $where = array(
-                        'c_l_id' => $results[$index]->c_l_id
-                    );
-                    $wpdb->update( $table, $data, $where );
+                    if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index]
+                        );
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
                 }
                 if (( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ) ){
                 } else {
