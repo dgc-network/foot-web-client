@@ -295,7 +295,7 @@ if (!class_exists('users')) {
         */
                 //$CourseId = $results[$index]['CourseId'];
                 //$CourseName = $results[$index]['CourseName'];
-                $userId = $results[$index]->user_id;
+                $userId = $results[$index]->ID;
                 $userTitle = $results[$index]->display_name;
                 $userEmail = $results[$index]->user_email;
                 //$userDate = $results[$index]->user_date;
