@@ -18,7 +18,7 @@ if (!class_exists('teaches')) {
         function shortcode_callback() {
 
             if( isset($_POST['submit_action']) ) {
-                return $_POST['submit_action'];
+                //return $_POST['submit_action'];
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teachcouses';
