@@ -27,9 +27,9 @@ if (!class_exists('teaches')) {
                     'teach_id' => $_POST['_teach_id'],
                     'course_id' => $_POST['_course_id']
                 );
-                //$format = array('%d', '%d', '%d');
-                //$wpdb->insert($table, $data, $format);
-                $wpdb->insert($table, $data);
+                $format = array('%d', '%d');
+                $wpdb->insert($table, $data, $format);
+                //$wpdb->insert($table, $data);
             }
             
             if( isset($_GET['view_mode']) ) {
