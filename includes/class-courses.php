@@ -24,7 +24,7 @@ if (!class_exists('courses')) {
                 foreach ($results as $index => $result) {
                     $table = $wpdb->prefix.'course_lecturers';
                     $data = array(
-                        'expired_date' => strtotime($_POST['_expired_date']),
+                        'expired_date' => strtotime($_POST['_expired_date_'].$index),
                         'lecturer_id' => $_POST['_lecturer_id_'.$index]
                     );
                     $where = array(
@@ -62,7 +62,7 @@ if (!class_exists('courses')) {
                     $output .= '<tr><td>'.$index.'</td>';
                     $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</td>';
                     $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                    $output .= '<td>'.$ExpireDate.'</td></tr>';
+                    $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
                 }
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
