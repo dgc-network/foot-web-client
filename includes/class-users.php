@@ -47,13 +47,14 @@ if (!class_exists('users')) {
             }
             
             if( isset($_GET['view_mode']) ) {
-                return $_GET['view_mode'];
+                //return $_GET['view_mode'];
 
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_GET['_id'])->display_name.'</td></tr>';
                 $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_GET['_id'])->user_email.'</td></tr>';
                 $output .= '</tbody></table></figure>';
+                return $output;
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
