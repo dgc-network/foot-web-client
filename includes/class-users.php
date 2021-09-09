@@ -200,7 +200,7 @@ if (!class_exists('users')) {
                 $output .= $results[$index]->display_name;
                 $output .= '</option>';        
             }
-            $output .= '<option value="delete_select">-- Remove this Select --</option>';
+            $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
         }
 

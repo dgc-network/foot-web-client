@@ -54,15 +54,23 @@ if (!class_exists('courses')) {
 
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $table = $wpdb->prefix.'course_witnesses';
-                    $data = array(
-                        'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
-                        'witness_id' => $_POST['_witness_id_'.$index]
-                    );
-                    $where = array(
-                        'c_w_id' => $results[$index]->c_w_id
-                    );
-                    $wpdb->update( $table, $data, $where );
+                    if ( $_POST['_witness_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
+                            'witness_id' => $_POST['_witness_id_'.$index]
+                        );
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->update( $table, $data, $where );
+                    }
                 }
                 if (( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ) ){
                 } else {
@@ -263,7 +271,7 @@ if (!class_exists('courses')) {
                 $output .= $results[$index]->course_title;
                 $output .= '</option>';        
             }
-            $output .= '<option value="delete_select">-- Remove this Select --</option>';
+            $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
         }
 
