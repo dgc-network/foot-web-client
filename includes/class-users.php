@@ -16,6 +16,7 @@ if (!class_exists('users')) {
         }
 
         function view_mode() {
+            return $_GET['view_mode'];
 
             if( isset($_POST['submit_action']) ) {
         
@@ -105,7 +106,7 @@ if (!class_exists('users')) {
         function shortcode_callback() {
 
             if( isset($_GET['view_mode']) ) {
-                return $_GET['view_mode'];
+                //return $_GET['view_mode'];
                 self::view_mode();
             }
 /*
