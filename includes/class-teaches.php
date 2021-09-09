@@ -31,7 +31,7 @@ if (!class_exists('teaches')) {
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
                 $results = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $output .= '<tr><td>'.$index.'</td><td>'.$results[$index]->course_id.'</td></tr>';
+                    $output .= '<tr><td>'.$index.'</td><td>'.'<select>'.Courses::select_options($results[$index]->course_id).'</td></tr>';
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select>'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';

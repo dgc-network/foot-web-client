@@ -11,7 +11,7 @@ if (!class_exists('courses')) {
          */
         public function __construct() {
             add_shortcode('course_shortcode', __CLASS__ . '::shortcode_callback');
-            self::create_table();
+            self::create_tables();
         }
 
         function shortcode_callback() {
@@ -257,12 +257,16 @@ if (!class_exists('courses')) {
             return $output;    
         }
         
-        function select_options() {
+        function select_options( $default_id=null ) {
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
             $output = '<option>-- Select an option --</option>';
             foreach ($results as $index => $result) {
-                $output .= '<option value="'.$results[$index]->course_id.'">';
+                if ( $results[$index]->course_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->course_id.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->course_id.'">';
+                }
                 $output .= $results[$index]->course_title;
                 $output .= '</option>';        
             }
@@ -270,7 +274,7 @@ if (!class_exists('courses')) {
         }
 
 
-        function create_table() {
+        function create_tables() {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
