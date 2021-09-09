@@ -47,9 +47,6 @@ if (!class_exists('users')) {
             }
             
             if( isset($_GET['view_mode']) ) {
-                global $wpdb;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}users WHERE user_id = {$_GET['_id']}", OBJECT );
-                $userDate = wp_date( get_option( 'date_format' ), $row->user_date );
 
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -62,22 +59,12 @@ if (!class_exists('users')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE user_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
-                    //$output .= '<input type="hidden" value="'.$index.'" name="_index">';
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-                }
-                if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-                }
-                if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-                }
                 $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_user_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
@@ -89,33 +76,11 @@ if (!class_exists('users')) {
                 $output .= '</div>';
                 $output .= '</form>';
 
-
                 return $output;
             }        
             
             if( isset($_POST['edit_mode']) ) {
         
-            //$AgentList = new AgentList();
-            //$Agent = new Agent();
-                //$agents = $AgentList->getAgents();
-        /*
-                foreach ($courses as $index => $course) {
-                    if ($_POST['_item']=='edit_'.$index) {
-                        $PublicKey = $agents[$index]->getPublicKey();
-                        $KeyValueEntries = $agents[$index]->getMetadata();
-                        foreach ($KeyValueEntries as $KeyValueEntry)
-                        if ($KeyValueEntry->getKey()=='email') 
-                            $LoginName = $KeyValueEntry->getValue();
-                    }
-                }
-        */
-                global $wpdb;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}users WHERE user_id = {$_POST['_id']}", OBJECT );
-                $userDate = wp_date( get_option( 'date_format' ), $row->user_date );
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $row=array();
-                }
-                //$userDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 if( $_POST['edit_mode']=='Create New' ) {
@@ -156,124 +121,14 @@ if (!class_exists('users')) {
             
             if( isset($_POST['create_action']) ) {
         
-                global $wpdb;
-                $table = $wpdb->prefix.'users';
-                $data = array(
-                    'user_date' => strtotime($_POST['_user_date']), 
-                    'user_title' => $_POST['_user_title']
-                );
-                $format = array('%d', '%s');
-                $wpdb->insert($table, $data, $format);
-                $my_id = $wpdb->insert_id;
-        
-                $Roles = array();
-                $KeyValueEntries = array();
-        /*
-                $KeyValueEntry = new KeyValueEntry();
-                $KeyValueEntry->setKey('email');
-                $KeyValueEntry->setValue($_POST['_LoginName']);
-                $KeyValueEntries[]=$KeyValueEntry;
-        
-                $CreateAgentAction = new CreateAgentAction();
-                $CreateAgentAction->setOrgId($_GET['_OrgId']);
-                $CreateAgentAction->setPublicKey($_POST['_PublicKey']);
-                $CreateAgentAction->setActive($_GET['_Active']);
-                $CreateAgentAction->setRoles($Roles);
-                $CreateAgentAction->setMetadata($KeyValueEntries);
-        
-                $send_data = $CreateAgentAction->serializeToString();
-                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
-                $send_amount = 0.001;
-            
-                try {
-                    $agents = $AgentList->getAgents();
-                    $Agent->mergeFromString($send_data);
-                    $agents[] = $Agent;
-                    $AgentList->setAgents($agents);
-                    //$send_data = $AgentList->serializeToString();
-                } catch (Exception $e) {
-                    // Handle parsing error from invalid data.
-                    // ...
-                }
-        */        
-        /*
-                $result = OP_RETURN_send($send_address, $send_amount, $send_data);
-            
-                if (isset($result['error']))
-                    $result_output = 'Error: '.$result['error']."\n";
-                else
-                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-        */
-            
             }
         
             if( isset($_POST['update_action']) ) {
         
-                global $wpdb;
-                $table = $wpdb->prefix.'users';
-                $data = array(
-                    'user_title' => $_POST['_user_title'],
-                    'user_date' => strtotime($_POST['_user_date'])
-                );
-                $where = array('user_id' => $_POST['_user_id']);
-                $updated = $wpdb->update( $table, $data, $where );
-/*         
-                if ( false === $updated ) {
-                    // There was an error.
-                } else {
-                    // No error. You can check updated to see how many rows were changed.
-                }
-                
-                $Roles = array();
-                $KeyValueEntries = array();
-        
-                $KeyValueEntry = new KeyValueEntry();
-                $KeyValueEntry->setKey('email');
-                $KeyValueEntry->setValue($_GET['_Name']);
-                $KeyValueEntries[]=$KeyValueEntry;
-        
-                $UpdateAgentAction = new UpdateAgentAction();
-                $UpdateAgentAction->setOrgId($_GET['_OrgId']);
-                $UpdateAgentAction->setPublicKey($_GET['_PublicKey']);
-                $UpdateAgentAction->setActive($_GET['_Active']);
-                $UpdateAgentAction->setRoles($Roles);
-                $UpdateAgentAction->setMetadata($KeyValueEntries);
-        
-                $send_data = $UpdateAgentAction->serializeToString();
-                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
-                $send_amount = 0.001;
-            
-                try {
-                    $agents = $AgentList->getAgents();
-                    $Agent->mergeFromString($send_data);
-                    foreach ( $agents as $agent ){
-        
-                    }
-                    //$agents[] = $Agent;
-                    $AgentList->setAgents($agents);
-                    //$send_data = $AgentList->serializeToString();
-                } catch (Exception $e) {
-                    // Handle parsing error from invalid data.
-                    // ...
-                }
-        
-                $result = OP_RETURN_send($send_address, $send_amount, $send_data);
-            
-                if (isset($result['error']))
-                    $result_output = 'Error: '.$result['error']."\n";
-                else
-                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-        */
-                
             }
         
             if( isset($_POST['delete_action']) ) {
-                global $wpdb;
-                $table = $wpdb->prefix.'users';
-                $where = array('user_id' => $_POST['_user_id']);
-                $deleted = $wpdb->delete( $table, $where );
+
             }
 
             /**
@@ -282,26 +137,13 @@ if (!class_exists('users')) {
             $output  = '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Name</td><td>Email</td><td>--</td><td>--</td></tr>';
         
-            //$agents = $AgentList->getAgents();
-            //global $wpdb;
-            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}users", OBJECT );
             $results = get_users();
             foreach ($results as $index => $result) {
-        /*
-                $PublicKey = $agents[$index]->getPublicKey();
-                $KeyValueEntries = $agents[$index]->getMetadata();
-                foreach ($KeyValueEntries as $KeyValueEntry)
-                    if ($KeyValueEntry->getKey()=='email') 
-                        $LoginName = $KeyValueEntry->getValue();
-        */
-                //$CourseId = $results[$index]['CourseId'];
-                //$CourseName = $results[$index]['CourseName'];
+
                 $userId = $results[$index]->ID;
                 $userTitle = $results[$index]->display_name;
                 $userEmail = $results[$index]->user_email;
-                //$userDate = $results[$index]->user_date;
-                //$userDate = wp_date( get_option( 'date_format' ), $results[$index]->user_date );
-        
+
                 $output .= '<form method="post">';
                 $output .= '<tr>';
                 $output .= '<td>'.$userTitle.'</td>';
@@ -328,6 +170,25 @@ if (!class_exists('users')) {
             return $output;    
         }
         
+        function select_options( $default_id=null ) {
+
+            //global $wpdb;
+            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
+            $results = get_users();
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->ID == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->ID.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->ID.'">';
+                }
+                $output .= $results[$index]->display_name;
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this Select --</option>';
+            return $output;    
+        }
+
         function create_tables() {
         
             global $wpdb;
