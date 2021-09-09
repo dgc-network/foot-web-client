@@ -21,7 +21,7 @@ if (!class_exists('teaches')) {
                 //return $_POST['submit_action'];
         
                 global $wpdb;
-                $table = $wpdb->prefix.'teachcouses';
+                $table = $wpdb->prefix.'teach_courses';
                 $data = array(
                     //'create_date' => strtotime($_POST['_create_date']), 
                     'teach_id' => $_POST['_teach_id'],
