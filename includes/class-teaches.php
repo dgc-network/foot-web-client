@@ -11,7 +11,7 @@ if (!class_exists('teaches')) {
          */
         public function __construct() {
             add_shortcode('teach_shortcode', __CLASS__ . '::shortcode_callback');
-            self::create_table();
+            self::create_tables();
         }
 
 
@@ -62,6 +62,7 @@ if (!class_exists('teaches')) {
                 if( $_POST['edit_mode']=='Delete' ) {
                     $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
                 }
+                $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_teach_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '<div class="wp-block-button">';
@@ -309,7 +310,7 @@ if (!class_exists('teaches')) {
             return $output;    
         }
         
-        function create_table() {
+        function create_tables() {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
@@ -327,7 +328,6 @@ if (!class_exists('teaches')) {
                 t_c_id int NOT NULL AUTO_INCREMENT,
                 teach_id int NOT NULL,
                 course_id int NOT NULL,
-                note varchar(255),
                 PRIMARY KEY  (t_c_id)
             ) $charset_collate;";        
             dbDelta($sql);
