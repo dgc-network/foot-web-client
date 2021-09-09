@@ -118,31 +118,29 @@ if (!class_exists('users')) {
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_user_title" value="'.$row->user_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_user_date" value="'.$userDate.'"></td></tr>';
+                    $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
+                    $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_user_id" value="'.$row->user_id.'"></td></tr>';
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_user_title" value="'.$row->user_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_user_date" value="'.$userDate.'"></td></tr>';
+                    $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_POST['_id'])->display_name.'"></td></tr>';
+                    $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_POST['_id'])->user_email.'"></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_user_id" value="'.$row->user_id.'"></td></tr>';
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_user_title" value="'.$row->user_title.'" disabled></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_user_date" value="'.$userDate.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_POST['_id'])->display_name.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_POST['_id'])->user_email.'" disabled></td></tr>';
                 }
                 $output .= '</tbody></table></figure>';
         
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
                 if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+                    //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+                    //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
                 }
                 if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+                    //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
                 }
                 $output .= '</div>';
                 $output .= '<div class="wp-block-button">';
