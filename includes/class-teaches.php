@@ -27,8 +27,9 @@ if (!class_exists('teaches')) {
                     'teach_id' => $_POST['_teach_id'],
                     'course_id' => $_POST['_course_id']
                 );
-                $format = array('%d', '%d', '%d');
-                $wpdb->insert($table, $data, $format);
+                //$format = array('%d', '%d', '%d');
+                //$wpdb->insert($table, $data, $format);
+                $wpdb->insert($table, $data);
             }
             
             if( isset($_GET['view_mode']) ) {
@@ -326,7 +327,6 @@ if (!class_exists('teaches')) {
                 t_c_id int NOT NULL AUTO_INCREMENT,
                 teach_id int NOT NULL,
                 course_id int NOT NULL,
-                create_date int NOT NULL,
                 note varchar(255),
                 PRIMARY KEY  (t_c_id)
             ) $charset_collate;";        
