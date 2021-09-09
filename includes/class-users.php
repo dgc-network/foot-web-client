@@ -15,8 +15,99 @@ if (!class_exists('users')) {
             self::create_tables();
         }
 
+        function view_mode() {
+
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'user_courses';
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'user_courses';
+                        $data = array(
+                            'certification_date' => strtotime($_POST['_certification_date_'.$index]), 
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index],
+                            'witness_id' => $_POST['_witness_id_'.$index],
+                            'course_id' => $_POST['_course_id_'.$index],
+                        );
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $wpdb->update( $table, $data, $where );
+                    }
+                }
+                if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) ){
+                } else {
+                    $table = $wpdb->prefix.'user_courses';
+                    $data = array(
+                        'certification_date' => strtotime($_POST['_certification_date']), 
+                        'course_id' => $_POST['_course_id'],
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'witness_id' => $_POST['_witness_id'],
+                        'student_id' => $_GET['_id'],
+                    );
+                    $format = array('%d', '%d');
+                    $wpdb->insert($table, $data, $format);    
+                }
+            }
+            
+            /** 
+             * view_mode
+             * Manage the learning history
+             */
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_GET['_id'])->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_GET['_id'])->user_email.'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
+                $output .= '<td><select name="_lecturer_id_'.$index.'">'.self::select_options($results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td><select name="_witness_id_'.$index.'">'.self::select_options($results[$index]->witness_id).'</select></td>';
+                $CertificationDate = wp_date( get_option( 'date_format' ), $results[$index]->certification_date );
+                $output .= '<td><input type="text" name="_certification_date_'.$index.'" value="'.$CertificationDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
+            $output .= '<td><select name="_lecturer_id">'.self::select_options().'</select></td>';
+            $output .= '<td><select name="_witness_id">'.self::select_options().'</select></td>';
+            $output .= '<td><input type="date" name="_certification_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+
+        }
+
         function shortcode_callback() {
 
+            if( isset($_GET['view_mode']) ) {
+                self::view_mode();
+            }
+/*
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
@@ -98,7 +189,7 @@ if (!class_exists('users')) {
 
                 return $output;
             }        
-            
+*/            
             if( isset($_POST['edit_mode']) ) {
         
                 $output  = '<form method="post">';
