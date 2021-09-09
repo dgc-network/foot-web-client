@@ -71,7 +71,7 @@ if (!class_exists('courses')) {
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_lecturer_id">';
+                //$output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_course_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
