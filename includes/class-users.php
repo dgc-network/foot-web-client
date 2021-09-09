@@ -61,7 +61,7 @@ if (!class_exists('users')) {
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Date</td></tr>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {

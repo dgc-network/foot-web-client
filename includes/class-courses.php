@@ -30,7 +30,7 @@ if (!class_exists('courses')) {
                     $where = array(
                         'c_l_id' => $results[$index]->c_l_id
                     );
-                    $updated = $wpdb->update( $table, $data, $where );
+                    $wpdb->update( $table, $data, $where );
                 }
                 if (( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ) ){
                 } else {
@@ -38,6 +38,30 @@ if (!class_exists('courses')) {
                     $data = array(
                         'expired_date' => strtotime($_POST['_expired_date']), 
                         'lecturer_id' => $_POST['_lecturer_id'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_GET['_id']}", OBJECT );
+                foreach ($results as $index => $result) {
+                    $table = $wpdb->prefix.'course_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
+                        'witness_id' => $_POST['_witness_id_'.$index]
+                    );
+                    $where = array(
+                        'c_w_id' => $results[$index]->c_w_id
+                    );
+                    $wpdb->update( $table, $data, $where );
+                }
+                if (( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ) ){
+                } else {
+                    $table = $wpdb->prefix.'course_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_w_expired_date']), 
+                        'witness_id' => $_POST['_witness_id'],
                         'course_id' => $_GET['_id']
                     );
                     $format = array('%d', '%d', '%d');
@@ -69,9 +93,22 @@ if (!class_exists('courses')) {
                 $output .= '<td><input type="date" name="_expired_date"></td></tr>';
                 $output .= '</tbody></table></figure>';
                 
+                $output .= '<figure class="wp-block-table"><table><tbody>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_GET['_id']}", OBJECT );
+                foreach ($results as $index => $result) {
+                    $output .= '<tr><td>'.$index.'</td>';
+                    $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
+                    $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                    $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+                }
+                $output .= '<tr><td>'.($index+1).'</td>';
+                $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
+                $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
+                $output .= '</tbody></table></figure>';
+                
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                //$output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_course_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
@@ -243,6 +280,15 @@ if (!class_exists('courses')) {
                 lecturer_id int NOT NULL,
                 expired_date int NOT NULL,
                 PRIMARY KEY  (c_l_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}course_witnesses` (
+                c_w_id int NOT NULL AUTO_INCREMENT,
+                course_id int NOT NULL,
+                witness_id int NOT NULL,
+                expired_date int NOT NULL,
+                PRIMARY KEY  (c_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
         }
