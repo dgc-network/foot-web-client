@@ -80,6 +80,8 @@ if (!class_exists('teaches')) {
                 $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_teach_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
+                $output .= '</form>';
+                $output .= '<form method="get">';
                 $output .= '<div class="wp-block-button">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
                 $output .= '</div>';
