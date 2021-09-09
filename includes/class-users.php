@@ -59,6 +59,7 @@ if (!class_exists('users')) {
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
+                return $output;
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
                 }
