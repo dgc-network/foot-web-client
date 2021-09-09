@@ -14,31 +14,37 @@ if (!class_exists('teaches')) {
             self::create_tables();
         }
 
-
         function shortcode_callback() {
 
             if( isset($_POST['submit_action']) ) {
-                //return $_POST['submit_action'];
         
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $table = $wpdb->prefix.'teach_courses';
-                    $data = array(
-                        //'teach_date' => strtotime($_POST['_teach_date']),
-                        'course_id' => $_POST['_course_id_'.$index]
-                    );
-                    $where = array(
-                        't_c_id' => $results[$index]->t_c_id
-                    );
-                    $updated = $wpdb->update( $table, $data, $where );
+                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'teach_courses';
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'teach_courses';
+                        $data = array(
+                            //'teach_date' => strtotime($_POST['_teach_date']),
+                            'course_id' => $_POST['_course_id_'.$index]
+                        );
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $updated = $wpdb->update( $table, $data, $where );
+                    }
                 }
                 if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) ){
                 } else {
                     $table = $wpdb->prefix.'teach_courses';
                     $data = array(
                         //'create_date' => strtotime($_POST['_create_date']), 
-                        'teach_id' => $_POST['_teach_id'],
+                        'teach_id' => $_GET['_id'],
                         'course_id' => $_POST['_course_id']
                     );
                     $format = array('%d', '%d');
@@ -61,13 +67,13 @@ if (!class_exists('teaches')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
-                    //$output .= '<input type="hidden" value="'.$index.'" name="_index">';
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
+                /*
                 if( $_POST['edit_mode']=='Create New' ) {
                     $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
                 }
@@ -78,6 +84,7 @@ if (!class_exists('teaches')) {
                     $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
                 }
                 $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_teach_id">';
+                */
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
@@ -87,7 +94,6 @@ if (!class_exists('teaches')) {
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</form>';
-
 
                 return $output;
             }        

@@ -15,26 +15,32 @@ if (!class_exists('users')) {
             self::create_tables();
         }
 
-
         function shortcode_callback() {
 
             if( isset($_POST['submit_action']) ) {
-                //return $_POST['submit_action'];
         
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $table = $wpdb->prefix.'user_courses';
-                    $data = array(
-                        'certification_date' => strtotime($_POST['_certification_date_'.$index]), 
-                        'lecturer_id' => $_POST['_lecturer_id_'.$index],
-                        'witness_id' => $_POST['_witness_id_'.$index],
-                        'course_id' => $_POST['_course_id_'.$index],
-                    );
-                    $where = array(
-                        't_c_id' => $results[$index]->t_c_id
-                    );
-                    $updated = $wpdb->update( $table, $data, $where );
+                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'user_courses';
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'user_courses';
+                        $data = array(
+                            'certification_date' => strtotime($_POST['_certification_date_'.$index]), 
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index],
+                            'witness_id' => $_POST['_witness_id_'.$index],
+                            'course_id' => $_POST['_course_id_'.$index],
+                        );
+                        $where = array(
+                            't_c_id' => $results[$index]->t_c_id
+                        );
+                        $wpdb->update( $table, $data, $where );
+                    }
                 }
                 if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) ){
                 } else {
@@ -52,7 +58,6 @@ if (!class_exists('users')) {
             }
             
             if( isset($_GET['view_mode']) ) {
-                //return $_GET['view_mode'];
 
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
