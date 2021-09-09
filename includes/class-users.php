@@ -11,6 +11,7 @@ if (!class_exists('users')) {
          */
         public function __construct() {
             add_shortcode('user_shortcode', __CLASS__ . '::shortcode_callback');
+            self::remove_tables();
             self::create_tables();
         }
 
@@ -63,7 +64,6 @@ if (!class_exists('users')) {
                 }
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
-                return $output;
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
