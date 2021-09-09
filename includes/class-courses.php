@@ -270,7 +270,7 @@ if (!class_exists('courses')) {
                 $output .= $results[$index]->course_title;
                 $output .= '</option>';        
             }
-            $output = '<option value="delete_select">-- Remove this Select --</option>';
+            $output .= '<option value="delete_select">-- Remove this Select --</option>';
             return $output;    
         }
 
