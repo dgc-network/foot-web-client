@@ -26,8 +26,10 @@ if (!class_exists('users')) {
                 foreach ($results as $index => $result) {
                     $table = $wpdb->prefix.'user_courses';
                     $data = array(
-                        //'user_date' => strtotime($_POST['_user_date']),
-                        'course_id' => $_POST['_course_id_'.$index]
+                        'certification_date' => strtotime($_POST['_certification_date_'.$index]), 
+                        'lecturer_id' => $_POST['_lecturer_id_'.$index],
+                        'witness_id' => $_POST['_witness_id_'.$index],
+                        'course_id' => $_POST['_course_id_'.$index],
                     );
                     $where = array(
                         't_c_id' => $results[$index]->t_c_id
@@ -38,9 +40,11 @@ if (!class_exists('users')) {
                 } else {
                     $table = $wpdb->prefix.'user_courses';
                     $data = array(
-                        //'create_date' => strtotime($_POST['_create_date']), 
+                        'certification_date' => strtotime($_POST['_certification_date']), 
+                        'course_id' => $_POST['_course_id'],
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'witness_id' => $_POST['_witness_id'],
                         'student_id' => $_GET['_id'],
-                        'course_id' => $_POST['_course_id']
                     );
                     $format = array('%d', '%d');
                     $wpdb->insert($table, $data, $format);    
@@ -57,26 +61,26 @@ if (!class_exists('users')) {
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturer</td><td>Witness</td><td>Date</td></tr>';
+                $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Date</td></tr>';
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td>'.$index.'</td>';
                     $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
                     $output .= '<td><select name="_lecturer_id_'.$index.'">'.self::select_options($results[$index]->lecturer_id).'</select></td>';
-                    $output .= '<td></td>';
-                    $output .= '<td></td></tr>';
+                    $output .= '<td><select name="_witness_id_'.$index.'">'.self::select_options($results[$index]->witness_id).'</select></td>';
+                    $CertificationDate = wp_date( get_option( 'date_format' ), $results[$index]->certification_date );
+                    $output .= '<td><input type="text" name="_certification_date_'.$index.'" value="'.$CertificationDate.'">'.'</td></tr>';
                 }
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
                 $output .= '<td><select name="_lecturer_id">'.self::select_options().'</select></td>';
-                $output .= '<td></td>';
-                $output .= '<td></td></tr>';
+                $output .= '<td><select name="_witness_id">'.self::select_options().'</select></td>';
+                $output .= '<td><input type="date" name="_certification_date"></td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                //$output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_student_id">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
