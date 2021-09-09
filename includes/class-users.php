@@ -50,10 +50,11 @@ if (!class_exists('users')) {
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}users WHERE user_id = {$_GET['_id']}", OBJECT );
                 $userDate = wp_date( get_option( 'date_format' ), $row->user_date );
+
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->user_title.'</td></tr>';
-                $output .= '<tr><td>'.'Date:'.'</td><td>'.$userDate.'</td></tr>';
+                $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_POST['_id'])->display_name.'</td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_POST['_id'])->user_email.'</td></tr>';
                 $output .= '</tbody></table></figure>';
 
                 $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -303,8 +304,8 @@ if (!class_exists('users')) {
         
                 $output .= '<form method="post">';
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=true&_id='.$userId.'">'.$userTitle.'</a></td>';
-                $output .= '<td>'.$userEmail.'</td>';
+                $output .= '<td>'.$userTitle.'</td>';
+                $output .= '<td><a href="?view_mode=true&_id='.$userId.'">'.$userEmail.'</a></td>';
                 $output .= '<input type="hidden" value="'.$userId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
