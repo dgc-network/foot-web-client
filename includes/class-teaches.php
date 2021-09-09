@@ -18,11 +18,12 @@ if (!class_exists('teaches')) {
         function shortcode_callback() {
 
             if( isset($_POST['submit_action']) ) {
+                return $_POST['submit_action'];
         
                 global $wpdb;
                 $table = $wpdb->prefix.'teachcouses';
                 $data = array(
-                    'create_date' => strtotime($_POST['_create_date']), 
+                    //'create_date' => strtotime($_POST['_create_date']), 
                     'teach_id' => $_POST['_teach_id'],
                     'course_id' => $_POST['_course_id']
                 );
@@ -44,9 +45,9 @@ if (!class_exists('teaches')) {
                 $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td></tr>';
                 $results = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teach_courses WHERE teach_id = {$_GET['_id']}", OBJECT );
                 foreach ($results as $index => $result) {
-                    $output .= '<tr><td>'.$index.'</td><td>'.'<select>'.Courses::select_options($results[$index]->course_id).'</td></tr>';
+                    $output .= '<tr><td>'.$index.'</td><td>'.'<select name="_course_id'.$index.'">'.Courses::select_options($results[$index]->course_id).'</td></tr>';
                 }
-                $output .= '<tr><td>'.($index+1).'</td><td>'.'<select>'.Courses::select_options().'</select>'.'</td></tr>';
+                $output .= '<tr><td>'.($index+1).'</td><td>'.'<select name="_course_id">'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
                 $output .= '<div class="wp-block-buttons">';
