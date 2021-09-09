@@ -107,7 +107,7 @@ if (!class_exists('users')) {
 
             if( isset($_GET['view_mode']) ) {
                 //return $_GET['view_mode'];
-                self::view_mode($_GET['_id']);
+                return self::view_mode($_GET['_id']);
             }
 /*
             if( isset($_POST['submit_action']) ) {
