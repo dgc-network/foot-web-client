@@ -17,6 +17,19 @@ if (!class_exists('teaches')) {
 
         function shortcode_callback() {
 
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                $table = $wpdb->prefix.'teachcouses';
+                $data = array(
+                    'create_date' => strtotime($_POST['_create_date']), 
+                    'teach_id' => $_POST['_teach_id'],
+                    'course_id' => $_POST['_course_id']
+                );
+                $format = array('%d', '%d', '%d');
+                $wpdb->insert($table, $data, $format);
+            }
+            
             if( isset($_GET['view_mode']) ) {
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teaches WHERE teach_id = {$_GET['_id']}", OBJECT );
@@ -36,6 +49,26 @@ if (!class_exists('teaches')) {
                 $output .= '<tr><td>'.($index+1).'</td><td>'.'<select>'.Courses::select_options().'</select>'.'</td></tr>';
                 $output .= '</tbody></table></figure>';
                 
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                if( $_POST['edit_mode']=='Create New' ) {
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+                }
+                if( $_POST['edit_mode']=='Update' ) {
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+                }
+                if( $_POST['edit_mode']=='Delete' ) {
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+                }
+                $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '</form>';
+
+
                 return $output;
             }        
             
