@@ -29,8 +29,7 @@ if (!class_exists('teaches')) {
                         'course_id' => $_POST['_course_id_'.$index]
                     );
                     $where = array(
-                        'teach_id' => $results[$index]->teach_id,
-                        'course_id' => $results[$index]->course_id
+                        't_c_id' => $results[$index]->t_c_id
                     );
                     $updated = $wpdb->update( $table, $data, $where );
                 }
