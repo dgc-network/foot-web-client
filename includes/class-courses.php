@@ -77,7 +77,7 @@ if (!class_exists('courses')) {
         
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input type="hidden" value="Submit" name="edit_mode">';
+                //$output .= '<input type="hidden" value="Submit" name="edit_mode">';
                 if( $_mode=='Update' ) {
                     //$output .= '<input type="hidden" value="Update" name="edit_mode">';
                     $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
@@ -234,9 +234,11 @@ if (!class_exists('courses')) {
                 return self::view_mode($_GET['_id']);
             }
             
-            if( isset($_POST['edit_mode']) ) {
+            //if( isset($_POST['edit_mode']) ) {
+            if( isset($_GET['edit_mode']) ) {
                 //return $_POST['_id'];
-                return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
+                //return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
+                return self::edit_mode($_GET['_id'], $_GET['edit_mode']);
             }            
 
             /**
@@ -253,7 +255,8 @@ if (!class_exists('courses')) {
                 $CourseTitle = $results[$index]->course_title;
                 $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->create_date );
         
-                $output .= '<form method="post">';
+                //$output .= '<form method="post">';
+                $output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
                 $output .= '<td>'.$CreateDate.'</td>';
@@ -265,7 +268,8 @@ if (!class_exists('courses')) {
             }        
             $output .= '</tbody></table></figure>';
         
-            $output .= '<form method="post">';
+            //$output .= '<form method="post">';
+            $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Create New" name="edit_mode">';
