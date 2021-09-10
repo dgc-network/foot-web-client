@@ -13,7 +13,6 @@ if (!class_exists('courses')) {
             add_shortcode('course_list', __CLASS__ . '::list_mode');
             add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             add_shortcode('course_view', __CLASS__ . '::view_mode');
-            //self::remove_tables();
             self::create_tables();
         }
 
@@ -45,6 +44,8 @@ if (!class_exists('courses')) {
                 );
                 $where = array('course_id' => $_POST['_course_id']);
                 $wpdb->update( $table, $data, $where );
+                unset($_GET['_id']);
+                unset($_GET['edit_mode']);
                 return;
             }
         
