@@ -47,7 +47,7 @@ if (!class_exists('courses')) {
                 //unset($_GET['_id']);
                 //unset($_GET['edit_mode']);
                 //return;
-                wp_redirect('https://foot-2beaa9.ingress-erytho.easywp.com/courses/');
+                wp_redirect(home_url());
                 exit;
             }
         
@@ -57,7 +57,8 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $where = array('course_id' => $_POST['_course_id']);
                 $deleted = $wpdb->delete( $table, $where );
-                return;
+                wp_redirect(home_url());
+                exit;
             }
 
             /** 
