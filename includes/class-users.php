@@ -148,7 +148,39 @@ if (!class_exists('users')) {
             //$output .= '<td><select name="_witness_id">'.Courses::select_witnesses.'</select></td>';
             $output .= '<td><input type="date" name="_certification_date"></td></tr>';
             $output .= '</tbody></table></figure>';
-            
+
+            ?><script type="text/javascript">
+            jQuery(document).ready(function(e) {
+                jQuery('.variations select').on('change', function(){
+                alert(jQuery('.single_variation').text());
+                });
+            });
+
+            jQuery(function($) {
+
+                // Delegated event handler attached to a common ancestor
+                $('.variations').on('change','select',function(){
+
+                    // this is the select itself, so use its val()
+                    var currentSelectVal = $(this).val();
+
+                    // Do something with the selection
+                    $('.single_variation').text(currentSelectVal);
+                });
+            });
+
+            jQuery(document).ready(function($) {
+                var $things = <?php echo json_encode($names); ?>;
+                console.log($things);
+                $(".element").each(function() {
+                    var $state = $(this).attr("title");
+                    if ($things.indexOf($state) > -1) {
+                        $(this).addClass('current');
+                    }
+                });
+            });
+            </script><?php
+
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
