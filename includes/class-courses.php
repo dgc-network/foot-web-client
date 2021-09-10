@@ -99,7 +99,7 @@ if (!class_exists('courses')) {
         function view_mode( $_id=null ) {
 
             if ($_id==null){
-                return 'ID is required';
+                return '<p>ID is required</p>';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -232,6 +232,7 @@ if (!class_exists('courses')) {
             }
             
             if( isset($_POST['edit_mode']) ) {
+                return $_POST['_id'];
                 return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
             }            
 
