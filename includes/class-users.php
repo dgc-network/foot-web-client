@@ -16,7 +16,7 @@ if (!class_exists('users')) {
             self::create_tables();
         }
 
-        function edit_mode( $_id=null, $_mode='Create New' ) {
+        function edit_mode( $_id=null, $_mode ) {
 
             if ($_id==null){
                 $_id=get_current_user_id();
@@ -39,30 +39,26 @@ if (!class_exists('users')) {
              */
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_mode=='Create New' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
-            }
             if( $_mode=='Update' ) {
                 $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'"></td></tr>';
                 $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'"></td></tr>';
-            }
-            if( $_mode=='Delete' ) {
+            } else if( $_mode=='Delete' ) {
                 $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'" disabled></td></tr>';
+            } else {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
             }
             $output .= '</tbody></table></figure>';
     
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            if( $_mode=='Create New' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-            }
             if( $_mode=='Update' ) {
                 //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            }
-            if( $_mode=='Delete' ) {
+            } else if( $_mode=='Delete' ) {
                 //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            } else {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
             }
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
