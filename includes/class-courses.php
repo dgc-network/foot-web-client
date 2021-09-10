@@ -48,7 +48,7 @@ if (!class_exists('courses')) {
                 //unset($_GET['edit_mode']);
                 //return;
                 wp_redirect(home_url());
-                exit;
+                die;
             }
         
             if( isset($_POST['delete_action']) ) {
