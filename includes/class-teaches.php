@@ -356,15 +356,6 @@ if (!class_exists('teaches')) {
             dbDelta($sql);
         }
         
-        // Delete table when deactivate
-        function remove_table() {
-            if( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit();
-            global $wpdb;
-            $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}teaches" );
-            delete_option("my_plugin_db_version");
-
-        }        
-
     }
     new teaches();
 }
