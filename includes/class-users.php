@@ -119,7 +119,6 @@ if (!class_exists('users')) {
             
             /** 
              * view_mode
-             * Manage the learning history
              */
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';

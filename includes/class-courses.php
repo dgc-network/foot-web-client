@@ -10,17 +10,105 @@ if (!class_exists('courses')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('course_shortcode', __CLASS__ . '::shortcode_callback');
+            add_shortcode('course_list', __CLASS__ . '::list_mode');
+            add_shortcode('course_edit', __CLASS__ . '::edit_mode');
+            add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
         }
 
-        function shortcode_callback() {
+        function edit_mode( $_id=null, $_mode ) {
+            if ($_id==null){
+                $_mode='Create New';
+            }
 
-            if( isset($_POST['submit_action']) ) {
-                //return $_POST['submit_action'];
+            if( isset($_POST['create_action']) ) {
         
                 global $wpdb;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_GET['_id']}", OBJECT );
+                $table = $wpdb->prefix.'courses';
+                $data = array(
+                    'create_date' => current_time('timestamp'), 
+                    'course_title' => $_POST['_course_title']
+                );
+                $format = array('%d', '%s');
+                $wpdb->insert($table, $data, $format);
+            }
+        
+            if( isset($_POST['update_action']) ) {
+        
+                global $wpdb;
+                $table = $wpdb->prefix.'courses';
+                $data = array(
+                    'course_title' => $_POST['_course_title']
+                );
+                $where = array('course_id' => $_POST['_course_id']);
+                $wpdb->update( $table, $data, $where );
+            }
+        
+            if( isset($_POST['delete_action']) ) {
+        
+                global $wpdb;
+                $table = $wpdb->prefix.'courses';
+                $where = array('course_id' => $_POST['_course_id']);
+                $deleted = $wpdb->delete( $table, $where );
+            }
+            
+            /** 
+             * edit_mode
+             */
+            global $wpdb;
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_id']}", OBJECT );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+            if( $_POST['edit_mode']=='Create New' ) {
+                $row=array();
+            }
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            if( $_POST['edit_mode']=='Create New' ) {
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
+            }
+            if( $_POST['edit_mode']=='Update' ) {
+                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+            }
+            if( $_POST['edit_mode']=='Delete' ) {
+                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+            }
+            $output .= '</tbody></table></figure>';
+    
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            if( $_POST['edit_mode']=='Create New' ) {
+                $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+            }
+            if( $_POST['edit_mode']=='Update' ) {
+                $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+            }
+            if( $_POST['edit_mode']=='Delete' ) {
+                $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            }
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+        
+            return $output;
+        }
+
+        function view_mode( $_id=null ) {
+
+            if ($_id==null){
+                return 'ID is required';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
                         $table = $wpdb->prefix.'course_lecturers';
@@ -52,7 +140,7 @@ if (!class_exists('courses')) {
                     $wpdb->insert($table, $data, $format);
                 }
 
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_GET['_id']}", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_witness_id_'.$index]=='delete_select' ){
                         $table = $wpdb->prefix.'course_witnesses';
@@ -84,138 +172,71 @@ if (!class_exists('courses')) {
                     $wpdb->insert($table, $data, $format);
                 }
             }
+
+            /** 
+             * view_mode
+             */
+            global $wpdb;
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</select></td>';
+                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
+            $output .= '<td><input type="date" name="_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
+                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
+            $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+    }
+
+        function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
-                global $wpdb;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_GET['_id']}", OBJECT );
-                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
-                $output  = '<form method="post">';
-                $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
-                $output .= '</tbody></table></figure>';
-
-                $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_GET['_id']}", OBJECT );
-                foreach ($results as $index => $result) {
-                    $output .= '<tr><td>'.$index.'</td>';
-                    $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</select></td>';
-                    $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                    $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
-                }
-                $output .= '<tr><td>'.($index+1).'</td>';
-                $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
-                $output .= '<td><input type="date" name="_expired_date"></td></tr>';
-                $output .= '</tbody></table></figure>';
-                
-                $output .= '<figure class="wp-block-table"><table><tbody>';
-                $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_GET['_id']}", OBJECT );
-                foreach ($results as $index => $result) {
-                    $output .= '<tr><td>'.$index.'</td>';
-                    $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
-                    $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                    $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
-                }
-                $output .= '<tr><td>'.($index+1).'</td>';
-                $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
-                $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
-                $output .= '</tbody></table></figure>';
-                
-                $output .= '<div class="wp-block-buttons">';
-                $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
-                $output .= '</div>';
-                $output .= '</form>';
-                $output .= '<form method="get">';
-                $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-                $output .= '</div>';
-                $output .= '</div>';
-                $output .= '</form>';
-
-
-                return $output;
-            }        
+                return self::view_mode($_GET['_id']);
+            }
             
             if( isset($_POST['edit_mode']) ) {
-        
-                global $wpdb;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_POST['_id']}", OBJECT );
-                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $row=array();
-                }
-                $output  = '<form method="post">';
-                $output .= '<figure class="wp-block-table"><table><tbody>';
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                }
-                if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
-                }
-                if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
-                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
-                }
-                $output .= '</tbody></table></figure>';
-        
-                $output .= '<div class="wp-block-buttons">';
-                $output .= '<div class="wp-block-button">';
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-                }
-                if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-                }
-                if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-                }
-                $output .= '</div>';
-                $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-                $output .= '</div>';
-                $output .= '</div>';
-                $output .= '</form>';
-            
-                return $output;
-        
-            }
-            
-            if( isset($_POST['create_action']) ) {
-        
-                global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $data = array(
-                    'create_date' => current_time('timestamp'), 
-                    'course_title' => $_POST['_course_title']
-                );
-                $format = array('%d', '%s');
-                $wpdb->insert($table, $data, $format);
-            }
-        
-            if( isset($_POST['update_action']) ) {
-        
-                global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $data = array(
-                    'course_title' => $_POST['_course_title']
-                );
-                $where = array('course_id' => $_POST['_course_id']);
-                $wpdb->update( $table, $data, $where );
-            }
-        
-            if( isset($_POST['delete_action']) ) {
-        
-                global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $where = array('course_id' => $_POST['_course_id']);
-                $deleted = $wpdb->delete( $table, $where );
-            }
+                return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
+            }            
 
             /**
              * List Mode
@@ -274,7 +295,6 @@ if (!class_exists('courses')) {
             $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
         }
-
 
         function create_tables() {
         
