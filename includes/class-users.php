@@ -134,7 +134,7 @@ if (!class_exists('users')) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
                 $output .= '<td><select name="_lecturer_id_'.$index.'">'.self::select_options($results[$index]->lecturer_id).'</select></td>';
-                //$output .= '<td><select name="_lecturer_id_'.$index.'">'.Courses::select_leturers($results[$index]->lecturer_id).'</select></td>';
+                //$output .= '<td><select name="_lecturer_id_'.$index.'">'.Courses::select_lecturers($results[$index]->lecturer_id).'</select></td>';
                 $output .= '<td><select name="_witness_id_'.$index.'">'.self::select_options($results[$index]->witness_id).'</select></td>';
                 //$output .= '<td><select name="_witness_id_'.$index.'">'.Courses::select_witnesses($results[$index]->witness_id).'</select></td>';
                 $CertificationDate = wp_date( get_option( 'date_format' ), $results[$index]->certification_date );
@@ -143,7 +143,7 @@ if (!class_exists('users')) {
             $output .= '<tr><td>'.($index+1).'</td>';
             $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
             //$output .= '<td><select name="_lecturer_id">'.self::select_options().'</select></td>';
-            $output .= '<td><select name="_lecturer_id">'.Courses::select_leturers().'</select></td>';
+            $output .= '<td><select name="_lecturer_id">'.Courses::select_lecturers().'</select></td>';
             $output .= '<td><select name="_witness_id">'.self::select_options().'</select></td>';
             //$output .= '<td><select name="_witness_id">'.Courses::select_witnesses.'</select></td>';
             $output .= '<td><input type="date" name="_certification_date"></td></tr>';
