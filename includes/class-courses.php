@@ -32,6 +32,7 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
+                return;
             }
         
             if( isset($_POST['update_action']) ) {
@@ -43,6 +44,7 @@ if (!class_exists('courses')) {
                 );
                 $where = array('course_id' => $_POST['_course_id']);
                 $wpdb->update( $table, $data, $where );
+                return;
             }
         
             if( isset($_POST['delete_action']) ) {
@@ -51,6 +53,7 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $where = array('course_id' => $_POST['_course_id']);
                 $deleted = $wpdb->delete( $table, $where );
+                return;
             }
 
             /** 
