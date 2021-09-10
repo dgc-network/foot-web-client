@@ -297,7 +297,7 @@ if (!class_exists('courses')) {
 
         function select_lecturers( $course_id=null, $default_id=null ) {
 
-            if ($course_id=null){
+            if ($course_id==null){
                 $output = '<option value="no_select">-- course_id is required --</option>';
                 return $output;    
             }
