@@ -20,6 +20,7 @@ if (!class_exists('users')) {
 
             if ($_id==null){
                 $_id=get_current_user_id();
+                $_mode='Update';
             }
 
             if( isset($_POST['create_action']) ) {
