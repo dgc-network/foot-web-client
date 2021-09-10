@@ -49,7 +49,7 @@ if (!class_exists('courses')) {
                 //return;
                 //wp_redirect(home_url());
                 //die;
-                ?><script>window.location='http://www.google.com'</script><?php
+                ?><script>window.location='/courses'</script><?php
             }
         
             if( isset($_POST['delete_action']) ) {
