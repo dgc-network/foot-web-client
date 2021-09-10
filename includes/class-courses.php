@@ -63,11 +63,11 @@ if (!class_exists('courses')) {
             //}
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_id=='Update' ) {
+            if( $_mode=='Update' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
-            } else if( $_id=='Delete' ) {
+            } else if( $_mode=='Delete' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
@@ -79,9 +79,9 @@ if (!class_exists('courses')) {
     
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            if( $_id=='Update' ) {
+            if( $_mode=='Update' ) {
                 $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            } else if( $_id=='Delete' ) {
+            } else if( $_mode=='Delete' ) {
                 $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
             } else {
                 $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
@@ -99,7 +99,7 @@ if (!class_exists('courses')) {
         function view_mode( $_id=null ) {
 
             if ($_id==null){
-                return '<p>ID is required</p>';
+                return '<div>ID is required</div>';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -223,7 +223,7 @@ if (!class_exists('courses')) {
             $output .= '</form>';
 
             return $output;
-    }
+        }
 
         function list_mode() {
             
@@ -232,7 +232,7 @@ if (!class_exists('courses')) {
             }
             
             if( isset($_POST['edit_mode']) ) {
-                return $_POST['_id'];
+                //return $_POST['_id'];
                 return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
             }            
 
