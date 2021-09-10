@@ -32,7 +32,6 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
-                return '';
             }
         
             if( isset($_POST['update_action']) ) {
@@ -44,7 +43,6 @@ if (!class_exists('courses')) {
                 );
                 $where = array('course_id' => $_POST['_course_id']);
                 $wpdb->update( $table, $data, $where );
-                return '';
             }
         
             if( isset($_POST['delete_action']) ) {
@@ -53,50 +51,52 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $where = array('course_id' => $_POST['_course_id']);
                 $deleted = $wpdb->delete( $table, $where );
-                return '';
             }
 
-            /** 
-             * edit_mode
-             */
-            global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_mode=='Update' ) {
-                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
-            } else if( $_mode=='Delete' ) {
-                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
-            } else {
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
-            }
-            $output .= '</tbody></table></figure>';
-    
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            if( $_mode=='Update' ) {
-                $output .= '<input type="hidden" value="Update" name="edit_mode">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            } else if( $_mode=='Delete' ) {
-                $output .= '<input type="hidden" value="Delete" name="edit_mode">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-            } else {
-                $output .= '<input type="hidden" value="Create" name="edit_mode">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-            }
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
+            //if( isset($_POST['edit_mode']) ) {
+                /** 
+                 * edit_mode
+                 */
+                global $wpdb;
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+                $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+                $output  = '<form method="post">';
+                $output .= '<figure class="wp-block-table"><table><tbody>';
+                if( $_mode=='Update' ) {
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
+                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                } else if( $_mode=='Delete' ) {
+                    $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
+                    $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                } else if( $_mode=='Create New' ){
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
+                }
+                $output .= '</tbody></table></figure>';
         
-            return $output;
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input type="hidden" value="Submit" name="edit_mode">';
+                if( $_mode=='Update' ) {
+                    //$output .= '<input type="hidden" value="Update" name="edit_mode">';
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+                } else if( $_mode=='Delete' ) {
+                    //$output .= '<input type="hidden" value="Delete" name="edit_mode">';
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+                } else if( $_mode=='Create New' ){
+                    //$output .= '<input type="hidden" value="Create" name="edit_mode">';
+                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+                }
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '</form>';
+            
+                return $output;
+            //}
         }
 
         function view_mode( $_id=null ) {
