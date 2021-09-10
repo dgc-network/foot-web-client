@@ -18,6 +18,10 @@ if (!class_exists('users')) {
 
         function edit_mode( $_id=null, $_mode='Create New' ) {
 
+            if ($_id==null){
+                $_id=get_current_user_id();
+            }
+
             if( isset($_POST['create_action']) ) {
         
             }
@@ -71,6 +75,10 @@ if (!class_exists('users')) {
         }
 
         function view_mode($_id=null) {
+
+            if ($_id==null){
+                $_id=get_current_user_id();
+            }
 
             if( isset($_POST['submit_action']) ) {
         
