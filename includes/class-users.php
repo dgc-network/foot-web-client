@@ -14,6 +14,60 @@ if (!class_exists('users')) {
             self::create_tables();
         }
 
+        function edit_mode($_id=null) {
+
+            if( isset($_POST['create_action']) ) {
+        
+            }
+        
+            if( isset($_POST['update_action']) ) {
+        
+            }
+        
+            if( isset($_POST['delete_action']) ) {
+
+            }
+
+            /** 
+             * edit_mode
+             */
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            if( $_POST['edit_mode']=='Create New' ) {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
+            }
+            if( $_POST['edit_mode']=='Update' ) {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'"></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'"></td></tr>';
+            }
+            if( $_POST['edit_mode']=='Delete' ) {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'" disabled></td></tr>';
+            }
+            $output .= '</tbody></table></figure>';
+    
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            if( $_POST['edit_mode']=='Create New' ) {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+            }
+            if( $_POST['edit_mode']=='Update' ) {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+            }
+            if( $_POST['edit_mode']=='Delete' ) {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            }
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+        
+            return $output;
+        }
+
         function view_mode($_id=null) {
 
             if( isset($_POST['submit_action']) ) {
@@ -189,7 +243,8 @@ if (!class_exists('users')) {
             }        
 */            
             if( isset($_POST['edit_mode']) ) {
-        
+                return self::edit_mode($_POST['_id']);
+/*        
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 if( $_POST['edit_mode']=='Create New' ) {
@@ -225,20 +280,9 @@ if (!class_exists('users')) {
                 $output .= '</form>';
             
                 return $output;
-        
+*/        
             }
             
-            if( isset($_POST['create_action']) ) {
-        
-            }
-        
-            if( isset($_POST['update_action']) ) {
-        
-            }
-        
-            if( isset($_POST['delete_action']) ) {
-
-            }
 
             /**
              * List Mode
