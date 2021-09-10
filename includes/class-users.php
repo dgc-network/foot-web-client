@@ -149,7 +149,7 @@ if (!class_exists('users')) {
             $output .= '<td><input type="date" name="_certification_date"></td></tr>';
             $output .= '</tbody></table></figure>';
 
-            ?><script type="text/javascript">
+        ?><script type="text/javascript">
             jQuery(document).ready(function(e) {
                 jQuery('.variations select').on('change', function(){
                 alert(jQuery('.single_variation').text());
@@ -179,7 +179,7 @@ if (!class_exists('users')) {
                     }
                 });
             });
-            </script><?php
+        </script><?php
 
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';

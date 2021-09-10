@@ -107,6 +107,45 @@ if (!class_exists('courses')) {
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
+                /** 
+                 * submit reference
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_references WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_reference_title_'.$index]=='delete' ) || ( $_POST['_reference_link_'.$index]=='delete' ) ){
+                        $table = $wpdb->prefix.'course_references';
+                        $where = array(
+                            'c_r_id' => $results[$index]->c_r_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_references';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'reference_title' => $_POST['_reference_title_'.$index],
+                            'reference_link' => $_POST['_reference_link_'.$index],
+                        );
+                        $where = array(
+                            'c_r_id' => $results[$index]->c_r_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( $_POST['_reference_title']=='' ){
+                } else {
+                    $table = $wpdb->prefix.'course_.references';
+                    $data = array(
+                        'reference_title' => $_POST['_reference_title'],
+                        'reference_link' => $_POST['_reference_link'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%s', '%s', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                /** 
+                 * submit lecturer
+                 */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
@@ -139,6 +178,9 @@ if (!class_exists('courses')) {
                     $wpdb->insert($table, $data, $format);
                 }
 
+                /** 
+                 * submit witness
+                 */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_witness_id_'.$index]=='delete_select' ){
@@ -173,7 +215,7 @@ if (!class_exists('courses')) {
             }
 
             /** 
-             * view_mode
+             * view_mode header
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
@@ -184,6 +226,26 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
+            /** 
+             * course relationship with refernce
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_references WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td><input type="text" name="_reference_title_'.$index.'" value="'.$results[$index]->reference_title.'"></td>';
+                $output .= '<td><input type="text" name="_reference_link_'.$index.'" value="'.$results[$index]->reference_link.'"></td>';
+                $output .= '</tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><input type="text" name="_reference_title"></td>';
+            $output .= '<td><input type="text" name="_reference_link"></td>';
+            $output .= '</tr></tbody></table></figure>';
+            
+            /** 
+             * course relationship with lecturer 
+             */
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
@@ -198,6 +260,9 @@ if (!class_exists('courses')) {
             $output .= '<td><input type="date" name="_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
             
+            /** 
+             * course relationship with witness 
+             */
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
@@ -212,6 +277,9 @@ if (!class_exists('courses')) {
             $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
             
+            /** 
+             * view_mode footer
+             */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
@@ -328,6 +396,15 @@ if (!class_exists('courses')) {
                 course_title varchar(255) NOT NULL,
                 create_date int NOT NULL,
                 PRIMARY KEY  (course_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}course_references` (
+                c_r_id int NOT NULL AUTO_INCREMENT,
+                course_id int NOT NULL,
+                reference_title varchar(255),
+                reference_link varchar(255),
+                PRIMARY KEY  (c_r_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
