@@ -32,7 +32,7 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%d', '%s');
                 $wpdb->insert($table, $data, $format);
-                return;
+                ?><script>window.location='/courses'</script><?php
             }
         
             if( isset($_POST['update_action']) ) {
@@ -44,11 +44,6 @@ if (!class_exists('courses')) {
                 );
                 $where = array('course_id' => $_POST['_course_id']);
                 $wpdb->update( $table, $data, $where );
-                //unset($_GET['_id']);
-                //unset($_GET['edit_mode']);
-                //return;
-                //wp_redirect(home_url());
-                //die;
                 ?><script>window.location='/courses'</script><?php
             }
         
@@ -58,10 +53,7 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $where = array('course_id' => $_POST['_course_id']);
                 $deleted = $wpdb->delete( $table, $where );
-                ob_clean();
-                return;
-                //wp_redirect(home_url());
-                //exit;
+                ?><script>window.location='/courses'</script><?php
             }
 
             /** 
