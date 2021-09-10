@@ -295,6 +295,28 @@ if (!class_exists('courses')) {
             return $output;    
         }
 
+        function select_lecturers( $course_id=null, $default_id=null ) {
+
+            if ($course_id=null){
+                $output = '<option value="no_select">-- course_id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id={$course_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->lecturer_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->lecturer_id.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->lecturer_id.'">';
+                }
+                $output .= get_userdata($results[$index]->lecturer_id)->display_name;
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+            return $output;    
+        }
+
         function create_tables() {
         
             global $wpdb;
