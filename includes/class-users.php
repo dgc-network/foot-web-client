@@ -11,17 +11,15 @@ if (!class_exists('users')) {
          */
         public function __construct() {
             add_shortcode('user_shortcode', __CLASS__ . '::shortcode_callback');
-            //self::remove_tables();
             self::create_tables();
         }
 
         function view_mode($_id=null) {
-            return $_id;
 
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_course_id_'.$index]=='delete_select' ){
                         $table = $wpdb->prefix.'user_courses';
@@ -51,7 +49,7 @@ if (!class_exists('users')) {
                         'course_id' => $_POST['_course_id'],
                         'lecturer_id' => $_POST['_lecturer_id'],
                         'witness_id' => $_POST['_witness_id'],
-                        'student_id' => $_GET['_id'],
+                        'student_id' => $_id,
                     );
                     $format = array('%d', '%d');
                     $wpdb->insert($table, $data, $format);    
@@ -64,14 +62,14 @@ if (!class_exists('users')) {
              */
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_GET['_id'])->display_name.'</td></tr>';
-            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_GET['_id'])->user_email.'</td></tr>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_id)->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_GET['_id']}", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
@@ -100,13 +98,11 @@ if (!class_exists('users')) {
             $output .= '</form>';
 
             return $output;
-
         }
 
         function shortcode_callback() {
 
             if( isset($_GET['view_mode']) ) {
-                //return $_GET['view_mode'];
                 return self::view_mode($_GET['_id']);
             }
 /*
