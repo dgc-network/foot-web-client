@@ -121,7 +121,6 @@ if (!class_exists('courses')) {
                     } else {
                         $table = $wpdb->prefix.'course_references';
                         $data = array(
-                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
                             'reference_title' => $_POST['_reference_title_'.$index],
                             'reference_link' => $_POST['_reference_link_'.$index],
                         );
@@ -133,7 +132,7 @@ if (!class_exists('courses')) {
                 }
                 if ( $_POST['_reference_title']=='' ){
                 } else {
-                    $table = $wpdb->prefix.'course_.references';
+                    $table = $wpdb->prefix.'course_references';
                     $data = array(
                         'reference_title' => $_POST['_reference_title'],
                         'reference_link' => $_POST['_reference_link'],
