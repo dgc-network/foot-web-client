@@ -57,6 +57,7 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $where = array('course_id' => $_POST['_course_id']);
                 $deleted = $wpdb->delete( $table, $where );
+                ob_clean();
                 wp_redirect(home_url());
                 exit;
             }
