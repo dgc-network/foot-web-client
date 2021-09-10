@@ -44,9 +44,10 @@ if (!class_exists('courses')) {
                 );
                 $where = array('course_id' => $_POST['_course_id']);
                 $wpdb->update( $table, $data, $where );
-                unset($_GET['_id']);
-                unset($_GET['edit_mode']);
-                return;
+                //unset($_GET['_id']);
+                //unset($_GET['edit_mode']);
+                //return;
+                wp_redirect('/');
             }
         
             if( isset($_POST['delete_action']) ) {
