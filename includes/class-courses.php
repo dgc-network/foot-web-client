@@ -47,8 +47,9 @@ if (!class_exists('courses')) {
                 //unset($_GET['_id']);
                 //unset($_GET['edit_mode']);
                 //return;
-                wp_redirect(home_url());
-                die;
+                //wp_redirect(home_url());
+                //die;
+                ?><script>window.location='http://www.google.com'</script><?php
             }
         
             if( isset($_POST['delete_action']) ) {
