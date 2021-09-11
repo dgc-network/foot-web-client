@@ -118,7 +118,7 @@ if (!class_exists('users')) {
             }
             
             /** 
-             * view_mode
+             * view_mode header
              */
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -126,6 +126,35 @@ if (!class_exists('users')) {
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
+            /** 
+             * user relationship with course learning
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
+                $output .= '<td><select name="_lecturer_id_'.$index.'">'.self::select_options($results[$index]->lecturer_id).'</select></td>';
+                //$output .= '<td><select name="_lecturer_id_'.$index.'">'.Courses::select_lecturers($results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td><select name="_witness_id_'.$index.'">'.self::select_options($results[$index]->witness_id).'</select></td>';
+                //$output .= '<td><select name="_witness_id_'.$index.'">'.Courses::select_witnesses($results[$index]->witness_id).'</select></td>';
+                $CertificationDate = wp_date( get_option( 'date_format' ), $results[$index]->certification_date );
+                $output .= '<td><input type="text" name="_certification_date_'.$index.'" value="'.$CertificationDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
+            //$output .= '<td><select name="_lecturer_id">'.self::select_options().'</select></td>';
+            $output .= '<td><select name="_lecturer_id">'.Courses::select_lecturers().'</select></td>';
+            $output .= '<td><select name="_witness_id">'.self::select_options().'</select></td>';
+            //$output .= '<td><select name="_witness_id">'.Courses::select_witnesses.'</select></td>';
+            $output .= '<td><input type="date" name="_certification_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * user relationship with course
+             */
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
             global $wpdb;
@@ -181,6 +210,9 @@ if (!class_exists('users')) {
             });
         </script><?php
 
+            /** 
+             * view_mode footer
+             */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
@@ -276,6 +308,18 @@ if (!class_exists('users')) {
                 witness_id int,
                 certification_date int,
                 PRIMARY KEY  (u_c_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
+                u_c_l_id int NOT NULL AUTO_INCREMENT,
+                student_id int NOT NULL,
+                course_id int NOT NULL,
+                learning_id int NOT NULL,
+                learning_date int NOT NULL,
+                lecturer_witness_id int,
+                learning_note varchar(255),
+                PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
         }

@@ -235,7 +235,7 @@ if (!class_exists('courses')) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td><input type="text" name="_reference_title_'.$index.'" value="'.$results[$index]->reference_title.'"></td>';
                 $output .= '<td><input type="text" name="_reference_link_'.$index.'" value="'.$results[$index]->reference_link.'">';
-                $output .= '<a href="'.$results[$index]->reference_link.'">link</a></td>';
+                $output .= ' <a href="'.$results[$index]->reference_link.'">link</a></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
