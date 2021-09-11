@@ -43,7 +43,7 @@ if (!class_exists('teaches')) {
                 } else {
                     $table = $wpdb->prefix.'teach_courses';
                     $data = array(
-                        //'create_date' => strtotime($_POST['_create_date']), 
+                        //'created_date' => strtotime($_POST['_created_date']), 
                         'teach_id' => $_GET['_id'],
                         'course_id' => $_POST['_course_id']
                     );

@@ -43,7 +43,7 @@ if (!class_exists('learnings')) {
                 } else {
                     $table = $wpdb->prefix.'learning_courses';
                     $data = array(
-                        //'create_date' => strtotime($_POST['_create_date']), 
+                        //'created_date' => strtotime($_POST['_created_date']), 
                         'learning_id' => $_GET['_id'],
                         'course_id' => $_POST['_course_id']
                     );
@@ -73,18 +73,6 @@ if (!class_exists('learnings')) {
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                /*
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-                }
-                if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-                }
-                if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-                }
-                $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_learning_id">';
-                */
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
@@ -100,20 +88,6 @@ if (!class_exists('learnings')) {
             
             if( isset($_POST['edit_mode']) ) {
         
-            //$AgentList = new AgentList();
-            //$Agent = new Agent();
-                //$agents = $AgentList->getAgents();
-        /*
-                foreach ($courses as $index => $course) {
-                    if ($_POST['_item']=='edit_'.$index) {
-                        $PublicKey = $agents[$index]->getPublicKey();
-                        $KeyValueEntries = $agents[$index]->getMetadata();
-                        foreach ($KeyValueEntries as $KeyValueEntry)
-                        if ($KeyValueEntry->getKey()=='email') 
-                            $LoginName = $KeyValueEntry->getValue();
-                    }
-                }
-        */
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learnings WHERE learning_id = {$_POST['_id']}", OBJECT );
                 $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
@@ -141,7 +115,7 @@ if (!class_exists('learnings')) {
         
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                if( $_POST['edit_mode']=='Create New' ) {
+                if( $_POST['edit_mode']=='Create' ) {
                     $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
@@ -166,7 +140,8 @@ if (!class_exists('learnings')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'learnings';
                 $data = array(
-                    'created_date' => strtotime($_POST['_created_date']), 
+                    //'created_date' => strtotime($_POST['_created_date']), 
+                    'created_date' => current_time('timestamp'), 
                     'learning_title' => $_POST['_learning_title']
                 );
                 $format = array('%d', '%s');

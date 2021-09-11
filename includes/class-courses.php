@@ -27,7 +27,7 @@ if (!class_exists('courses')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'courses';
                 $data = array(
-                    'create_date' => current_time('timestamp'), 
+                    'created_date' => current_time('timestamp'), 
                     'course_title' => $_POST['_course_title']
                 );
                 $format = array('%d', '%s');
@@ -61,17 +61,17 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             if( $_mode=='Update' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreateDate.'" disabled></td></tr>';
             } else if( $_mode=='Delete' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_create_date" value="'.$CreateDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreateDate.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
             }
@@ -218,7 +218,7 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->create_date );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
@@ -317,7 +317,7 @@ if (!class_exists('courses')) {
 
                 $CourseId = $results[$index]->course_id;
                 $CourseTitle = $results[$index]->course_title;
-                $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->create_date );
+                $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->created_date );
         
                 $output .= '<form method="get">';
                 $output .= '<tr>';
@@ -394,7 +394,7 @@ if (!class_exists('courses')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
                 course_id int NOT NULL AUTO_INCREMENT,
                 course_title varchar(255) NOT NULL,
-                create_date int NOT NULL,
+                created_date int NOT NULL,
                 PRIMARY KEY  (course_id)
             ) $charset_collate;";        
             dbDelta($sql);
