@@ -91,20 +91,16 @@ if (!class_exists('learnings')) {
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learnings WHERE learning_id = {$_POST['_id']}", OBJECT );
                 $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
-                //if( $_POST['edit_mode']=='Create New' ) {
-                //    $row=array();
-                //}
-                //$learningDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 if( $_POST['edit_mode']=='Create' ) {
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value=""></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_created_date" value="'.$CreatedDate.'"></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.date(get_option('date_format')).'" disabled></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
                     $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_learning_id" value="'.$row->learning_id.'"></td></tr>';
                     $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value="'.$row->learning_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.' disabled"></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.'" disabled></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Delete' ) {
                     $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_learning_id" value="'.$row->learning_id.'"></td></tr>';
@@ -178,7 +174,6 @@ if (!class_exists('learnings')) {
             foreach ($results as $index => $result) {
                 $learningId = $results[$index]->learning_id;
                 $learningTitle = $results[$index]->learning_title;
-                //$learningDate = $results[$index]->learning_date;
                 $CreatedDate = wp_date( get_option( 'date_format' ), $results[$index]->created_date );
         
                 $output .= '<form method="post">';
@@ -207,6 +202,24 @@ if (!class_exists('learnings')) {
             return $output;    
         }
         
+        function select_options( $default_id=null ) {
+
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learnings", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->course_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->learning_id.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->learning_id.'">';
+                }
+                $output .= $results[$index]->learning_title;
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+            return $output;    
+        }
+
         function create_tables() {
         
             global $wpdb;
