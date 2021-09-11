@@ -127,7 +127,7 @@ if (!class_exists('users')) {
                     if ( $_POST['_course_id_'.$index]=='delete_select' ){
                         $table = $wpdb->prefix.'user_course_learnings';
                         $where = array(
-                            't_c_l_id' => $results[$index]->t_c_l_id
+                            'u_c_l_id' => $results[$index]->u_c_l_id
                         );
                         $wpdb->delete( $table, $where );    
                     } else {
@@ -139,7 +139,7 @@ if (!class_exists('users')) {
                             'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
                         );
                         $where = array(
-                            't_c_l_id' => $results[$index]->t_c_l_id
+                            'u_c_l_id' => $results[$index]->u_c_l_id
                         );
                         $wpdb->update( $table, $data, $where );
                     }
