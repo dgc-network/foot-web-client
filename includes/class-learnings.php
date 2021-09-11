@@ -208,7 +208,7 @@ if (!class_exists('learnings')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learnings", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
-                if ( $results[$index]->course_id == $default_id ) {
+                if ( $results[$index]->learning_id == $default_id ) {
                     $output .= '<option value="'.$results[$index]->learning_id.'" selected>';
                 } else {
                     $output .= '<option value="'.$results[$index]->learning_id.'">';
