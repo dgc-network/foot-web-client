@@ -66,11 +66,32 @@ if (!class_exists('NonFungibleToken')) {
         function setup_account(){}
 
         // This transaction is for transferring and NFT from one account to another
-        /// transaction(recipient: Address, withdrawID: UInt64)
-        function transfer_nft( $recipient, $withdrawID ){}
+        ///transaction(recipient: Address, withdrawID: UInt64)
+        function transfer_nft( $recipient, int $withdrawID ){
+/*
+            // get the recipients public account object
+            let recipient = getAccount(recipient)
+
+            // borrow a reference to the signer's NFT collection
+            let collectionRef = acct.borrow<&ExampleNFT.Collection>(
+                from: /storage/NFTCollection
+            )?? panic("Could not borrow a reference to the owner's collection")
+
+            // borrow a public reference to the receivers collection
+            let depositRef = recipient.getCapability(/public/NFTCollection)
+                .borrow<&{NonFungibleToken.CollectionPublic}>()
+                ?? panic("Could not borrow a reference to the receiver's collection")
+
+            // withdraw the NFT from the owner's collection
+            let nft <- collectionRef.withdraw(withdrawID: withdrawID)
+
+            // Deposit the NFT in the recipient's collection
+            depositRef.deposit(token: <-nft)
+*/
+        }
 
         // This script uses the NFTMinter resource to mint a new NFT
-        /// transaction(recipient: Address)
+        ///transaction(recipient: Address)
         function mint_nft( $recipient ){
 
            // create a new NFT
@@ -86,26 +107,45 @@ if (!class_exists('NonFungibleToken')) {
          * Scripts
          */
         // This transaction returns an array of all the nft ids in the collection
-        /// pub fun main(account: Address): [UInt64]
+        ///pub fun main(account: Address): [UInt64]
         function read_collection_ids( $account ){
-
+/*
+            let collectionRef = getAccount(account)
+                .getCapability(/public/%s)
+                .borrow<&{NonFungibleToken.CollectionPublic}>()
+                ?? panic("Could not borrow capability from public collection")
+     
+            return collectionRef.getIDs()
+*/
+            return $this->CollectionPublic.getIDs();
         }
 
 
         // This transaction gets the length of an account's nft collection
-        /// pub fun main(account: Address): Int
+        ///pub fun main(account: Address): Int
         function read_collection_length( $account ){
 
         }
 
         // This script reads metadata about an NFT in a user's collection
-        /// pub fun main(account: Address): UInt64 
+        ///pub fun main(account: Address): UInt64 
         function read_nft_id( $account ){
+/*            
+            // Get the public collection of the owner of the token
+            let collectionRef = getAccount(account)
+                .getCapability(/public/NFTCollection)
+                .borrow<&{NonFungibleToken.CollectionPublic}>()
+                ?? panic("Could not borrow capability from public collection")
 
+            // Borrow a reference to a specific NFT in the collection
+            let nft = collectionRef.borrowNFT(id: 1)
+
+            return nft.id
+*/
         }
 
         // public function that anyone can call to create a new empty collection
-        //pub fun createEmptyCollection(): @NonFungibleToken.Collection 
+        ///pub fun createEmptyCollection(): @NonFungibleToken.Collection 
         function createEmptyCollection(){
             $collection = new NFT_Collection;
             return $collection;
@@ -180,14 +220,17 @@ if (!class_exists('NFT_Collection')) {
         // getIDs returns an array of the IDs that are in the collection
         ///pub fun getIDs(): [UInt64] 
         function getIDs(){
-            return self.ownedNFTs.keys;
+            //return self.ownedNFTs.keys;
+            return $this->ownedNFTs;
         }
 
         // borrowNFT gets a reference to an NFT in the collection
         // so that the caller can read its metadata and call its methods
-        //pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-        //    return &self.ownedNFTs[id] as &NonFungibleToken.NFT
-        //}
+        //pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT 
+        function borrowNFT(int $id){
+            //return &self.ownedNFTs[id] as &NonFungibleToken.NFT
+            return $this->ownedNFTs[$id];
+        }
 
         //destroy() {
         //    destroy self.ownedNFTs
@@ -196,4 +239,18 @@ if (!class_exists('NFT_Collection')) {
     }
 }
 
+if (!class_exists('NFT_Minter')) {
+
+    class NFT_Minter {
+
+        // mintNFT mints a new NFT with a new ID and deposit it in the
+        // recipients collection using their collection reference
+        //
+        ///pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) 
+        function mintNFT($recipient){
+            
+        }
+
+    }
+}
 ?>
