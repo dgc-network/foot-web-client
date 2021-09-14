@@ -306,7 +306,7 @@ if (!class_exists('users')) {
             $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Create New" name="edit_mode">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';

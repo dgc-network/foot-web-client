@@ -10,11 +10,11 @@ if (!class_exists('teaches')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('teach_shortcode', __CLASS__ . '::shortcode_callback');
+            add_shortcode('teach_list', __CLASS__ . '::list_mode');
             self::create_tables();
         }
 
-        function shortcode_callback() {
+        function list_mode() {
 
             if( isset($_POST['submit_action']) ) {
         
@@ -73,18 +73,6 @@ if (!class_exists('teaches')) {
                 
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                /*
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-                }
-                if( $_POST['edit_mode']=='Update' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-                }
-                if( $_POST['edit_mode']=='Delete' ) {
-                    $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-                }
-                $output .= '<input type="hidden" value="'.$_GET['_id'].'" name="_teach_id">';
-                */
                 $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
                 $output .= '</div>';
                 $output .= '</form>';
@@ -117,15 +105,11 @@ if (!class_exists('teaches')) {
                 global $wpdb;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}teaches WHERE teach_id = {$_POST['_id']}", OBJECT );
                 $TeachDate = wp_date( get_option( 'date_format' ), $row->teach_date );
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $row=array();
-                }
-                //$TeachDate = wp_date( get_option( 'date_format' ), get_post_timestamp() );
                 $output  = '<form method="post">';
                 $output .= '<figure class="wp-block-table"><table><tbody>';
-                if( $_POST['edit_mode']=='Create New' ) {
-                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value="'.$row->teach_title.'"></td></tr>';
-                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value="'.$TeachDate.'"></td></tr>';
+                if( $_POST['edit_mode']=='Create' ) {
+                    $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_teach_title" value=""></td></tr>';
+                    $output .= '<tr><td>'.'Date:'.'</td><td><input style="width: 100%" type="date" name="_teach_date" value=""></td></tr>';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
                     $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_teach_id" value="'.$row->teach_id.'"></td></tr>';
@@ -141,7 +125,7 @@ if (!class_exists('teaches')) {
         
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                if( $_POST['edit_mode']=='Create New' ) {
+                if( $_POST['edit_mode']=='Create' ) {
                     $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
                 }
                 if( $_POST['edit_mode']=='Update' ) {
@@ -322,7 +306,7 @@ if (!class_exists('teaches')) {
             $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Create New" name="edit_mode">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
