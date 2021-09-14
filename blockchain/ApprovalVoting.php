@@ -198,13 +198,13 @@ if (!class_exists('Administrator')) {
         ///pub fun initializeProposals(_ proposals: [String]) {
         function initializeProposals( $proposals ) {
             
+            $approvalVoting = new ApprovalVoting;
             //pre {
             //    ApprovalVoting.proposals.length == 0: 
             //        "Proposals can only be initialized once"
             //    proposals.length > 0: 
             //        "Cannot initialize with no proposals"
             //}
-            $approvalVoting = new ApprovalVoting;
             $approvalVoting->proposals = $proposals;
 
             // Set each tally of votes to zero
