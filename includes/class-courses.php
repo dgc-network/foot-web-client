@@ -179,7 +179,7 @@ if (!class_exists('courses')) {
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td>'.'<select name="_lecturer_id">'.self::select_learnings().'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_lecturer_id">'.self::select_learnings($_id).'</select>'.'</td>';
             $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
             //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
