@@ -57,7 +57,7 @@ if (!class_exists('courses')) {
                         'learning_id' => $_POST['_learning_id'],
                         'lecturer_witness_id' => $_POST['_lecturer_witness_id'],
                     );
-                    $format = array('%s', '%s', '%d');
+                    $format = array('%d', '%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
             }
