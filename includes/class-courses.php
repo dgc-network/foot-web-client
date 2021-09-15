@@ -354,13 +354,13 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><input size="30" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'">';
+                $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'">';
                 $output .= ' <a href="'.$results[$index]->learning_link.'&_id='.$_id.'&c_l_id='.$results[$index]->c_l_id.'">link</a></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><input size="50" type="text" name="_learning_title"></td>';
+            $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
             $output .= '</tr></tbody></table></figure>';
             
