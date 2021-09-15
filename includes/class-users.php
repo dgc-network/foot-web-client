@@ -16,61 +16,6 @@ if (!class_exists('users')) {
             self::create_tables();
         }
 
-        function edit_mode( $_id=null, $_mode ) {
-
-            if ($_id==null){
-                $_id=get_current_user_id();
-                $_mode='Update';
-            }
-
-            if( isset($_POST['create_action']) ) {
-        
-            }
-        
-            if( isset($_POST['update_action']) ) {
-        
-            }
-        
-            if( isset($_POST['delete_action']) ) {
-
-            }
-
-            /** 
-             * edit_mode
-             */
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_mode=='Update' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'"></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'"></td></tr>';
-            } else if( $_mode=='Delete' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'" disabled></td></tr>';
-            } else {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
-            }
-            $output .= '</tbody></table></figure>';
-    
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            if( $_mode=='Update' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            } else if( $_mode=='Delete' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-            } else {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-            }
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-        
-            return $output;
-        }
-
         function view_mode($_id=null) {
 
             if ($_id==null){
@@ -133,8 +78,9 @@ if (!class_exists('users')) {
                     } else {
                         $table = $wpdb->prefix.'user_course_learnings';
                         $data = array(
-                            'course_id' => $_POST['_course_id_'.$index],
-                            'learning_id' => $_POST['_learning_id_'.$index],
+                            //'course_id' => $_POST['_course_id_'.$index],
+                            //'learning_id' => $_POST['_learning_id_'.$index],
+                            'c_l_id' => $_POST['_c_l_id_'.$index],
                             'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
                             'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
                         );
@@ -177,16 +123,16 @@ if (!class_exists('users')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
-                $output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
+                //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
+                //$output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
                 $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
                 $output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
                 $output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
-            $output .= '<td><select name="_learning_id">'.Learnings::select_options().'</select></td>';
+            //$output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
+            //$output .= '<td><select name="_learning_id">'.Learnings::select_options().'</select></td>';
             $output .= '<td><input type="date" name="_learning_date"></td>';
             $output .= '<td><select name="_lecturer_witness_id">'.self::select_options().'</select></td>';
             $output .= '</tr></tbody></table></figure>';
@@ -265,6 +211,61 @@ if (!class_exists('users')) {
             $output .= '</div>';
             $output .= '</form>';
 
+            return $output;
+        }
+
+        function edit_mode( $_id=null, $_mode ) {
+
+            if ($_id==null){
+                $_id=get_current_user_id();
+                $_mode='Update';
+            }
+
+            if( isset($_POST['create_action']) ) {
+        
+            }
+        
+            if( isset($_POST['update_action']) ) {
+        
+            }
+        
+            if( isset($_POST['delete_action']) ) {
+
+            }
+
+            /** 
+             * edit_mode
+             */
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            if( $_mode=='Update' ) {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'"></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'"></td></tr>';
+            } else if( $_mode=='Delete' ) {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_userdata($_id)->display_name.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value="'.get_userdata($_id)->user_email.'" disabled></td></tr>';
+            } else {
+                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
+                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_user_email" value=""></td></tr>';
+            }
+            $output .= '</tbody></table></figure>';
+    
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            if( $_mode=='Update' ) {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+            } else if( $_mode=='Delete' ) {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            } else {
+                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+            }
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+        
             return $output;
         }
 
@@ -354,9 +355,10 @@ if (!class_exists('users')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
-                course_id int NOT NULL,
-                learning_id int NOT NULL,
-                learning_date int NOT NULL,
+                course_id int,
+                learning_id int,
+                c_l_id int,
+                learning_date int,
                 lecturer_witness_id int,
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        

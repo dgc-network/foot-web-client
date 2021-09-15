@@ -16,6 +16,407 @@ if (!class_exists('courses')) {
             self::create_tables();
         }
 
+        function course_learnings( $_id=null ) {
+
+            if ($_id==null){
+                return '<div>course ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                /** 
+                 * submit learning
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_learning_title_'.$index]=='delete' ) || ( $_POST['_learning_link_'.$index]=='delete' ) ){
+                        $table = $wpdb->prefix.'course_learnings';
+                        $where = array(
+                            'c_r_id' => $results[$index]->c_r_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_learnings';
+                        $data = array(
+                            'learning_title' => $_POST['_learning_title_'.$index],
+                            'learning_link' => $_POST['_learning_link_'.$index],
+                        );
+                        $where = array(
+                            'c_r_id' => $results[$index]->c_r_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( !($_POST['_learning_title']=='') ){
+                //} else {
+                    $table = $wpdb->prefix.'course_learnings';
+                    $data = array(
+                        'learning_title' => $_POST['_learning_title'],
+                        'learning_link' => $_POST['_learning_link'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%s', '%s', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                /** 
+                 * submit lecturer
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index]
+                        );
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if (!(( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ))){
+                //} else {
+                    $table = $wpdb->prefix.'course_lecturers';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_expired_date']), 
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                /** 
+                 * submit witness
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_witness_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
+                            'witness_id' => $_POST['_witness_id_'.$index]
+                        );
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->update( $table, $data, $where );
+                    }
+                }
+                if (!(( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ))){
+                //} else {
+                    $table = $wpdb->prefix.'course_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_w_expired_date']), 
+                        'witness_id' => $_POST['_witness_id'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
+
+            /** 
+             * view_mode header
+             */
+            global $wpdb;
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $current_user_id = get_current_user_id();
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * course relationship with refernce
+             */
+/*            
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td><input type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                $output .= '<td><input type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'">';
+                $output .= ' <a href="'.$results[$index]->learning_link.'">link</a></td>';
+                $output .= '</tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><input type="text" name="_learning_title"></td>';
+            $output .= '<td><input type="text" name="_learning_link"></td>';
+            $output .= '</tr></tbody></table></figure>';
+*/            
+            /** 
+             * user course relationship with learning
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_learning_title_'.$index.'">'.self::select_learnings($results[$index]->c_l_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
+                //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td>'.'<select name="_lecturer_id">'.self::select_learnings().'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
+            //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * course relationship with witness 
+             */
+/*            
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
+                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
+            $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+*/            
+            /** 
+             * view_mode footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
+        function view_mode( $_id=null ) {
+
+            if ($_id==null){
+                return '<div>ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                /** 
+                 * submit learning
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_learning_title_'.$index]=='delete' ) || ( $_POST['_learning_link_'.$index]=='delete' ) ){
+                        $table = $wpdb->prefix.'course_learnings';
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_learnings';
+                        $data = array(
+                            'learning_title' => $_POST['_learning_title_'.$index],
+                            'learning_link' => $_POST['_learning_link_'.$index],
+                        );
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( !($_POST['_learning_title']=='') ){
+                //} else {
+                    $table = $wpdb->prefix.'course_learnings';
+                    $data = array(
+                        'learning_title' => $_POST['_learning_title'],
+                        'learning_link' => $_POST['_learning_link'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%s', '%s', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                /** 
+                 * submit lecturer
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_lecturers';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index]
+                        );
+                        $where = array(
+                            'c_l_id' => $results[$index]->c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if (!(( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ))){
+                //} else {
+                    $table = $wpdb->prefix.'course_lecturers';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_expired_date']), 
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+                /** 
+                 * submit witness
+                 */
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_witness_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_witnesses';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
+                            'witness_id' => $_POST['_witness_id_'.$index]
+                        );
+                        $where = array(
+                            'c_w_id' => $results[$index]->c_w_id
+                        );
+                        $wpdb->update( $table, $data, $where );
+                    }
+                }
+                if (!(( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ))){
+                //} else {
+                    $table = $wpdb->prefix.'course_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_w_expired_date']), 
+                        'witness_id' => $_POST['_witness_id'],
+                        'course_id' => $_GET['_id']
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
+
+            /** 
+             * view_mode header
+             */
+            global $wpdb;
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * course relationship with refernce
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td><input type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                $output .= '<td><input type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'">';
+                $output .= ' <a href="'.$results[$index]->learning_link.'">link</a></td>';
+                $output .= '</tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><input type="text" name="_learning_title"></td>';
+            $output .= '<td><input type="text" name="_learning_link"></td>';
+            $output .= '</tr></tbody></table></figure>';
+            
+            /** 
+             * course relationship with lecturer 
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</select></td>';
+                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
+            $output .= '<td><input type="date" name="_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * course relationship with witness 
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
+                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
+            $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * view_mode footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
         function edit_mode( $_id=null, $_mode ) {
 
             if ($_id==null){
@@ -95,203 +496,6 @@ if (!class_exists('courses')) {
             $output .= '</div>';
             $output .= '</form>';
         
-            return $output;
-        }
-
-        function view_mode( $_id=null ) {
-
-            if ($_id==null){
-                return '<div>ID is required</div>';
-            }
-
-            if( isset($_POST['submit_action']) ) {
-        
-                global $wpdb;
-                /** 
-                 * submit reference
-                 */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_references WHERE course_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if (( $_POST['_reference_title_'.$index]=='delete' ) || ( $_POST['_reference_link_'.$index]=='delete' ) ){
-                        $table = $wpdb->prefix.'course_references';
-                        $where = array(
-                            'c_r_id' => $results[$index]->c_r_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'course_references';
-                        $data = array(
-                            'reference_title' => $_POST['_reference_title_'.$index],
-                            'reference_link' => $_POST['_reference_link_'.$index],
-                        );
-                        $where = array(
-                            'c_r_id' => $results[$index]->c_r_id
-                        );
-                        $wpdb->update( $table, $data, $where );    
-                    }
-                }
-                if ( $_POST['_reference_title']=='' ){
-                } else {
-                    $table = $wpdb->prefix.'course_references';
-                    $data = array(
-                        'reference_title' => $_POST['_reference_title'],
-                        'reference_link' => $_POST['_reference_link'],
-                        'course_id' => $_GET['_id']
-                    );
-                    $format = array('%s', '%s', '%d');
-                    $wpdb->insert($table, $data, $format);
-                }
-
-                /** 
-                 * submit lecturer
-                 */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
-                        $table = $wpdb->prefix.'course_lecturers';
-                        $where = array(
-                            'c_l_id' => $results[$index]->c_l_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'course_lecturers';
-                        $data = array(
-                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
-                            'lecturer_id' => $_POST['_lecturer_id_'.$index]
-                        );
-                        $where = array(
-                            'c_l_id' => $results[$index]->c_l_id
-                        );
-                        $wpdb->update( $table, $data, $where );    
-                    }
-                }
-                if (( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ) ){
-                } else {
-                    $table = $wpdb->prefix.'course_lecturers';
-                    $data = array(
-                        'expired_date' => strtotime($_POST['_expired_date']), 
-                        'lecturer_id' => $_POST['_lecturer_id'],
-                        'course_id' => $_GET['_id']
-                    );
-                    $format = array('%d', '%d', '%d');
-                    $wpdb->insert($table, $data, $format);
-                }
-
-                /** 
-                 * submit witness
-                 */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if ( $_POST['_witness_id_'.$index]=='delete_select' ){
-                        $table = $wpdb->prefix.'course_witnesses';
-                        $where = array(
-                            'c_w_id' => $results[$index]->c_w_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'course_witnesses';
-                        $data = array(
-                            'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
-                            'witness_id' => $_POST['_witness_id_'.$index]
-                        );
-                        $where = array(
-                            'c_w_id' => $results[$index]->c_w_id
-                        );
-                        $wpdb->update( $table, $data, $where );
-                    }
-                }
-                if (( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ) ){
-                } else {
-                    $table = $wpdb->prefix.'course_witnesses';
-                    $data = array(
-                        'expired_date' => strtotime($_POST['_w_expired_date']), 
-                        'witness_id' => $_POST['_witness_id'],
-                        'course_id' => $_GET['_id']
-                    );
-                    $format = array('%d', '%d', '%d');
-                    $wpdb->insert($table, $data, $format);
-                }
-            }
-
-            /** 
-             * view_mode header
-             */
-            global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
-            $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
-            $output .= '</tbody></table></figure>';
-
-            /** 
-             * course relationship with refernce
-             */
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_references WHERE course_id = {$_id}", OBJECT );
-            foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><input type="text" name="_reference_title_'.$index.'" value="'.$results[$index]->reference_title.'"></td>';
-                $output .= '<td><input type="text" name="_reference_link_'.$index.'" value="'.$results[$index]->reference_link.'">';
-                $output .= ' <a href="'.$results[$index]->reference_link.'">link</a></td>';
-                $output .= '</tr>';
-            }
-            $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><input type="text" name="_reference_title"></td>';
-            $output .= '<td><input type="text" name="_reference_link"></td>';
-            $output .= '</tr></tbody></table></figure>';
-            
-            /** 
-             * course relationship with lecturer 
-             */
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
-            foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_id).'</select></td>';
-                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
-            }
-            $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
-            $output .= '<td><input type="date" name="_expired_date"></td></tr>';
-            $output .= '</tbody></table></figure>';
-            
-            /** 
-             * course relationship with witness 
-             */
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
-            foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->witness_id).'</select></td>';
-                $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
-            }
-            $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
-            $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
-            $output .= '</tbody></table></figure>';
-            
-            /** 
-             * view_mode footer
-             */
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
-            $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-
             return $output;
         }
 
@@ -385,6 +589,28 @@ if (!class_exists('courses')) {
             return $output;    
         }
 
+        function select_learnings( $course_id=null, $default_id=null ) {
+
+            if ($course_id==null){
+                $output = '<option value="no_select">-- id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id={$course_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->lecturer_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->c_l_id.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->c_l_id.'">';
+                }
+                $output .= $results[$index]->learning_title;
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+            return $output;    
+        }
+
         function create_tables() {
         
             global $wpdb;
@@ -399,12 +625,12 @@ if (!class_exists('courses')) {
             ) $charset_collate;";        
             dbDelta($sql);
 
-            $sql = "CREATE TABLE `{$wpdb->prefix}course_references` (
-                c_r_id int NOT NULL AUTO_INCREMENT,
+            $sql = "CREATE TABLE `{$wpdb->prefix}course_learnings` (
+                c_l_id int NOT NULL AUTO_INCREMENT,
                 course_id int NOT NULL,
-                reference_title varchar(255),
-                reference_link varchar(255),
-                PRIMARY KEY  (c_r_id)
+                learning_title varchar(255),
+                learning_link varchar(255),
+                PRIMARY KEY  (c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
