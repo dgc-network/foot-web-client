@@ -169,11 +169,11 @@ if (!class_exists('courses')) {
              * user course relationship with learning
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td>'.'<select name="_learning_title_'.$index.'">'.self::select_learnings($results[$index]->c_l_id).'</select></td>';
+                $output .= '<td>'.'<select name="_learning_title_'.$index.'">'.self::select_learnings($_id, $results[$index]->c_l_id).'</select></td>';
                 $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
@@ -253,7 +253,6 @@ if (!class_exists('courses')) {
                     }
                 }
                 if ( !($_POST['_learning_title']=='') ){
-                //} else {
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
                         'learning_title' => $_POST['_learning_title'],
