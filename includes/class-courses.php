@@ -49,7 +49,6 @@ if (!class_exists('courses')) {
                     }
                 }
                 if ( !($_POST['_learning_title']=='') ){
-                //} else {
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
                         'learning_title' => $_POST['_learning_title'],
@@ -84,7 +83,6 @@ if (!class_exists('courses')) {
                     }
                 }
                 if (!(( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ))){
-                //} else {
                     $table = $wpdb->prefix.'course_lecturers';
                     $data = array(
                         'expired_date' => strtotime($_POST['_expired_date']), 
@@ -132,7 +130,7 @@ if (!class_exists('courses')) {
             }
 
             /** 
-             * view_mode header
+             * course_learnings header
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
@@ -287,7 +285,6 @@ if (!class_exists('courses')) {
                     }
                 }
                 if (!(( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ))){
-                //} else {
                     $table = $wpdb->prefix.'course_lecturers';
                     $data = array(
                         'expired_date' => strtotime($_POST['_expired_date']), 
@@ -322,7 +319,6 @@ if (!class_exists('courses')) {
                     }
                 }
                 if (!(( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ))){
-                //} else {
                     $table = $wpdb->prefix.'course_witnesses';
                     $data = array(
                         'expired_date' => strtotime($_POST['_w_expired_date']), 
@@ -354,14 +350,14 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><input type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
-                $output .= '<td><input type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'">';
+                $output .= '<td><input size="50" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'">';
                 $output .= ' <a href="'.$results[$index]->learning_link.'&_id='.$_id.'">link</a></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><input type="text" name="_learning_title"></td>';
-            $output .= '<td><input type="text" name="_learning_link"></td>';
+            $output .= '<td><input size="50" type="text" name="_learning_title"></td>';
+            $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
             $output .= '</tr></tbody></table></figure>';
             
             /** 
@@ -592,14 +588,14 @@ if (!class_exists('courses')) {
         function select_learnings( $course_id=null, $default_id=null ) {
 
             if ($course_id==null){
-                $output = '<option value="no_select">-- id is required --</option>';
+                $output = '<option value="no_select">-- course_id is required --</option>';
                 return $output;    
             }
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id={$course_id}", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
-                if ( $results[$index]->lecturer_id == $default_id ) {
+                if ( $results[$index]->c_l_id == $default_id ) {
                     $output .= '<option value="'.$results[$index]->c_l_id.'" selected>';
                 } else {
                     $output .= '<option value="'.$results[$index]->c_l_id.'">';
