@@ -80,7 +80,7 @@ if (!class_exists('users')) {
                         $data = array(
                             //'course_id' => $_POST['_course_id_'.$index],
                             //'learning_id' => $_POST['_learning_id_'.$index],
-                            'c_l_id' => $_POST['_c_l_id_'.$index],
+                            'learning_id' => $_POST['_learning_id_'.$index],
                             'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
                             'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
                         );
@@ -357,7 +357,6 @@ if (!class_exists('users')) {
                 student_id int NOT NULL,
                 course_id int,
                 learning_id int,
-                c_l_id int,
                 learning_date int,
                 lecturer_witness_id int,
                 PRIMARY KEY  (u_c_l_id)
