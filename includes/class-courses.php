@@ -69,7 +69,7 @@ if (!class_exists('courses')) {
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
-            $repack = self::repack_lecturers_witnesses();
+            //$repack = self::repack_lecturers_witnesses();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
