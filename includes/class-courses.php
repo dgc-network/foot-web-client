@@ -68,7 +68,7 @@ if (!class_exists('courses')) {
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
-            $current_user_id = get_current_user_id();
+            //$current_user_id = get_current_user_id();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
@@ -247,7 +247,7 @@ if (!class_exists('courses')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'">';
-                $output .= ' <a href="'.$results[$index]->learning_link.'&_id='.$_id.'&learning_id='.$results[$index]->learning_id.'">link</a></td>';
+                $output .= ' <a href="'.$results[$index]->learning_link.'&_id='.$_id.'">link</a></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
