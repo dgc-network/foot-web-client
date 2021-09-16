@@ -565,10 +565,10 @@ if (!class_exists('courses')) {
                 $output = '<option value="no_select">-- id is required --</option>';
                 return $output;    
             }
-
+            global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id={$course_id}", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
-            return $output;
+            //return $output;
             foreach ($results as $index => $result) {
                 if ( $results[$index]->lecturer_witness_id == $default_id ) {
                     $output .= '<option value="'.$results[$index]->lecturer_witness_id.'" selected>';
