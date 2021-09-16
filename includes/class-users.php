@@ -67,7 +67,7 @@ if (!class_exists('users')) {
                 /** 
                  * submit the user relationship with course learning
                  */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id}", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_course_id_'.$index]=='delete_select' ){
                         $table = $wpdb->prefix.'user_course_learnings';
@@ -80,9 +80,9 @@ if (!class_exists('users')) {
                         $data = array(
                             //'course_id' => $_POST['_course_id_'.$index],
                             //'learning_id' => $_POST['_learning_id_'.$index],
-                            'learning_id' => $_POST['_learning_id_'.$index],
+                            //'learning_id' => $_POST['_learning_id_'.$index],
                             'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
-                            'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
+                            //'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
                         );
                         $where = array(
                             'u_c_l_id' => $results[$index]->u_c_l_id
@@ -137,10 +137,10 @@ if (!class_exists('users')) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$learning_id}", OBJECT );
                 $output .= '<td>'.$row->learning_title.'</td>';
                 $output .= '<td>'.get_userdata($results[$index]->lecturer_witness_id)->display_name.'</td>';
-                $output .= '<td>'.$learningDate.'</td>';
+                //$output .= '<td>'.$learningDate.'</td>';
+                $output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
                 //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
                 //$output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
-                //$output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
                 //$output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $output .= '</tr>';
             }
