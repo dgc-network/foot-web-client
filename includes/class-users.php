@@ -125,18 +125,18 @@ if (!class_exists('users')) {
             foreach ($results as $index => $result) {
                 if ($course_id == $results[$index]->course_id){$course_header=false;}
                 if ($course_header) {
-
                     $course_id = $results[$index]->course_id;
                     $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
                     $output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
                     $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
                 }
 
-
                 $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td>'.$results[$index]->learning_id.'</td>';
-                $output .= '<td>'.$results[$index]->lecturer_witness_id.'</td>';
+                $learning_id = $results[$index]->learning_id;
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$learning_id}", OBJECT );
+                $output .= '<td>'.$row->learning_title.'</td>';
+                $output .= '<td>'.get_userdata($results[$index]->lecturer_witness_id)->display_name.'</td>';
                 $output .= '<td>'.$learningDate.'</td>';
                 //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
                 //$output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
