@@ -69,7 +69,7 @@ if (!class_exists('courses')) {
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
-            $repack = self::repack_lecturers_witnesses();
+            //$repack = self::repack_lecturers_witnesses();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
@@ -163,6 +163,7 @@ if (!class_exists('courses')) {
                 /** 
                  * submit lecturer
                  */
+/*                
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
@@ -193,10 +194,42 @@ if (!class_exists('courses')) {
                     $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
+*/
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=false", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_lecturers_witnesses';
+                        $where = array(
+                            'c_l_w_id' => $results[$index]->c_l_w_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_lecturers_witnesses';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'lecturer_witness_id' => $_POST['_lecturer_id_'.$index]
+                        );
+                        $where = array(
+                            'c_l_w_id' => $results[$index]->c_l_w_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if (!(( $_POST['_lecturer_id']=='no_select' ) || ( $_POST['_lecturer_id']=='delete_select' ))){
+                    $table = $wpdb->prefix.'course_lecturers_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_expired_date']), 
+                        'lecturer_witness_id' => $_POST['_lecturer_id'],
+                        'course_id' => $_GET['_id'],
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
 
                 /** 
                  * submit witness
                  */
+/*                
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_witness_id_'.$index]=='delete_select' ){
@@ -226,6 +259,39 @@ if (!class_exists('courses')) {
                     );
                     $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
+                }
+*/
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=true", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $_POST['_witness_id_'.$index]=='delete_select' ){
+                        $table = $wpdb->prefix.'course_lecturers_witnesses';
+                        $where = array(
+                            'c_l_w_id' => $results[$index]->c_l_w_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_lecturers_witnesses';
+                        $data = array(
+                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'lecturer_witness_id' => $_POST['_witness_id_'.$index]
+                        );
+                        $where = array(
+                            'c_l_w_id' => $results[$index]->c_l_w_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if (!(( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ))){
+                    $table = $wpdb->prefix.'course_lecturers_witnesses';
+                    $data = array(
+                        'expired_date' => strtotime($_POST['_expired_date']), 
+                        'lecturer_witness_id' => $_POST['_witness_id'],
+                        'course_id' => $_GET['_id'],
+                        'is_witness' => true,
+                    );
+                    //$format = array('%d', '%d', '%d');
+                    //$wpdb->insert($table, $data, $format);
+                    $wpdb->insert($table, $data);
                 }
             }
 
@@ -579,6 +645,7 @@ if (!class_exists('courses')) {
                 course_id int NOT NULL,
                 lecturer_witness_id int NOT NULL,
                 expired_date int NOT NULL,
+                is_witness boolean NOT NULL,
                 PRIMARY KEY  (c_l_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
