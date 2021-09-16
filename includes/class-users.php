@@ -26,52 +26,21 @@ if (!class_exists('users')) {
         
                 global $wpdb;
                 /** 
-                 * submit the user relationship with course
-                 */
-/*                
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
-                        $table = $wpdb->prefix.'user_courses';
-                        $where = array(
-                            't_c_id' => $results[$index]->t_c_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'user_courses';
-                        $data = array(
-                            'certification_date' => strtotime($_POST['_certification_date_'.$index]), 
-                            'lecturer_id' => $_POST['_lecturer_id_'.$index],
-                            'witness_id' => $_POST['_witness_id_'.$index],
-                            'course_id' => $_POST['_course_id_'.$index],
-                        );
-                        $where = array(
-                            't_c_id' => $results[$index]->t_c_id
-                        );
-                        $wpdb->update( $table, $data, $where );
-                    }
-                }
-                if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) ){
-                } else {
-                    $table = $wpdb->prefix.'user_courses';
-                    $data = array(
-                        'certification_date' => strtotime($_POST['_certification_date']), 
-                        'course_id' => $_POST['_course_id'],
-                        'lecturer_id' => $_POST['_lecturer_id'],
-                        'witness_id' => $_POST['_witness_id'],
-                        'student_id' => $_id,
-                    );
-                    $format = array('%d', '%d');
-                    $wpdb->insert($table, $data, $format);    
-                }
-*/
-                /** 
                  * submit the user relationship with course learning
                  */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
                 foreach ($results as $index => $result) {
-                    //if ( $_POST['_course_id_'.$index]=='delete_select' ){
-                    if ( $_POST['_course_id_'.$index]=='' ){
+                    $table = $wpdb->prefix.'user_course_learnings';
+                    $data = array(
+                        'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
+                    );
+                    $where = array(
+                        'u_c_l_id' => $results[$index]->u_c_l_id
+                    );
+                    $wpdb->update( $table, $data, $where );
+/*                
+                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                    //if ( $_POST['_course_id_'.$index]=='' ){
                         $table = $wpdb->prefix.'user_course_learnings';
                         $where = array(
                             'u_c_l_id' => $results[$index]->u_c_l_id
@@ -91,6 +60,7 @@ if (!class_exists('users')) {
                         );
                         $wpdb->update( $table, $data, $where );
                     }
+*/                    
                 }
                 /*
                 if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) || ( $_POST['_learning_id']=='no_select' ) || ( $_POST['_learning_id']=='delete_select' ) ){
@@ -123,7 +93,6 @@ if (!class_exists('users')) {
              */
             $course_header = true;
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            //$output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
             foreach ($results as $index => $result) {
@@ -141,82 +110,11 @@ if (!class_exists('users')) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$learning_id}", OBJECT );
                 $output .= '<td>'.$row->learning_title.'</td>';
                 $output .= '<td>'.get_userdata($results[$index]->lecturer_witness_id)->display_name.'</td>';
-                //$output .= '<td>'.$learningDate.'</td>';
                 $output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
-                //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
-                //$output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
-                //$output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';
-            /*
-            $output .= '<tr><td>'.($index+1).'</td>';
-            //$output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
-            //$output .= '<td><select name="_learning_id">'.Learnings::select_options().'</select></td>';
-            $output .= '<td><input type="date" name="_learning_date"></td>';
-            $output .= '<td><select name="_lecturer_witness_id">'.self::select_options().'</select></td>';
-            $output .= '</tr></tbody></table></figure>';
-            */
 
-            /** 
-             * user relationship with course
-             */
-/*            
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Courses'.'</td><td>Lecturers</td><td>Witnesses</td><td>Certification</td></tr>';
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
-            foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
-                $output .= '<td><select name="_lecturer_id_'.$index.'">'.self::select_options($results[$index]->lecturer_id).'</select></td>';
-                //$output .= '<td><select name="_lecturer_id_'.$index.'">'.Courses::select_lecturers($results[$index]->lecturer_id).'</select></td>';
-                $output .= '<td><select name="_witness_id_'.$index.'">'.self::select_options($results[$index]->witness_id).'</select></td>';
-                //$output .= '<td><select name="_witness_id_'.$index.'">'.Courses::select_witnesses($results[$index]->witness_id).'</select></td>';
-                $CertificationDate = wp_date( get_option( 'date_format' ), $results[$index]->certification_date );
-                $output .= '<td><input type="text" name="_certification_date_'.$index.'" value="'.$CertificationDate.'">'.'</td></tr>';
-            }
-            $output .= '<tr><td>'.($index+1).'</td>';
-            $output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
-            //$output .= '<td><select name="_lecturer_id">'.self::select_options().'</select></td>';
-            $output .= '<td><select name="_lecturer_id">'.Courses::select_lecturers().'</select></td>';
-            $output .= '<td><select name="_witness_id">'.self::select_options().'</select></td>';
-            //$output .= '<td><select name="_witness_id">'.Courses::select_witnesses.'</select></td>';
-            $output .= '<td><input type="date" name="_certification_date"></td></tr>';
-            $output .= '</tbody></table></figure>';
-
-        ?><script type="text/javascript">
-            jQuery(document).ready(function(e) {
-                jQuery('.variations select').on('change', function(){
-                alert(jQuery('.single_variation').text());
-                });
-            });
-
-            jQuery(function($) {
-
-                // Delegated event handler attached to a common ancestor
-                $('.variations').on('change','select',function(){
-
-                    // this is the select itself, so use its val()
-                    var currentSelectVal = $(this).val();
-
-                    // Do something with the selection
-                    $('.single_variation').text(currentSelectVal);
-                });
-            });
-
-            jQuery(document).ready(function($) {
-                var $things = <?php echo json_encode($names); ?>;
-                console.log($things);
-                $(".element").each(function() {
-                    var $state = $(this).attr("title");
-                    if ($things.indexOf($state) > -1) {
-                        $(this).addClass('current');
-                    }
-                });
-            });
-        </script><?php
-*/
             /** 
              * view_mode footer
              */
@@ -361,7 +259,7 @@ if (!class_exists('users')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        
+/*        
             $sql = "CREATE TABLE `{$wpdb->prefix}user_courses` (
                 u_c_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
@@ -372,7 +270,7 @@ if (!class_exists('users')) {
                 PRIMARY KEY  (u_c_id)
             ) $charset_collate;";        
             dbDelta($sql);
-
+*/
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,

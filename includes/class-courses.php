@@ -69,6 +69,7 @@ if (!class_exists('courses')) {
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
+            $repack = self::repack_lecturers_witnesses();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
@@ -86,13 +87,15 @@ if (!class_exists('courses')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
+                //$output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($results[$index]->lecturer_witness_id).'</select></td>';
                 //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
             $output .= '<tr><td>'.($index+1).'</td>';
             $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
-            $output .= '<td>'.'<select name="_lecturer_witness_id">'.Users::select_options().'</select>'.'</td>';
+            //$output .= '<td>'.'<select name="_lecturer_witness_id">'.Users::select_options().'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers_witnesses().'</select>'.'</td>';
             //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
             
@@ -459,22 +462,49 @@ if (!class_exists('courses')) {
             return $output;    
         }
 
-        function select_lecturers( $course_id=null, $default_id=null ) {
+        function repack_lecturers_witnesses() {
+            global $wpdb;
+            $delete = $wpdb->query("TRUNCATE TABLE `course_lecturers_witnesses`");
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers}", OBJECT );
+            foreach ($results as $index => $result) {
+                $table = $wpdb->prefix.'course_lecturers_witnesses';
+                $data = array(
+                    'course_id' => $results[$index]->course_id,
+                    'lecturer_witness_id' => $results[$index]->lecturer_id,
+                    'expired_date' => $results[$index]->expired_date,
+                );
+                $format = array('%d', '%d', '%d');
+                $wpdb->insert($table, $data, $format);
+            }
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses", OBJECT );
+            foreach ($results as $index => $result) {
+                $table = $wpdb->prefix.'course_lecturers_witnesses';
+                $data = array(
+                    'course_id' => $results[$index]->course_id,
+                    'lecturer_witness_id' => $results[$index]->witness_id,
+                    'expired_date' => $results[$index]->expired_date,
+                );
+                $format = array('%d', '%d', '%d');
+                $wpdb->insert($table, $data, $format);
+            }
+        }
+
+        function select_lecturers_witnesses( $course_id=null, $default_id=null ) {
 
             if ($course_id==null){
                 $output = '<option value="no_select">-- id is required --</option>';
                 return $output;    
             }
-            global $wpdb;
+
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id={$course_id}", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
-                if ( $results[$index]->lecturer_id == $default_id ) {
-                    $output .= '<option value="'.$results[$index]->lecturer_id.'" selected>';
+                if ( $results[$index]->lecturer_witness_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->lecturer_witness_id.'" selected>';
                 } else {
-                    $output .= '<option value="'.$results[$index]->lecturer_id.'">';
+                    $output .= '<option value="'.$results[$index]->lecturer_witness_id.'">';
                 }
-                $output .= get_userdata($results[$index]->lecturer_id)->display_name;
+                $output .= get_userdata($results[$index]->lecturer_witness_id)->display_name;
                 $output .= '</option>';        
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
@@ -543,8 +573,16 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (c_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
-        }
-        
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}course_lecturers_witnesses` (
+                c_l_w_id int NOT NULL AUTO_INCREMENT,
+                course_id int NOT NULL,
+                lecturer_witness_id int NOT NULL,
+                expired_date int NOT NULL,
+                PRIMARY KEY  (c_l_w_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+        }        
     }
     new courses();
 }
