@@ -38,45 +38,7 @@ if (!class_exists('users')) {
                         'u_c_l_id' => $results[$index]->u_c_l_id
                     );
                     $wpdb->update( $table, $data, $where );
-/*                
-                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
-                    //if ( $_POST['_course_id_'.$index]=='' ){
-                        $table = $wpdb->prefix.'user_course_learnings';
-                        $where = array(
-                            'u_c_l_id' => $results[$index]->u_c_l_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'user_course_learnings';
-                        $data = array(
-                            //'course_id' => $_POST['_course_id_'.$index],
-                            //'learning_id' => $_POST['_learning_id_'.$index],
-                            //'learning_id' => $_POST['_learning_id_'.$index],
-                            'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
-                            //'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
-                        );
-                        $where = array(
-                            'u_c_l_id' => $results[$index]->u_c_l_id
-                        );
-                        $wpdb->update( $table, $data, $where );
-                    }
-*/                    
                 }
-                /*
-                if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) || ( $_POST['_learning_id']=='no_select' ) || ( $_POST['_learning_id']=='delete_select' ) ){
-                } else {
-                    $table = $wpdb->prefix.'user_course_learnings';
-                    $data = array(
-                        'course_id' => $_POST['_course_id'],
-                        'learning_id' => $_POST['_learning_id'],
-                        'learning_date' => strtotime($_POST['_learning_date']), 
-                        'lecturer_witness_id' => $_POST['_lecturer_witness_id'],
-                        'student_id' => $_id,
-                    );
-                    $format = array('%d', '%d');
-                    $wpdb->insert($table, $data, $format);    
-                }
-                */
             }
             
             /** 
@@ -89,7 +51,7 @@ if (!class_exists('users')) {
             $output .= '</tbody></table></figure>';
 
             /** 
-             * user relationship with course learning
+             * user relationship with course learnings
              */
             $course_header = true;
             $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -259,18 +221,7 @@ if (!class_exists('users')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-/*        
-            $sql = "CREATE TABLE `{$wpdb->prefix}user_courses` (
-                u_c_id int NOT NULL AUTO_INCREMENT,
-                student_id int NOT NULL,
-                course_id int NOT NULL,
-                lecturer_id int,
-                witness_id int,
-                certification_date int,
-                PRIMARY KEY  (u_c_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-*/
+
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
