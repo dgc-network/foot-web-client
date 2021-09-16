@@ -527,11 +527,11 @@ if (!class_exists('courses')) {
             dbDelta($sql);
 
             $sql = "CREATE TABLE `{$wpdb->prefix}course_lecturers` (
-                learning_id int NOT NULL AUTO_INCREMENT,
+                c_l_id int NOT NULL AUTO_INCREMENT,
                 course_id int NOT NULL,
                 lecturer_id int NOT NULL,
                 expired_date int NOT NULL,
-                PRIMARY KEY  (learning_id)
+                PRIMARY KEY  (c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
 

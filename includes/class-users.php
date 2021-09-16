@@ -134,7 +134,7 @@ if (!class_exists('users')) {
                 $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
                 $output .= '<tr><td>'.$index.'</td>';
                 $learning_id = $results[$index]->learning_id;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$learning_id}", OBJECT );
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$learning_id}", OBJECT );
                 $output .= '<td>'.$row->learning_title.'</td>';
                 $output .= '<td>'.get_userdata($results[$index]->lecturer_witness_id)->display_name.'</td>';
                 $output .= '<td>'.$learningDate.'</td>';
