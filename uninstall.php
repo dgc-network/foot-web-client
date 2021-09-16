@@ -5,6 +5,7 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 }
 global $wpdb;
 //$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}user_course_learnings" );
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}course_learnings" );
 /*
 $option_name = 'wporg_option';
  
