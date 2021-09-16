@@ -127,13 +127,14 @@ if (!class_exists('users')) {
                 if ($course_header) {
 
                     $course_id = $results[$index]->course_id;
-                    $output .= '<tr><td colspan="3">'.$course_id.'</td></td>';
+                    $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
+                    $output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
                 }
 
 
                 $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
                 $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td>'.$results[$index]->learning_title.'</td>';
+                $output .= '<td>'.$results[$index]->learning_id.'</td>';
                 $output .= '<td>'.$results[$index]->lecturer_witness_id.'</td>';
                 $output .= '<td>'.$learningDate.'</td>';
                 //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
