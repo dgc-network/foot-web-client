@@ -236,7 +236,7 @@ if (!class_exists('courses')) {
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$row->course_title.'</a></td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
