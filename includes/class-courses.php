@@ -69,7 +69,6 @@ if (!class_exists('courses')) {
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
-            //$repack = self::repack_lecturers_witnesses();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
@@ -87,8 +86,8 @@ if (!class_exists('courses')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
-                //$output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
+                //$output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
                 //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
@@ -530,33 +529,6 @@ if (!class_exists('courses')) {
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
-        }
-
-        function repack_lecturers_witnesses() {
-            global $wpdb;
-            $delete = $wpdb->query("TRUNCATE TABLE `{$wpdb->prefix}course_lecturers_witnesses`");
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers}", OBJECT );
-            foreach ($results as $index => $result) {
-                $table = $wpdb->prefix.'course_lecturers_witnesses';
-                $data = array(
-                    'course_id' => $results[$index]->course_id,
-                    'lecturer_witness_id' => $results[$index]->lecturer_id,
-                    'expired_date' => $results[$index]->expired_date,
-                );
-                $format = array('%d', '%d', '%d');
-                $wpdb->insert($table, $data, $format);
-            }
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_witnesses", OBJECT );
-            foreach ($results as $index => $result) {
-                $table = $wpdb->prefix.'course_lecturers_witnesses';
-                $data = array(
-                    'course_id' => $results[$index]->course_id,
-                    'lecturer_witness_id' => $results[$index]->witness_id,
-                    'expired_date' => $results[$index]->expired_date,
-                );
-                $format = array('%d', '%d', '%d');
-                $wpdb->insert($table, $data, $format);
-            }
         }
 
         function select_lecturers_witnesses( $course_id=null, $default_id=null ) {
