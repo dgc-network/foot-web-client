@@ -117,25 +117,39 @@ if (!class_exists('users')) {
             /** 
              * user relationship with course learning
              */
+            $course_header = true;
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Courses</td><td>Learnings</td><td>Date</td><td>Certification</td></tr>';
+            $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id}", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
             foreach ($results as $index => $result) {
+                if ($course_id == $results[$index]->course_id){$course_header=false;}
+                if ($course_header) {
+
+                    $course_id = $results[$index]->course_id;
+                    $output .= '<tr><td colspan="3">'.$course_id.'</td></td>';
+                }
+
+
+                $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
                 $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<td>'.$results[$index]->learning_title.'</td>';
+                $output .= '<td>'.$results[$index]->lecturer_witness_id.'</td>';
+                $output .= '<td>'.$learningDate.'</td>';
                 //$output .= '<td><select name="_course_id_'.$index.'">'.Courses::select_options($results[$index]->course_id).'</select></td>';
                 //$output .= '<td><select name="_learning_id_'.$index.'">'.Learnings::select_options($results[$index]->learning_id).'</select></td>';
-                $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
-                $output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
-                $output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
+                //$output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
+                //$output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $output .= '</tr>';
             }
+            /*
             $output .= '<tr><td>'.($index+1).'</td>';
             //$output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
             //$output .= '<td><select name="_learning_id">'.Learnings::select_options().'</select></td>';
             $output .= '<td><input type="date" name="_learning_date"></td>';
             $output .= '<td><select name="_lecturer_witness_id">'.self::select_options().'</select></td>';
             $output .= '</tr></tbody></table></figure>';
+            */
 
             /** 
              * user relationship with course
