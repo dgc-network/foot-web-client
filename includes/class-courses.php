@@ -272,7 +272,7 @@ if (!class_exists('courses')) {
                     } else {
                         $table = $wpdb->prefix.'course_lecturers_witnesses';
                         $data = array(
-                            'expired_date' => strtotime($_POST['_expired_date_'.$index]),
+                            'expired_date' => strtotime($_POST['_w_expired_date_'.$index]),
                             'lecturer_witness_id' => $_POST['_witness_id_'.$index]
                         );
                         $where = array(
@@ -284,7 +284,7 @@ if (!class_exists('courses')) {
                 if (!(( $_POST['_witness_id']=='no_select' ) || ( $_POST['_witness_id']=='delete_select' ))){
                     $table = $wpdb->prefix.'course_lecturers_witnesses';
                     $data = array(
-                        'expired_date' => strtotime($_POST['_expired_date']), 
+                        'expired_date' => strtotime($_POST['_w_expired_date']), 
                         'lecturer_witness_id' => $_POST['_witness_id'],
                         'course_id' => $_GET['_id'],
                         'is_witness' => true,
@@ -566,6 +566,7 @@ if (!class_exists('courses')) {
                 return $output;    
             }
 
+            return $output;    
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id={$course_id}", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
