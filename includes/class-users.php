@@ -119,7 +119,7 @@ if (!class_exists('users')) {
              */
             $course_header = true;
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
+            //$output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
             foreach ($results as $index => $result) {
@@ -129,6 +129,7 @@ if (!class_exists('users')) {
                     $course_id = $results[$index]->course_id;
                     $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
                     $output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
+                    $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
                 }
 
 
@@ -143,6 +144,7 @@ if (!class_exists('users')) {
                 //$output .= '<td><select name="_lecturer_witness_id_'.$index.'">'.self::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $output .= '</tr>';
             }
+            $output .= '</tbody></table></figure>';
             /*
             $output .= '<tr><td>'.($index+1).'</td>';
             //$output .= '<td><select name="_course_id">'.Courses::select_options().'</select></td>';
