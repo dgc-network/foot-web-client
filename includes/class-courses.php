@@ -249,7 +249,7 @@ if (!class_exists('courses')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.$index.'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'">';
-                $output .= ' <a href="'.$results[$index]->learning_link.'&_id='.$_id.'">link</a></td>';
+                $output .= ' <a href="'.$results[$index]->learning_link.'">link</a></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
