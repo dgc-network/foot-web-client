@@ -464,7 +464,7 @@ if (!class_exists('courses')) {
 
         function repack_lecturers_witnesses() {
             global $wpdb;
-            $delete = $wpdb->query("TRUNCATE TABLE `course_lecturers_witnesses`");
+            $delete = $wpdb->query("TRUNCATE TABLE `{$wpdb->prefix}course_lecturers_witnesses`");
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers}", OBJECT );
             foreach ($results as $index => $result) {
                 $table = $wpdb->prefix.'course_lecturers_witnesses';
@@ -496,7 +496,7 @@ if (!class_exists('courses')) {
                 return $output;    
             }
 
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers WHERE course_id={$course_id}", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id={$course_id}", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
                 if ( $results[$index]->lecturer_witness_id == $default_id ) {
