@@ -28,6 +28,7 @@ if (!class_exists('users')) {
                 /** 
                  * submit the user relationship with course
                  */
+/*                
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_courses WHERE student_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_course_id_'.$index]=='delete_select' ){
@@ -63,13 +64,14 @@ if (!class_exists('users')) {
                     $format = array('%d', '%d');
                     $wpdb->insert($table, $data, $format);    
                 }
-
+*/
                 /** 
                  * submit the user relationship with course learning
                  */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
                 foreach ($results as $index => $result) {
-                    if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                    //if ( $_POST['_course_id_'.$index]=='delete_select' ){
+                    if ( $_POST['_course_id_'.$index]=='' ){
                         $table = $wpdb->prefix.'user_course_learnings';
                         $where = array(
                             'u_c_l_id' => $results[$index]->u_c_l_id
@@ -90,6 +92,7 @@ if (!class_exists('users')) {
                         $wpdb->update( $table, $data, $where );
                     }
                 }
+                /*
                 if (( $_POST['_course_id']=='no_select' ) || ( $_POST['_course_id']=='delete_select' ) || ( $_POST['_learning_id']=='no_select' ) || ( $_POST['_learning_id']=='delete_select' ) ){
                 } else {
                     $table = $wpdb->prefix.'user_course_learnings';
@@ -103,6 +106,7 @@ if (!class_exists('users')) {
                     $format = array('%d', '%d');
                     $wpdb->insert($table, $data, $format);    
                 }
+                */
             }
             
             /** 
