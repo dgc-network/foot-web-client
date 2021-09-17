@@ -556,7 +556,7 @@ if (!class_exists('courses')) {
             dbDelta($sql);
         }        
     }
-    if ( is_admin() )
+    //if ( is_admin() )
     new courses();
 }
 ?>
