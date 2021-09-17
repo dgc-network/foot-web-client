@@ -97,7 +97,7 @@ if (!class_exists('courses')) {
             $output .= '</tbody></table></figure>';
             
             /** 
-             * footer
+             * course_learnings footer
              */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
@@ -247,9 +247,8 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
-                $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'">';
-                $output .= ' <a href="'.$results[$index]->learning_link.'">link</a></td>';
+                $output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.$index.'</a></td>';
+                $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
