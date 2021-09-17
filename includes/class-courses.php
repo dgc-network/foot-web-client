@@ -84,13 +84,13 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
                 $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
                 //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
-            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
             $output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers_witnesses($_id).'</select>'.'</td>';
             //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
@@ -281,12 +281,12 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'#'.'</td><td>'.'Witnesses'.'</td><td>Expired Date</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=true", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 $output .= '<td><input type="text" name="_w_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
-            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><select name="_witness_id">'.Users::select_options().'</select></td>';
             $output .= '<td><input type="date" name="_w_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
@@ -556,6 +556,7 @@ if (!class_exists('courses')) {
             dbDelta($sql);
         }        
     }
+    if ( is_admin() )
     new courses();
 }
 ?>

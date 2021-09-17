@@ -235,6 +235,7 @@ if (!class_exists('users')) {
         }
         
     }
+    if ( is_admin() )
     new users();
 }
 ?>
