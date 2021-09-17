@@ -27,7 +27,8 @@
  */
 
 	//define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
+	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
+	define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
 	
 	if (OP_RETURN_BITCOIN_USE_CMD) {
@@ -58,8 +59,7 @@
 
 //	User-facing functions
 
-	function OP_RETURN_send($send_address, $send_amount, $metadata, $testnet=false)
-	{
+	function OP_RETURN_send($send_address, $send_amount, $metadata, $testnet=false) {
 		
 	//	Validate some parameters
 		
@@ -109,8 +109,7 @@
 	}
 	
 	
-	function OP_RETURN_store($data, $testnet=false)
-	{
+	function OP_RETURN_store($data, $testnet=false) {
 	/*
 		Data is stored in OP_RETURNs within a series of chained transactions.
 		The data is referred to by the txid of the first transaction containing an OP_RETURN.
@@ -199,8 +198,7 @@
 	}
 	
 	
-	function OP_RETURN_retrieve($ref, $max_results=1, $testnet=false)
-	{
+	function OP_RETURN_retrieve($ref, $max_results=1, $testnet=false) {
 	
 	//	Validate parameters and get status of Bitcoin Core
 	
@@ -323,8 +321,7 @@
 
 //	Utility functions
 
-	function OP_RETURN_select_inputs($total_amount, $testnet)
-	{
+	function OP_RETURN_select_inputs($total_amount, $testnet=false) {
 	
 	//	List and sort unspent inputs by priority
 	
@@ -363,8 +360,8 @@
 		);
 	}
 	
-	function OP_RETURN_create_txn($inputs, $outputs, $metadata, $metadata_pos, $testnet)
-	{
+	function OP_RETURN_create_txn($inputs, $outputs, $metadata, $metadata_pos, $testnet) {
+	
 		$raw_txn=OP_RETURN_bitcoin_cmd('createrawtransaction', $testnet, $inputs, $outputs);
 
 		$txn_unpacked=OP_RETURN_unpack_txn(pack('H*', $raw_txn));
@@ -388,8 +385,8 @@
 		return reset(unpack('H*', OP_RETURN_pack_txn($txn_unpacked)));
 	}
 	
-	function OP_RETURN_sign_send_txn($raw_txn, $testnet)
-	{
+	function OP_RETURN_sign_send_txn($raw_txn, $testnet=false) {
+	
 		$signed_txn=OP_RETURN_bitcoin_cmd('signrawtransaction', $testnet, $raw_txn);
 		if (!$signed_txn['complete'])
 			return array('error' => 'Could not sign the transaction');
@@ -401,27 +398,27 @@
 		return array('txid' => $send_txid);
 	}
 	
-	function OP_RETURN_get_height_txns($height, $testnet)
-	{
+	function OP_RETURN_get_height_txns($height, $testnet=false) {
+	
 		if ($height==0)
 			return OP_RETURN_get_mempool_txns($testnet);
 		else
 			return OP_RETURN_get_block_txns($height, $testnet);	
 	}
 	
-	function OP_RETURN_list_mempool_txns($testnet)
-	{
+	function OP_RETURN_list_mempool_txns($testnet=false) {
+	
 		return OP_RETURN_bitcoin_cmd('getrawmempool', $testnet);
 	}
 	
-	function OP_RETURN_get_mempool_txn($txid, $testnet)
-	{
+	function OP_RETURN_get_mempool_txn($txid, $testnet=false) {
+	
 		$raw_txn=OP_RETURN_bitcoin_cmd('getrawtransaction', $testnet, $txid);
 		return OP_RETURN_unpack_txn(pack('H*', $raw_txn));
 	}
 	
-	function OP_RETURN_get_mempool_txns($testnet)
-	{
+	function OP_RETURN_get_mempool_txns($testnet=false) {
+	
 		$txids=OP_RETURN_list_mempool_txns($testnet);
 
 		$txns=array();
@@ -431,8 +428,8 @@
 		return $txns;
 	}
 
-	function OP_RETURN_get_raw_block($height, $testnet)
-	{
+	function OP_RETURN_get_raw_block($height, $testnet=false) {
+	
 		$block_hash=OP_RETURN_bitcoin_cmd('getblockhash', $testnet, $height);
 		if (strlen($block_hash)!=64)
 			return array('error' => 'Block at height '.$height.' not found');
@@ -442,8 +439,8 @@
 		);
 	}
 	
-	function OP_RETURN_get_block_txns($height, $testnet)
-	{
+	function OP_RETURN_get_block_txns($height, $testnet=false) {
+	
 		$raw_block=OP_RETURN_get_raw_block($height, $testnet);
 		if (isset($raw_block['error']))
 			return array('error' => $raw_block['error']);
@@ -456,15 +453,16 @@
 	
 //	Talking to bitcoin-cli
 
-	function OP_RETURN_bitcoin_check($testnet)
-	{
+	function OP_RETURN_bitcoin_check($testnet=false) {
+	
 		$info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
 		
 		return is_array($info);
 	}
 	
-	function OP_RETURN_bitcoin_cmd($command, $testnet) // more params are read from here
-	{
+	function OP_RETURN_bitcoin_cmd($command, $testnet=false) {
+		// more params are read from here
+	
 		$args=func_get_args();
 		array_shift($args);
 		array_shift($args);
@@ -554,8 +552,8 @@
 		Note that the txid is ordered according to user presentation, not raw data in the block.
 	*/		
 	
-	function OP_RETURN_calc_ref($next_height, $txid, $avoid_txids)
-	{
+	function OP_RETURN_calc_ref($next_height, $txid, $avoid_txids) {
+	
 		$txid_binary=pack('H*', $txid);
 		
 		for ($txid_offset=0; $txid_offset<=14; $txid_offset++) {
@@ -586,8 +584,8 @@
 		return sprintf('%06d-%06d', $next_height, $tx_ref);
 	}
 	
-	function OP_RETURN_get_ref_parts($ref)
-	{
+	function OP_RETURN_get_ref_parts($ref) {
+	
 		if (!preg_match('/^[0-9]+\-[0-9A-Fa-f]+$/', $ref)) // also support partial txid for second half
 			return null;
 		
@@ -607,8 +605,8 @@
 		return $parts;
 	}
 	
-	function OP_RETURN_get_ref_heights($ref, $max_height)
-	{
+	function OP_RETURN_get_ref_heights($ref, $max_height) {
+	
 		$parts=OP_RETURN_get_ref_parts($ref);
 		if (!is_array($parts))
 			return null;
@@ -616,8 +614,8 @@
 		return OP_RETURN_get_try_heights((int)$parts[0], $max_height, true);
 	}
 	
-	function OP_RETURN_get_try_heights($est_height, $max_height, $also_back)
-	{
+	function OP_RETURN_get_try_heights($est_height, $max_height, $also_back) {
+	
 		$forward_height=$est_height;
 		$back_height=min($forward_height-1, $max_height);
 		
@@ -651,8 +649,8 @@
 		return $heights;
 	}
 	
-	function OP_RETURN_match_ref_txid($ref, $txid)
-	{
+	function OP_RETURN_match_ref_txid($ref, $txid) {
+	
 		$parts=OP_RETURN_get_ref_parts($ref);
 		if (!is_array($parts))
 			return null;
@@ -669,8 +667,8 @@
 
 //	Unpacking and packing bitcoin blocks and transactions	
 	
-	function OP_RETURN_unpack_block($binary)
-	{
+	function OP_RETURN_unpack_block($binary) {
+	
 		$buffer=new OP_RETURN_buffer($binary);
 		$block=array();
 		
@@ -702,13 +700,13 @@
 		return $block;
 	}
 	
-	function OP_RETURN_unpack_txn($binary)
-	{
+	function OP_RETURN_unpack_txn($binary) {
+	
 		return OP_RETURN_unpack_txn_buffer(new OP_RETURN_buffer($binary));
 	}
 	
-	function OP_RETURN_unpack_txn_buffer($buffer)
-	{
+	function OP_RETURN_unpack_txn_buffer($buffer) {
+	
 		// see: https://en.bitcoin.it/wiki/Transactions
 		
 		$txn=array();
@@ -742,8 +740,8 @@
 		return $txn;
 	}
 	
-	function OP_RETURN_find_spent_txid($txns, $spent_txid, $spent_vout)
-	{
+	function OP_RETURN_find_spent_txid($txns, $spent_txid, $spent_vout) {
+	
 		foreach ($txns as $txid => $txn_unpacked)
 			foreach ($txn_unpacked['vin'] as $input)
 				if ( ($input['txid']==$spent_txid) && ($input['vout']==$spent_vout) )
@@ -752,8 +750,8 @@
 		return null;
 	}
 	
-	function OP_RETURN_find_txn_data($txn_unpacked)
-	{
+	function OP_RETURN_find_txn_data($txn_unpacked) {
+	
 		foreach ($txn_unpacked['vout'] as $index => $output) {
 			$op_return=OP_RETURN_get_script_data(pack('H*', $output['scriptPubKey']));
 			
@@ -767,8 +765,8 @@
 		return null;
 	}
 	
-	function OP_RETURN_get_script_data($scriptPubKeyBinary)
-	{
+	function OP_RETURN_get_script_data($scriptPubKeyBinary) {
+	
 		$op_return=null;
 		
 		if ($scriptPubKeyBinary[0]=="\x6a") {
@@ -785,8 +783,8 @@
 		return $op_return;	
 	}
 	
-	function OP_RETURN_pack_txn($txn)
-	{
+	function OP_RETURN_pack_txn($txn) {
+	
 		$binary='';
 		
 		$binary.=pack('V', $txn['version']);
@@ -814,8 +812,8 @@
 		return $binary;
 	}
 	
-	function OP_RETURN_pack_varint($integer)
-	{
+	function OP_RETURN_pack_varint($integer) {
+	
 		if ($integer>0xFFFFFFFF)
 			$packed="\xFF".OP_RETURN_pack_uint64($integer);
 		elseif ($integer>0xFFFF)
@@ -828,8 +826,8 @@
 		return $packed;
 	}
 	
-	function OP_RETURN_pack_uint64($integer)
-	{
+	function OP_RETURN_pack_uint64($integer) {
+	
 		$upper=floor($integer/4294967296);
 		$lower=$integer-$upper*4294967296;
 		
@@ -839,8 +837,8 @@
 
 //	Helper class for unpacking bitcoin binary data
 
-	class OP_RETURN_buffer
-	{
+	class OP_RETURN_buffer {
+	
 		 var $data;
 		 var $len;
 		 var $ptr;
@@ -904,8 +902,8 @@
 
 //	Sort-by utility functions
 	
-	function OP_RETURN_sort_by(&$array, $by1, $by2=null)
-	{
+	function OP_RETURN_sort_by(&$array, $by1, $by2=null) {
+	
 		global $sort_by_1, $sort_by_2;
 		
 		$sort_by_1=$by1;
@@ -914,8 +912,8 @@
 		uasort($array, 'OP_RETURN_sort_by_fn');
 	}
 
-	function OP_RETURN_sort_by_fn($a, $b)
-	{
+	function OP_RETURN_sort_by_fn($a, $b) {
+	
 		global $sort_by_1, $sort_by_2;
 		
 		$compare=OP_RETURN_sort_cmp($a[$sort_by_1], $b[$sort_by_1]);
@@ -926,8 +924,8 @@
 		return $compare;
 	}
 
-	function OP_RETURN_sort_cmp($a, $b)
-	{
+	function OP_RETURN_sort_cmp($a, $b) {
+	
 		if (is_numeric($a) && is_numeric($b)) // straight subtraction won't work for floating bits
 			return ($a==$b) ? 0 : (($a<$b) ? -1 : 1);
 		else
