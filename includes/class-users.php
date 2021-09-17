@@ -14,6 +14,44 @@ if (!class_exists('users')) {
             add_shortcode('user_edit', __CLASS__ . '::edit_mode');
             add_shortcode('user_view', __CLASS__ . '::view_mode');
             self::create_tables();
+        /*
+                $KeyValueEntry = new KeyValueEntry();
+                $KeyValueEntry->setKey('email');
+                $KeyValueEntry->setValue($_POST['_LoginName']);
+                $KeyValueEntries[]=$KeyValueEntry;
+        
+                $CreateAgentAction = new CreateAgentAction();
+                $CreateAgentAction->setOrgId($_GET['_OrgId']);
+                $CreateAgentAction->setPublicKey($_POST['_PublicKey']);
+                $CreateAgentAction->setActive($_GET['_Active']);
+                $CreateAgentAction->setRoles($Roles);
+                $CreateAgentAction->setMetadata($KeyValueEntries);
+        
+                $send_data = $CreateAgentAction->serializeToString();
+                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
+                $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
+                $send_amount = 0.001;
+            
+                try {
+                    $agents = $AgentList->getAgents();
+                    $Agent->mergeFromString($send_data);
+                    $agents[] = $Agent;
+                    $AgentList->setAgents($agents);
+                    //$send_data = $AgentList->serializeToString();
+                } catch (Exception $e) {
+                    // Handle parsing error from invalid data.
+                    // ...
+                }
+        */        
+        /*
+                $result = OP_RETURN_send($send_address, $send_amount, $send_data);
+            
+                if (isset($result['error']))
+                    $result_output = 'Error: '.$result['error']."\n";
+                else
+                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+        */
+
         }
 
         function view_mode($_id=null) {
