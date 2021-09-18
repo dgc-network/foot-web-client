@@ -247,12 +247,12 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.$index.'</a></td>';
+                $output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
-            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
             $output .= '</tr></tbody></table></figure>';
@@ -264,12 +264,12 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'#'.'</td><td>'.'Lecturers'.'</td><td>Expired Date</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=false", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.$index.'</td>';
+                $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.Users::select_options($results[$index]->lecturer_witness_id).'</select></td>';
                 $ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 $output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
-            $output .= '<tr><td>'.($index+1).'</td>';
+            $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td>'.'<select name="_lecturer_id">'.Users::select_options().'</select>'.'</td>';
             $output .= '<td><input type="date" name="_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
