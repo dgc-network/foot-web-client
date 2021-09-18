@@ -511,7 +511,8 @@
 			}
 			
 			if (!strlen($port))
-				$port=$testnet ? 18332 : 8332;
+				//$port=$testnet ? 18332 : 8332;
+				$port=$testnet ? 17998 : 7998;
 				
 			if (!strlen($user) && strlen($password))
 				return null; // no point trying in this case
