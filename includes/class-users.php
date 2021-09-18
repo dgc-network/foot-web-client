@@ -87,6 +87,8 @@ if (!class_exists('users')) {
                     $result_output = 'Error: '.$result['error']."\n";
                 else
                     $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+
+                return $result_output;
             }
             
             /** 
