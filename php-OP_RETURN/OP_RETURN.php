@@ -527,12 +527,13 @@
 			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($request));
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
+			return $curl;
 			
 			//$result[] = ['command'=>$command]; 
 			//return $result;
 			
 			$result_array=json_decode($raw_result, true);
-			return $result_array;
+			//return $result_array;
 			$result=@$result_array['result'];
 			//$result=$result_array['result'];
 		}
