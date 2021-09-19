@@ -462,6 +462,8 @@
 	
 	function OP_RETURN_bitcoin_cmd($command, $testnet=false) {
 		// more params are read from here
+		$result[] = ['command'=>$command]; 
+		return $result;
 	
 		$args=func_get_args();
 		array_shift($args);
