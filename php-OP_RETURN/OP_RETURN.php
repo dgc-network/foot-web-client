@@ -527,7 +527,9 @@
 			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($request));
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
-			return $curl;
+			//return $curl;
+			$result[] = ['command'=>$curl]; 
+			return $result;
 			
 			//$result[] = ['command'=>$command]; 
 			//return $result;
