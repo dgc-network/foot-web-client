@@ -532,8 +532,9 @@
 			//return $result;
 			
 			$result_array=json_decode($raw_result, true);
-			//$result=@$result_array['result'];
-			$result=$result_array['result'];
+			return $result_array;
+			$result=@$result_array['result'];
+			//$result=$result_array['result'];
 		}
 
 		return $result;
