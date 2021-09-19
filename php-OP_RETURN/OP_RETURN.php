@@ -456,7 +456,7 @@
 	function OP_RETURN_bitcoin_check($testnet=false) {
 	
 		$info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
-		
+		return $info; 
 		return is_array($info);
 	}
 	
@@ -528,8 +528,8 @@
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
 			//return $curl;
-			$result[] = ['command'=>$curl]; 
-			return $result;
+			//$result[] = ['command'=>$curl]; 
+			//return $result;
 			
 			//$result[] = ['command'=>$command]; 
 			//return $result;
