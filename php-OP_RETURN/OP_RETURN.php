@@ -531,8 +531,8 @@
 			//$result[] = ['command'=>$curl]; 
 			//return $result;
 			
-			//$result[] = ['command'=>$command]; 
-			//return $result;
+			$result[] = ['command'=>$command]; 
+			return $result;
 			
 			$result_array=json_decode($raw_result, true);
 			//return $result_array;
