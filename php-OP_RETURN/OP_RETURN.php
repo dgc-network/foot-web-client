@@ -528,8 +528,8 @@
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
 			
-			$result[] = ['command'=>$command]; 
-			return $result;
+			//$result[] = ['command'=>$command]; 
+			//return $result;
 			
 			$result_array=json_decode($raw_result, true);
 			$result=@$result_array['result'];
