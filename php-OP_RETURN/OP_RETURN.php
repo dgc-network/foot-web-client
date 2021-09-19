@@ -462,8 +462,6 @@
 	
 	function OP_RETURN_bitcoin_cmd($command, $testnet=false) {
 		// more params are read from here
-		$result[] = ['command'=>$command]; 
-		return $result;
 	
 		$args=func_get_args();
 		array_shift($args);
@@ -518,6 +516,9 @@
 				
 			if (!strlen($user) && strlen($password))
 				return null; // no point trying in this case
+			
+			$result[] = ['command'=>$command]; 
+			return $result;
 			
 			$curl=curl_init('http://'.OP_RETURN_BITCOIN_IP.':'.$port.'/');
 			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
