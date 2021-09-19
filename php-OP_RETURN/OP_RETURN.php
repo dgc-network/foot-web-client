@@ -517,9 +517,6 @@
 			if (!strlen($user) && strlen($password))
 				return null; // no point trying in this case
 			
-			$result[] = ['command'=>$command]; 
-			return $result;
-			
 			$curl=curl_init('http://'.OP_RETURN_BITCOIN_IP.':'.$port.'/');
 			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 			curl_setopt($curl, CURLOPT_USERPWD, $user.':'.$password);
@@ -530,6 +527,9 @@
 			curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($request));
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
+			
+			$result[] = ['command'=>$command]; 
+			return $result;
 			
 			$result_array=json_decode($raw_result, true);
 			$result=@$result_array['result'];
