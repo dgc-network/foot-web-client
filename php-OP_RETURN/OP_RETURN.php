@@ -529,7 +529,7 @@
 			$raw_result=curl_exec($curl);
 			curl_close($curl);
 			
-			return $curl;
+			//return $curl;
 			//$result[] = ['command'=>$curl]; 
 			//return $result;
 			
