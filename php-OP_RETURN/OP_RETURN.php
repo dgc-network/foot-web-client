@@ -28,7 +28,8 @@
 
 	//define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
+	//define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
+	define('OP_RETURN_BITCOIN_IP', '218.161.56.168'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
 	
 	if (OP_RETURN_BITCOIN_USE_CMD) {
