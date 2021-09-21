@@ -388,6 +388,9 @@
 	
 	function OP_RETURN_sign_send_txn($raw_txn, $testnet=false) {
 	
+		$params= ["my passphrase", 60];
+		$signed_txn=OP_RETURN_bitcoin_cmd('walletpassphrase', $testnet, $params);
+
 		$signed_txn=OP_RETURN_bitcoin_cmd('signrawtransaction', $testnet, $raw_txn);
 		if (!$signed_txn['complete'])
 			return array('error' => 'Could not sign the transaction');
