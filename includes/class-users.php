@@ -83,7 +83,7 @@ if (!class_exists('users')) {
                 $send_data = 'this is my first test';
 
                 $info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
-                return $info; 
+                //return $info; 
         
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
             
