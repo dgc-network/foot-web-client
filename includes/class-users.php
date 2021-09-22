@@ -85,7 +85,8 @@ if (!class_exists('users')) {
                 $send_amount = 0.001;
                 $send_data = 'this is my second test';
 
-                $info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
+                $result=OP_RETURN_bitcoin_cmd('listunspent', $testnet);
+                return var_dump($result);
         
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
             
@@ -94,7 +95,6 @@ if (!class_exists('users')) {
                 else
                     $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
-                return var_dump($result);
                 return $result_output;
             }
             
