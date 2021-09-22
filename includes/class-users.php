@@ -30,6 +30,8 @@ if (!class_exists('users')) {
                 $send_data = $CreateAgentAction->serializeToString();
                 $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
                 $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
+                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
+                $private_key = 'L12R3yCmcUDK1aEebqUUA3N8bzTMAnSR8GdN2VniMrJTnmWDS9f7';
                 $send_amount = 0.001;
             
                 try {
@@ -78,7 +80,8 @@ if (!class_exists('users')) {
                     $wpdb->update( $table, $data, $where );
                 }
 
-                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
+                //$send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
+                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $send_amount = 0.001;
                 $send_data = 'this is my first test';
 
