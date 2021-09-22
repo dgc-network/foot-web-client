@@ -389,7 +389,7 @@
 	function OP_RETURN_sign_send_txn($raw_txn, $testnet=false) {
 	
 		$funded_txn=OP_RETURN_bitcoin_cmd('fundrawtransaction', $testnet, $raw_txn);
-		return $funded_txn['fee'];
+		return $funded_txn;
 		$params = array("mypassphrase", 60);
 		$signed_txn=OP_RETURN_bitcoin_cmd('walletpassphrase', $testnet, $params);
 

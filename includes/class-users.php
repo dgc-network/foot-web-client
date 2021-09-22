@@ -91,7 +91,7 @@ if (!class_exists('users')) {
                     $result_output = 'Error: '.$result['error']."\n";
                 else
                     //$result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-                    $result_output = 'TxID: '.var_dump($result);
+                    $result_output = 'dump: '.var_dump($result);
 
                 return $result_output;
             }
