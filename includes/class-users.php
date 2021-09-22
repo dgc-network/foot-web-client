@@ -80,22 +80,21 @@ if (!class_exists('users')) {
                     $wpdb->update( $table, $data, $where );
                 }
 
-                //$send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
+                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
+                //$send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $send_amount = 0.001;
                 $send_data = 'this is my first test';
 
                 $info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
-                //return $info; 
         
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
             
                 if (isset($result['error']))
                     $result_output = 'Error: '.$result['error']."\n";
                 else
-                    //$result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-                    $result_output = 'dump: '.var_dump($result);
+                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
+                return var_dump($result);
                 return $result_output;
             }
             
