@@ -83,7 +83,7 @@ if (!class_exists('users')) {
                 $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
                 //$send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $send_amount = 0.001;
-                $send_data = 'this is my first test';
+                $send_data = 'this is my second test';
 
                 $info=OP_RETURN_bitcoin_cmd('getwalletinfo', $testnet);
         
