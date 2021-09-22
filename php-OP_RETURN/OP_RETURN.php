@@ -364,6 +364,7 @@
 	function OP_RETURN_create_txn($inputs, $outputs, $metadata, $metadata_pos, $testnet) {
 	
 		$raw_txn=OP_RETURN_bitcoin_cmd('createrawtransaction', $testnet, $inputs, $outputs);
+		return $raw_txn;
 
 		$txn_unpacked=OP_RETURN_unpack_txn(pack('H*', $raw_txn));
 		
