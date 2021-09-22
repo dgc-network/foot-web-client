@@ -90,7 +90,8 @@ if (!class_exists('users')) {
                 if (isset($result['error']))
                     $result_output = 'Error: '.$result['error']."\n";
                 else
-                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+                    //$result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+                    $result_output = 'TxID: '.$result['fee'];
 
                 return $result_output;
             }
