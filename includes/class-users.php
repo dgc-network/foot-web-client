@@ -107,6 +107,7 @@ if (!class_exists('users')) {
                 return var_dump($outputs);
 */        
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
+                return $result;
             
                 if (isset($result['error']))
                     $result_output = 'Error: '.$result['error']."\n";
