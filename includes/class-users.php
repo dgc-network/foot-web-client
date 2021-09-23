@@ -104,7 +104,7 @@ if (!class_exists('users')) {
         
                 $raw_txn=OP_RETURN_create_txn($inputs_spend['inputs'], $outputs, $metadata, count($outputs), $testnet);
 
-                return var_dump($inputs_spend['inputs']);
+                return var_dump($outputs);
         
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
             
