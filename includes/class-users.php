@@ -84,7 +84,7 @@ if (!class_exists('users')) {
                 $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $send_amount = 0.001;
                 $send_data = 'this is my second test';
-
+/*
                 $result=OP_RETURN_bitcoin_cmd('listunspent', $testnet);
 
                 $output_amount=$send_amount+OP_RETURN_BTC_FEE;		
@@ -105,7 +105,7 @@ if (!class_exists('users')) {
                 $raw_txn=OP_RETURN_create_txn($inputs_spend['inputs'], $outputs, $metadata, count($outputs), $testnet);
 
                 return var_dump($outputs);
-        
+*/        
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
             
                 if (isset($result['error']))

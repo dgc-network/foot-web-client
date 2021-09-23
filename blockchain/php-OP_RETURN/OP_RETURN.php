@@ -361,7 +361,7 @@
 		);
 	}
 	
-	function OP_RETURN_create_txn($inputs, $outputs, $metadata, $metadata_pos, $testnet) {
+	function OP_RETURN_create_txn($inputs, $outputs, $metadata, $metadata_pos, $testnet=false) {
 	
 		$raw_txn=OP_RETURN_bitcoin_cmd('createrawtransaction', $testnet, $inputs, $outputs);
 		//return $raw_txn;
