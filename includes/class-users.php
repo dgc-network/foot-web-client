@@ -80,12 +80,16 @@ if (!class_exists('users')) {
                     $wpdb->update( $table, $data, $where );
                 }
 
-                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                //$send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
+                //$send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
+                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $send_amount = 0.001;
                 $send_data = 'this is my second test';
 
                 $result=OP_RETURN_bitcoin_cmd('listunspent', $testnet);
+                
+                $output_amount=$send_amount+OP_RETURN_BTC_FEE;		
+
+                $result=OP_RETURN_select_inputs($output_amount, $testnet);
                 return var_dump($result);
         
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
