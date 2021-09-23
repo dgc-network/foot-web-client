@@ -70,19 +70,43 @@ if (!class_exists('users')) {
                  */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
                 foreach ($results as $index => $result) {
+
+                    $send_address = OP_RETURN_SEND_ADDRESS;
+                    $send_amount = OP_RETURN_SEND_AMOUNT;
+                    $UpdateUserCourseLearningAction = new UpdateUserCourseLearningAction();
+                    $UpdateUserCourseLearningAction->setUCLId($results[$index]->u_c_l_id);
+                    $UpdateUserCourseLearningAction->setStudentId($results[$index]->student_id);
+                    $UpdateUserCourseLearningAction->setCourseId($results[$index]->course_id);
+                    $UpdateUserCourseLearningAction->setLearningId($results[$index]->learning_id);
+                    $UpdateUserCourseLearningAction->setLearningDate(strtotime($_POST['_learning_date_'.$index]));
+                    $UpdateUserCourseLearningAction->setLecturerWitnessId($results[$index]->lecturer_witness_id);
+                    $send_data = $UpdateUserCourseLearningAction->serializeToString();
+                    //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
+                    $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+                    return var_dump($op_result);
+                
+                    if (isset($op_result['error']))
+                        $result_output = 'Error: '.$op_result['error']."\n";
+                    else
+                        $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+    
+                    return $result_output;
+                        
                     $table = $wpdb->prefix.'user_course_learnings';
                     $data = array(
                         'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
+                        'txid' => $op_result['txid'], 
                     );
                     $where = array(
                         'u_c_l_id' => $results[$index]->u_c_l_id
                     );
                     $wpdb->update( $table, $data, $where );
+                
                 }
 
                 //$send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
                 $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
-                $send_amount = 0.001;
+                $send_amount = 0.99399;
                 $send_data = 'this is my second test';
 /*
                 $result=OP_RETURN_bitcoin_cmd('listunspent', $testnet);
@@ -305,6 +329,7 @@ if (!class_exists('users')) {
                 learning_id int,
                 learning_date int,
                 lecturer_witness_id int,
+                txid varchar(255),
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);

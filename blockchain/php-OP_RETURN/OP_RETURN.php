@@ -48,6 +48,9 @@
 	//define('OP_RETURN_BTC_FEE', 0.0001); // BTC fee to pay per transaction
 	//define('OP_RETURN_BTC_DUST', 0.00001); // omit BTC outputs smaller than this
 
+	define('OP_RETURN_SEND_AMOUNT', 0.00000002); // BTC send amount per transaction
+	define('OP_RETURN_SEND_ADDRESS', 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66'); // BTC send address per transaction
+
 	define('OP_RETURN_BTC_FEE', 0.00000002); // BTC fee to pay per transaction
 	define('OP_RETURN_BTC_DUST', 0); // omit BTC outputs smaller than this
 
