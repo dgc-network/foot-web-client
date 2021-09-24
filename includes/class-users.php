@@ -83,24 +83,27 @@ if (!class_exists('users')) {
                     $send_data = $UpdateUserCourseLearningAction->serializeToString();
                     //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
                     $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                    return var_dump($op_result);
+                    //return var_dump($op_result);
                 
                     if (isset($op_result['error']))
                         $result_output = 'Error: '.$op_result['error']."\n";
-                    else
+                    else {
                         $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+
+                        $table = $wpdb->prefix.'user_course_learnings';
+                        $data = array(
+                            'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
+                            'txid' => $op_result['txid'], 
+                        );
+                        $where = array(
+                            'u_c_l_id' => $results[$index]->u_c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );
     
-                    return $result_output;
+                    }
+    
+                    //return $result_output;
                         
-                    $table = $wpdb->prefix.'user_course_learnings';
-                    $data = array(
-                        'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
-                        'txid' => $op_result['txid'], 
-                    );
-                    $where = array(
-                        'u_c_l_id' => $results[$index]->u_c_l_id
-                    );
-                    $wpdb->update( $table, $data, $where );
                 
                 }
 
@@ -130,6 +133,7 @@ if (!class_exists('users')) {
 
                 return var_dump($outputs);
 */        
+/*
                 $result = OP_RETURN_send($send_address, $send_amount, $send_data);
                 return var_dump($result);
             
@@ -139,6 +143,7 @@ if (!class_exists('users')) {
                     $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                 return $result_output;
+*/                
             }
             
             /** 
