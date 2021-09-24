@@ -21,6 +21,7 @@ include_once dirname( __FILE__ ) . '/includes/class-courses.php';
 include_once dirname( __FILE__ ) . '/includes/class-users.php';
 include_once dirname( __FILE__ ) . '/vendor/autoload.php';
 include_once dirname( __FILE__ ) . '/blockchain/php-OP_RETURN/OP_RETURN.php';
+include_once dirname( __FILE__ ) . '/blockchain/build/gen/GPBMetadata/Payload.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateCourseAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateCourseAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateCourseLearingAction.php';
