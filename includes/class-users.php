@@ -90,6 +90,7 @@ if (!class_exists('users')) {
                     else {
                         $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
+                        global $wpdb;
                         $table = $wpdb->prefix.'user_course_learnings';
                         $data = array(
                             'learning_date' => strtotime($_POST['_learning_date_'.$index]), 

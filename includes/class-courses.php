@@ -330,13 +330,31 @@ if (!class_exists('courses')) {
         
             if( isset($_POST['update_action']) ) {
         
-                global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $data = array(
-                    'course_title' => $_POST['_course_title']
-                );
-                $where = array('course_id' => $_POST['_course_id']);
-                $wpdb->update( $table, $data, $where );
+                $UpdateCourseAction = new UpdateCourseAction();
+                $UpdateCourseAction->setCourseId($_POST['_course_id']);
+                $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
+                $UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
+                $UpdateCourseAction->setPublicKey($_POST['_public_key']);
+                $send_data = $UpdateCourseAction->serializeToString();
+                //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
+                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+                //return var_dump($op_result);
+            
+                if (isset($op_result['error']))
+                    $result_output = 'Error: '.$op_result['error']."\n";
+                else {
+                    $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+
+                    global $wpdb;
+                    $table = $wpdb->prefix.'courses';
+                    $data = array(
+                        'course_title' => $_POST['_course_title']
+                    );
+                    $where = array('course_id' => $_POST['_course_id']);
+                    $wpdb->update( $table, $data, $where );
+
+                }
+
                 ?><script>window.location='/courses'</script><?php
             }
         
