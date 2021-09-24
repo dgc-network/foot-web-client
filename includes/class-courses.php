@@ -331,6 +331,7 @@ if (!class_exists('courses')) {
             if( isset($_POST['update_action']) ) {
         
                 $UpdateCourseAction = new UpdateCourseAction();
+/*                
                 $UpdateCourseAction->setCourseId($_POST['_course_id']);
                 $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
                 $UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
@@ -355,7 +356,7 @@ if (!class_exists('courses')) {
                     $wpdb->update( $table, $data, $where );
 
                 }
-
+*/
                 ?><script>window.location='/courses'</script><?php
             }
         
