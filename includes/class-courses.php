@@ -334,8 +334,8 @@ if (!class_exists('courses')) {
                 
                 $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
-                $UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
-                $UpdateCourseAction->setPublicKey($_POST['_public_key']);
+                //$UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
+                //$UpdateCourseAction->setPublicKey($_POST['_public_key']);
                 $send_data = $UpdateCourseAction->serializeToString();
 /*                
                 //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
