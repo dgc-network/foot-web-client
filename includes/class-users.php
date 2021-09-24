@@ -336,6 +336,7 @@ if (!class_exists('users')) {
                 learning_date int,
                 lecturer_witness_id int,
                 txid varchar(255),
+                is_deleted boolean,
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);

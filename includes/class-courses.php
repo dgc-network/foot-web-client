@@ -348,7 +348,8 @@ if (!class_exists('courses')) {
                     global $wpdb;
                     $table = $wpdb->prefix.'courses';
                     $data = array(
-                        'course_title' => $_POST['_course_title']
+                        'course_title' => $_POST['_course_title'],
+                        'txid' => $op_result['txid'], 
                     );
                     $where = array('course_id' => $_POST['_course_id']);
                     $wpdb->update( $table, $data, $where );
@@ -532,7 +533,10 @@ if (!class_exists('courses')) {
                 course_id int NOT NULL AUTO_INCREMENT,
                 course_title varchar(255) NOT NULL,
                 created_date int NOT NULL,
+                public_key varchar(255),
+                txid varchar(255),
                 PRIMARY KEY  (course_id)
+                is_deleted boolean,
             ) $charset_collate;";        
             dbDelta($sql);
 
@@ -541,6 +545,8 @@ if (!class_exists('courses')) {
                 course_id int NOT NULL,
                 learning_title varchar(255),
                 learning_link varchar(255),
+                txid varchar(255),
+                is_deleted boolean,
                 PRIMARY KEY  (learning_id)
             ) $charset_collate;";        
             dbDelta($sql);
@@ -568,7 +574,9 @@ if (!class_exists('courses')) {
                 course_id int NOT NULL,
                 lecturer_witness_id int NOT NULL,
                 expired_date int NOT NULL,
-                is_witness boolean NOT NULL,
+                is_witness boolean,
+                txid varchar(255),
+                is_deleted boolean,
                 PRIMARY KEY  (c_l_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
