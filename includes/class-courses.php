@@ -332,9 +332,9 @@ if (!class_exists('courses')) {
         
                 $UpdateCourseAction = new UpdateCourseAction();
                 
-                $UpdateCourseAction->setCourseId($_POST['_course_id']);
-                $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
-                $UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
+                //$UpdateCourseAction->setCourseId($_POST['_course_id']);
+                //$UpdateCourseAction->setCourseTitle($_POST['_course_title']);
+                //$UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
                 //$UpdateCourseAction->setPublicKey($_POST['_public_key']);
                 //$send_data = $UpdateCourseAction->serializeToString();
                 return '$send_data';
