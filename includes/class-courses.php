@@ -332,12 +332,11 @@ if (!class_exists('courses')) {
         
                 $UpdateCourseAction = new UpdateCourseAction();
                 
-                //$UpdateCourseAction->setCourseId($_POST['_course_id']);
+                $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
                 //$UpdateCourseAction->setCourseTitle($_POST['_course_title']);
                 //$UpdateCourseAction->setCreatedDate(strtotime($_POST['_created_date']));
                 //$UpdateCourseAction->setPublicKey($_POST['_public_key']);
                 //$send_data = $UpdateCourseAction->serializeToString();
-                return '$send_data';
 /*                
                 //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
@@ -358,8 +357,9 @@ if (!class_exists('courses')) {
                     $wpdb->update( $table, $data, $where );
 
                 }
+*/                
                 ?><script>window.location='/courses'</script><?php
-*/
+
             }
         
             if( isset($_POST['delete_action']) ) {
