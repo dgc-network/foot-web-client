@@ -321,26 +321,48 @@ if (!class_exists('courses')) {
                 $table = $wpdb->prefix.'courses';
                 $data = array(
                     'created_date' => current_time('timestamp'), 
-                    'course_title' => $_POST['_course_title']
                 );
-                $format = array('%d', '%s');
+                $format = array('%d');
                 $wpdb->insert($table, $data, $format);
+                $insert_id = $wpdb->insert_id;
+
+                $CreateCourseAction = new CreateCourseAction();                
+                //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
+                $CreateCourseAction->setCourseId(intval($insert_id));
+                $CreateCourseAction->setCourseTitle($_POST['_course_title']);
+                $CreateCourseAction->setCreatedDate(intval(current_time('timestamp')));
+                $CreateCourseAction->setPublicKey($_POST['_public_key']);
+                $send_data = $CreateCourseAction->serializeToString();
+
+                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+            
+                if (isset($op_result['error']))
+                    $result_output = 'Error: '.$op_result['error']."\n";
+                else {
+                    $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+
+                    $table = $wpdb->prefix.'courses';
+                    $data = array(
+                        'course_title' => $_POST['_course_title'],
+                        'txid' => $op_result['txid'], 
+                    );
+                    $where = array('course_id' => $insert_id);
+                    $wpdb->update( $table, $data, $where );
+                }
+
                 ?><script>window.location='/courses'</script><?php
             }
         
             if( isset($_POST['update_action']) ) {
         
-                $UpdateCourseAction = new UpdateCourseAction();
-                
+                $UpdateCourseAction = new UpdateCourseAction();                
                 $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
                 $UpdateCourseAction->setCreatedDate(intval(strtotime($_POST['_created_date'])));
                 $UpdateCourseAction->setPublicKey($_POST['_public_key']);
                 $send_data = $UpdateCourseAction->serializeToString();
 
-                //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                //return var_dump($op_result);
             
                 if (isset($op_result['error']))
                     $result_output = 'Error: '.$op_result['error']."\n";
@@ -355,11 +377,9 @@ if (!class_exists('courses')) {
                     );
                     $where = array('course_id' => $_POST['_course_id']);
                     $wpdb->update( $table, $data, $where );
-
                 }
 
                 ?><script>window.location='/courses'</script><?php
-
             }
         
             if( isset($_POST['delete_action']) ) {
