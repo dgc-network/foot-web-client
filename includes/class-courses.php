@@ -363,7 +363,7 @@ if (!class_exists('courses')) {
                 $send_data = $UpdateCourseAction->serializeToString();
 
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                return var_dump($op_result);
+                //return var_dump($op_result);
             
                 if (isset($op_result['error'])) {
                     $result_output = 'Error: '.$op_result['error']."\n";
