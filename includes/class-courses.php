@@ -364,9 +364,10 @@ if (!class_exists('courses')) {
 
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
             
-                if (isset($op_result['error']))
+                if (isset($op_result['error'])) {
                     $result_output = 'Error: '.$op_result['error']."\n";
-                else {
+                    return $result_output;
+                } else {
                     $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                     global $wpdb;
