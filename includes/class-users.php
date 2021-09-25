@@ -32,6 +32,8 @@ if (!class_exists('users')) {
                 $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
                 $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
                 $private_key = 'L12R3yCmcUDK1aEebqUUA3N8bzTMAnSR8GdN2VniMrJTnmWDS9f7';
+                $send_address = 'D7z8KC655SrPEG6QrsAahJHbvwy22ehmZP';
+                $private_key = 'KyX3d7a8PjLgS8aK6XSoqXV6aJTZieZ9LCJtoy4iQBJtLsx97Kwy';
                 $send_amount = 0.001;
             
                 try {
