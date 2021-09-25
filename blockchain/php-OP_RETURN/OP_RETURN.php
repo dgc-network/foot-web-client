@@ -392,7 +392,7 @@
 	
 	function OP_RETURN_sign_send_txn($raw_txn, $testnet=false) {
 	
-		//return $raw_txn;
+		return $raw_txn;
 		//$funded_txn=OP_RETURN_bitcoin_cmd('fundrawtransaction', $testnet, $raw_txn);
 		//return $funded_txn;
 		$params = array("56c735f3910a53eeda0357670bc6a02f", 60);
