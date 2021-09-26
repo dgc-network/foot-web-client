@@ -33,70 +33,71 @@
 
 	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
-	
-    function nelio_add_settings_page() {
-        add_options_page(
-          'Nelio Plugin Settings',
-          'Nelio',
-          'manage_options',
-          'nelio-example-plugin',
-          'nelio_render_settings_page'
-        );
-    }
-    add_action( 'admin_menu', 'nelio_add_settings_page' );
+
+//    
+function nelio_add_settings_page() {
+    add_options_page(
+      'OP_RETURN Settings',
+      'OP_RETURN',
+      'manage_options',
+      'nelio-example-plugin',
+      'nelio_render_settings_page'
+    );
+}
+add_action( 'admin_menu', 'nelio_add_settings_page' );
 
 //
 function nelio_render_settings_page() {
-    ?>
-      <h2>Nelio Plugin Settings</h2>
-      <form action="options.php" method="post">
+?>
+    <h2>OP_RETURN Settings</h2>
+    <form action="options.php" method="post">
         <?php 
-        settings_fields( 'nelio_example_plugin_settings' );
-        do_settings_sections( 'nelio_example_plugin' );
+        settings_fields( 'op_return_settings' );
+        do_settings_sections( 'op_return' );
         ?>
         <input
-          type="submit"
-          name="submit"
-          class="button button-primary"
-          value="<?php esc_attr_e( 'Save' ); ?>"
+           type="submit"
+           name="submit"
+           class="button button-primary"
+           value="<?php esc_attr_e( 'Save' ); ?>"
         />
-      </form>
-    <?php
+    </form>
+<?php
 }
 
 function nelio_register_settings() {
     register_setting(
-      'nelio_example_plugin_settings',
-      'nelio_example_plugin_settings',
-      'nelio_validate_example_plugin_settings'
+        'op_return_settings',
+        'op_return_settings',
+        'nelio_validate_example_plugin_settings'
     );
   
     add_settings_section(
-      'section_one',
-      'Section One',
-      'nelio_section_one_text',
-      'nelio_example_plugin'
+        'section_one',
+        'Section One',
+        'nelio_section_one_text',
+        'op_return'
     );
   
     add_settings_field(
-      'some_text_field',
-      'Some Text Field',
-      'nelio_render_some_text_field',
-      'nelio_example_plugin',
-      'section_one'
+        'some_text_field',
+        'Some Text Field',
+        'nelio_render_some_text_field',
+        'op_return',
+        'section_one'
     );
   
     add_settings_field(
-      'another_number_field',
-      'Another Number Field',
-      'nelio_render_another_number_field',
-      'nelio_example_plugin',
-      'section_one'
+        'another_number_field',
+        'Another Number Field',
+        'nelio_render_another_number_field',
+        'op_return',
+        'section_one'
     );
-  }
-  add_action( 'admin_init', 'nelio_register_settings' );
+}
+add_action( 'admin_init', 'nelio_register_settings' );
 
-  function nelio_validate_example_plugin_settings( $input ) {
+function nelio_validate_example_plugin_settings( $input ) {
     $output['some_text_field']      = sanitize_text_field( $input['some_text_field'] );
     $output['another_number_field'] = absint( $input['another_number_field'] );
     // ...
@@ -105,27 +106,27 @@ function nelio_register_settings() {
 
 function nelio_section_one_text() {
     echo '<p>This is the first (and only) section in my settings.</p>';
-  }
+}
   
-  function nelio_render_some_text_field() {
-    $options = get_option( 'nelio_example_plugin_settings' );
+function nelio_render_some_text_field() {
+    $options = get_option( 'op_return_settings' );
     printf(
       '<input type="text" name="%s" value="%s" />',
-      esc_attr( 'nelio_example_plugin_settings[some_text_field]' ),
+      esc_attr( 'op_return_settings[some_text_field]' ),
       esc_attr( $options['some_text_field'] )
     );
-  }
+}
   
-  function nelio_render_another_number_field() {
-    $options = get_option( 'nelio_example_plugin_settings' );
+function nelio_render_another_number_field() {
+    $options = get_option( 'op_return_settings' );
     printf(
       '<input type="number" name="%s" value="%s" />',
-      esc_attr( 'nelio_example_plugin_settings[another_number_field]' ),
+      esc_attr( 'op_return_settings[another_number_field]' ),
       esc_attr( $options['another_number_field'] )
     );
-  }
+}
     
-
+/*
 //Add Custom Admin Menu Item and Sub Menus
 function theme_options_panel(){
   add_menu_page('Theme page title', 'OP_RETURN', 'manage_options', 'theme-options', 'wps_theme_func');
@@ -137,26 +138,6 @@ add_action('admin_menu', 'theme_options_panel');
 function wps_theme_func(){
                 echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
                 <h2>OP_RETURN Configuration</h2></div>';
-/*
-                $customWPMenu = new WordPressMenu( array(
-                    'slug' => 'wpmenu',
-                    'title' => 'WP Menu',
-                    'desc' => 'Settings for theme custom WordPress Menu',
-                    'icon' => 'dashicons-welcome-widgets-menus',
-                    'position' => 99,
-                ));
-        
-        $customWPMenu->add_field(array(
-            'name' => 'text',
-            'title' => 'Text Input',
-            'desc' => 'Input Description' ));
-        
-        $customWPMenu->add_field(array(
-            'name' => 'checkbox',
-            'title' => 'Checkbox Example',
-            'desc' => 'Check it to wake it',
-            'type' => 'checkbox'));
-*/
 }
 
 function wps_theme_func_settings(){
@@ -168,4 +149,5 @@ function wps_theme_func_faq(){
                 echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
                 <h2>FAQ</h2></div>';
 }
+*/
 ?>
