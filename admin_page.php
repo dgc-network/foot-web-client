@@ -71,14 +71,14 @@ function nelio_register_settings() {
         'op_return_settings',
         'nelio_validate_example_plugin_settings'
     );
-/*
+
     add_settings_section(
         'section_one',
         'Section One',
         'nelio_section_one_text',
         'op_return_page'
     );
-*/
+
     add_settings_field(
         'some_text_field',
         'Some Text Field',
