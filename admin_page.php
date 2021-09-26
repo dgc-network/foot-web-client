@@ -40,7 +40,7 @@ function nelio_add_settings_page() {
       'OP_RETURN Settings',
       'OP_RETURN',
       'manage_options',
-      'nelio-example-plugin',
+      'op-return-page',
       'nelio_render_settings_page'
     );
 }
@@ -53,7 +53,7 @@ function nelio_render_settings_page() {
     <form action="options.php" method="post">
         <?php 
         settings_fields( 'op_return_settings' );
-        //do_settings_sections( 'op_return' );
+        //do_settings_sections( 'op_return_page' );
         ?>
         <input
            type="submit"
@@ -76,14 +76,14 @@ function nelio_register_settings() {
         'section_one',
         'Section One',
         'nelio_section_one_text',
-        'op_return'
+        'op_return_page'
     );
 */  
     add_settings_field(
         'some_text_field',
         'Some Text Field',
         'nelio_render_some_text_field',
-        'op_return',
+        'op_return_page',
         //'section_one'
     );
   
@@ -91,7 +91,7 @@ function nelio_register_settings() {
         'another_number_field',
         'Another Number Field',
         'nelio_render_another_number_field',
-        'op_return',
+        'op_return_page',
         //'section_one'
     );
 }
