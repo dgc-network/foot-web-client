@@ -17,6 +17,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+include_once dirname( __FILE__ ) . '/admin_page.php';
 include_once dirname( __FILE__ ) . '/includes/class-courses.php';
 include_once dirname( __FILE__ ) . '/includes/class-users.php';
 include_once dirname( __FILE__ ) . '/vendor/autoload.php';
