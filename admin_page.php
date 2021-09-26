@@ -53,7 +53,7 @@ function nelio_render_settings_page() {
     <form action="options.php" method="post">
         <?php 
         settings_fields( 'op_return_settings' );
-        do_settings_sections( 'op_return' );
+        //do_settings_sections( 'op_return' );
         ?>
         <input
            type="submit"
