@@ -112,6 +112,14 @@ function op_return_register_settings() {
     );
 
     add_settings_field(
+        'send_amount_field',
+        'Send Amount:',
+        'op_return_render_send_amount_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
         'another_number_field',
         'Another Number Field',
         'op_return_render_another_number_field',
@@ -126,6 +134,7 @@ function op_return_validate_settings( $input ) {
     $output['port_number_field']    = sanitize_text_field( $input['port_number_field'] );
     $output['rpc_user_field']       = sanitize_text_field( $input['rpc_user_field'] );
     $output['rpc_password_field']   = sanitize_text_field( $input['rpc_password_field'] );
+    $output['send_amount_field']    = sanitize_text_field( $input['send_amount_field'] );
     $output['another_number_field'] = absint( $input['another_number_field'] );
     // ...
     return $output;
@@ -171,6 +180,24 @@ function op_return_render_rpc_password_field() {
     );
 }
 
+function op_return_render_send_amount_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[send_amount_field]' ),
+      esc_attr( $options['send_amount_field'] )
+    );
+}
+
+function op_return_render_send_address_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="text" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[send_address_field]' ),
+      esc_attr( $options['send_address_field'] )
+    );
+}
+
 function op_return_render_another_number_field() {
     $options = get_option( 'op_return_settings' );
     printf(
@@ -179,7 +206,7 @@ function op_return_render_another_number_field() {
       esc_attr( $options['another_number_field'] )
     );
 }
-    
+
 /*
 //Add Custom Admin Menu Item and Sub Menus
 function theme_options_panel(){
