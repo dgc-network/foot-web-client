@@ -150,6 +150,30 @@ function op_return_register_settings() {
         'op_return_page',
         'section_one'
     );
+
+    add_settings_field(
+        'max_blocks_field',
+        'Max Blocks:',
+        'op_return_render_max_blocks_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
+        'connect_timeout_field',
+        'Connect Timeout:',
+        'op_return_render_connect_timeout_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
+        'receive_timeout_field',
+        'Receive Timeout:',
+        'op_return_render_receive_timeout_field',
+        'op_return_page',
+        'section_one'
+    );
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
@@ -163,6 +187,9 @@ function op_return_validate_settings( $input ) {
     $output['transaction_fee_field'] = (float)$input['transaction_fee_field'];
     $output['dust_amount_field']     = (float)$input['dust_amount_field'];
     $output['max_bytes_field']       = (int)$input['max_bytes_field'];
+    $output['max_blocks_field']      = (int)$input['max_blocks_field'];
+    $output['connect_timeout_field'] = (int)$input['connect_timeout_field'];
+    $output['receive_timeout_field'] = (int)$input['receive_timeout_field'];
     // ...
     return $output;
 }
@@ -249,6 +276,33 @@ function op_return_render_max_bytes_field() {
       '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_bytes_field]' ),
       esc_attr( $options['max_bytes_field'] )
+    );
+}
+
+function op_return_render_max_blocks_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[max_blocks_field]' ),
+      esc_attr( $options['max_blocks_field'] )
+    );
+}
+
+function op_return_render_connect_timeout_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[connect_timeout_field]' ),
+      esc_attr( $options['connect_timeout_field'] )
+    );
+}
+
+function op_return_render_receive_timeout_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[receive_timeout_field]' ),
+      esc_attr( $options['receive_timeout_field'] )
     );
 }
 
