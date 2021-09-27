@@ -90,7 +90,7 @@ function op_return_register_settings() {
         'IP Address:',
         'op_return_render_ip_address_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
