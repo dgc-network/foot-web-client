@@ -2,8 +2,8 @@
 
 if( isset($_POST['submit']) ) {
 	//$op_options = get_option( 'op_return_settings' );
-	$op_options = get_option( 'ip_address_field' );
-    return $op_options;
+	//$op_options = get_option( 'ip_address_field' );
+    //return $op_options;
     //echo $my_options['title'];
     //echo $my_options['id_number'];
     //define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
@@ -58,7 +58,7 @@ function op_return_render_settings_page() {
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">
         <?php 
-        settings_fields( 'op_return_settings' );
+        settings_fields( 'op_return_group' );
         do_settings_sections( 'op_return_page' );
         ?>
         <input
@@ -73,9 +73,9 @@ function op_return_render_settings_page() {
 
 function op_return_register_settings() {
     register_setting(
+        'op_return_group',
         'op_return_settings',
-        'op_return_settings',
-        'op_return_validate_settings'
+        'op_return_validate_callback'
     );
 
     add_settings_section(
@@ -183,7 +183,7 @@ function op_return_register_settings() {
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
-function op_return_validate_settings( $input ) {
+function op_return_validate_callback( $input ) {
     $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
     $output['port_number_field']     = sanitize_text_field( $input['port_number_field'] );
     $output['rpc_user_field']        = sanitize_text_field( $input['rpc_user_field'] );
