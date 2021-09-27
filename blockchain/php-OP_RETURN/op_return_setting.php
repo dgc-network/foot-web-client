@@ -92,7 +92,7 @@ function op_return_register_settings() {
         'op_return_page',
         //'section_one'
     );
-
+/*
     add_settings_field(
         'port_number_field',
         'Port Number:',
@@ -180,6 +180,7 @@ function op_return_register_settings() {
         'op_return_page',
         'section_one'
     );
+*/    
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
