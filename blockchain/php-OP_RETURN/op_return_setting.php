@@ -77,14 +77,14 @@ function op_return_register_settings() {
         'op_return_settings',
         'op_return_validate_callback'
     );
-
+/*
     add_settings_section(
         'section_one',
         'Digitalcoin Configuration',
         'op_return_section_one_text',
         'op_return_page'
     );
-
+*/
     add_settings_field(
         'ip_address_field',
         'IP Address:',
