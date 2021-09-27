@@ -35,19 +35,19 @@
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
 
 //    
-function nelio_add_settings_page() {
+function op_return_add_settings_page() {
     add_options_page(
       'OP_RETURN Settings',
       'OP_RETURN',
       'manage_options',
       'op-return-page',
-      'nelio_render_settings_page'
+      'op_return_render_settings_page'
     );
 }
-add_action( 'admin_menu', 'nelio_add_settings_page' );
+add_action( 'admin_menu', 'op_return_add_settings_page' );
 
 //
-function nelio_render_settings_page() {
+function op_return_render_settings_page() {
 ?>
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">
@@ -65,24 +65,32 @@ function nelio_render_settings_page() {
 <?php
 }
 
-function nelio_register_settings() {
+function op_return_register_settings() {
     register_setting(
         'op_return_settings',
         'op_return_settings',
-        'nelio_validate_example_plugin_settings'
+        'op_return_validate_example_plugin_settings'
     );
 
     add_settings_section(
         'section_one',
-        'Section One',
-        'nelio_section_one_text',
+        'Digitalcoin Configuration',
+        'op_return_section_one_text',
         'op_return_page'
     );
 
     add_settings_field(
+        'ip_address_field',
+        'IP Address',
+        'op_return_render_ip_address_field',
+        'op_return_page',
+        'section_one'
+    );
+  
+    add_settings_field(
         'some_text_field',
         'Some Text Field',
-        'nelio_render_some_text_field',
+        'op_return_render_some_text_field',
         'op_return_page',
         'section_one'
     );
@@ -90,25 +98,35 @@ function nelio_register_settings() {
     add_settings_field(
         'another_number_field',
         'Another Number Field',
-        'nelio_render_another_number_field',
+        'op_return_render_another_number_field',
         'op_return_page',
         'section_one'
     );
 }
-add_action( 'admin_init', 'nelio_register_settings' );
+add_action( 'admin_init', 'op_return_register_settings' );
 
-function nelio_validate_example_plugin_settings( $input ) {
+function op_return_validate_example_plugin_settings( $input ) {
+    $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
     $output['some_text_field']      = sanitize_text_field( $input['some_text_field'] );
     $output['another_number_field'] = absint( $input['another_number_field'] );
     // ...
     return $output;
 }
 
-function nelio_section_one_text() {
+function op_return_section_one_text() {
     echo '<p>This is the first (and only) section in my settings.</p>';
 }
   
-function nelio_render_some_text_field() {
+function op_return_render_ip_address_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="text" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[ip_address_field]' ),
+      esc_attr( $options['ip_address_field'] )
+    );
+}
+  
+function op_return_render_some_text_field() {
     $options = get_option( 'op_return_settings' );
     printf(
       '<input type="text" name="%s" value="%s" />',
@@ -117,7 +135,7 @@ function nelio_render_some_text_field() {
     );
 }
   
-function nelio_render_another_number_field() {
+function op_return_render_another_number_field() {
     $options = get_option( 'op_return_settings' );
     printf(
       '<input type="number" name="%s" value="%s" />',
