@@ -1,8 +1,10 @@
 <?php
 
+if( isset($_POST['submit']) ) {
 	//define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
+    return $_POST['op_return_settings']['ip_address_field'];
 	//define('OP_RETURN_BITCOIN_IP', '218.161.56.168'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
 	
@@ -33,7 +35,7 @@
 
 	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
-
+}
 //    
 function op_return_add_settings_page() {
     add_options_page(
