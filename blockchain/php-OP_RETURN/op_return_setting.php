@@ -142,7 +142,7 @@ function op_return_validate_settings( $input ) {
     $output['port_number_field']     = sanitize_text_field( $input['port_number_field'] );
     $output['rpc_user_field']        = sanitize_text_field( $input['rpc_user_field'] );
     $output['rpc_password_field']    = sanitize_text_field( $input['rpc_password_field'] );
-    $output['send_amount_field']     = (float)$input['send_amount_field'];
+    $output['send_amount_field']     = floatval( $input['send_amount_field'] );
     $output['send_address_field']    = sanitize_text_field( $input['send_address_field'] );
     $output['transaction_fee_field'] = (float)$input['transaction_fee_field'];
     // ...
