@@ -69,7 +69,7 @@ function op_return_register_settings() {
     register_setting(
         'op_return_settings',
         'op_return_settings',
-        'op_return_validate_example_plugin_settings'
+        'op_return_validate_settings'
     );
 
     add_settings_section(
@@ -81,20 +81,36 @@ function op_return_register_settings() {
 
     add_settings_field(
         'ip_address_field',
-        'IP Address',
+        'IP Address:',
         'op_return_render_ip_address_field',
         'op_return_page',
         'section_one'
     );
-  
+
     add_settings_field(
-        'some_text_field',
-        'Some Text Field',
-        'op_return_render_some_text_field',
+        'port_number_field',
+        'Port Number:',
+        'op_return_render_port_number_field',
         'op_return_page',
         'section_one'
     );
-  
+
+    add_settings_field(
+        'rpc_user_field',
+        'RPC User:',
+        'op_return_render_rpc_user_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
+        'rpc_password_field',
+        'RPC Password:',
+        'op_return_render_rpc_password_field',
+        'op_return_page',
+        'section_one'
+    );
+
     add_settings_field(
         'another_number_field',
         'Another Number Field',
@@ -105,9 +121,11 @@ function op_return_register_settings() {
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
-function op_return_validate_example_plugin_settings( $input ) {
-    $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
-    $output['some_text_field']      = sanitize_text_field( $input['some_text_field'] );
+function op_return_validate_settings( $input ) {
+    $output['ip_address_field']     = sanitize_text_field( $input['ip_address_field'] );
+    $output['port_number_field']    = sanitize_text_field( $input['port_number_field'] );
+    $output['rpc_user_field']       = sanitize_text_field( $input['rpc_user_field'] );
+    $output['rpc_password_field']   = sanitize_text_field( $input['rpc_password_field'] );
     $output['another_number_field'] = absint( $input['another_number_field'] );
     // ...
     return $output;
@@ -125,16 +143,34 @@ function op_return_render_ip_address_field() {
       esc_attr( $options['ip_address_field'] )
     );
 }
-  
-function op_return_render_some_text_field() {
+
+function op_return_render_port_number_field() {
     $options = get_option( 'op_return_settings' );
     printf(
       '<input type="text" name="%s" value="%s" />',
-      esc_attr( 'op_return_settings[some_text_field]' ),
-      esc_attr( $options['some_text_field'] )
+      esc_attr( 'op_return_settings[port_number_field]' ),
+      esc_attr( $options['port_number_field'] )
     );
 }
-  
+
+function op_return_render_rpc_user_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="text" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[rpc_user_field]' ),
+      esc_attr( $options['rpc_user_field'] )
+    );
+}
+
+function op_return_render_rpc_password_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="text" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[rpc_password_field]' ),
+      esc_attr( $options['rpc_password_field'] )
+    );
+}
+
 function op_return_render_another_number_field() {
     $options = get_option( 'op_return_settings' );
     printf(
