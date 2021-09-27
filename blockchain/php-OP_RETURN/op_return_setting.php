@@ -134,6 +134,22 @@ function op_return_register_settings() {
         'op_return_page',
         'section_one'
     );
+
+    add_settings_field(
+        'dust_amount_field',
+        'Dust Amount:',
+        'op_return_render_dust_amount_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
+        'max_bytes_field',
+        'Max Bytes:',
+        'op_return_render_max_bytes_field',
+        'op_return_page',
+        'section_one'
+    );
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
@@ -145,6 +161,8 @@ function op_return_validate_settings( $input ) {
     $output['send_amount_field']     = floatval( $input['send_amount_field'] );
     $output['send_address_field']    = sanitize_text_field( $input['send_address_field'] );
     $output['transaction_fee_field'] = (float)$input['transaction_fee_field'];
+    $output['dust_amount_field']     = (float)$input['dust_amount_field'];
+    $output['max_bytes_field']       = (int)$input['max_bytes_field'];
     // ...
     return $output;
 }
@@ -213,6 +231,24 @@ function op_return_render_transaction_fee_field() {
       '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[transaction_fee_field]' ),
       esc_attr( $options['transaction_fee_field'] )
+    );
+}
+
+function op_return_render_dust_amount_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[dust_amount_field]' ),
+      esc_attr( $options['dust_amount_field'] )
+    );
+}
+
+function op_return_render_max_bytes_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="number" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[max_bytes_field]' ),
+      esc_attr( $options['max_bytes_field'] )
     );
 }
 
