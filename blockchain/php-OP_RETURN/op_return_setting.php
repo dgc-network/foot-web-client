@@ -120,9 +120,17 @@ function op_return_register_settings() {
     );
 
     add_settings_field(
-        'another_number_field',
-        'Another Number Field',
-        'op_return_render_another_number_field',
+        'send_address_field',
+        'Send Address:',
+        'op_return_render_send_address_field',
+        'op_return_page',
+        'section_one'
+    );
+
+    add_settings_field(
+        'transaction_fee_field',
+        'Transaction Fee:',
+        'op_return_render_transaction_fee_field',
         'op_return_page',
         'section_one'
     );
@@ -130,12 +138,13 @@ function op_return_register_settings() {
 add_action( 'admin_init', 'op_return_register_settings' );
 
 function op_return_validate_settings( $input ) {
-    $output['ip_address_field']     = sanitize_text_field( $input['ip_address_field'] );
-    $output['port_number_field']    = sanitize_text_field( $input['port_number_field'] );
-    $output['rpc_user_field']       = sanitize_text_field( $input['rpc_user_field'] );
-    $output['rpc_password_field']   = sanitize_text_field( $input['rpc_password_field'] );
-    $output['send_amount_field']    = sanitize_text_field( $input['send_amount_field'] );
-    $output['another_number_field'] = absint( $input['another_number_field'] );
+    $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
+    $output['port_number_field']     = sanitize_text_field( $input['port_number_field'] );
+    $output['rpc_user_field']        = sanitize_text_field( $input['rpc_user_field'] );
+    $output['rpc_password_field']    = sanitize_text_field( $input['rpc_password_field'] );
+    $output['send_amount_field']     = absint( $input['send_amount_field'] );
+    $output['send_address_field']    = sanitize_text_field( $input['send_address_field'] );
+    $output['transaction_fee_field'] = absint( $input['transaction_fee_field'] );
     // ...
     return $output;
 }
@@ -198,12 +207,12 @@ function op_return_render_send_address_field() {
     );
 }
 
-function op_return_render_another_number_field() {
+function op_return_render_transaction_fee_field() {
     $options = get_option( 'op_return_settings' );
     printf(
       '<input type="number" name="%s" value="%s" />',
-      esc_attr( 'op_return_settings[another_number_field]' ),
-      esc_attr( $options['another_number_field'] )
+      esc_attr( 'op_return_settings[transaction_fee_field]' ),
+      esc_attr( $options['transaction_fee_field'] )
     );
 }
 
