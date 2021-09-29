@@ -40,7 +40,7 @@ if( isset($_POST['submit']) ) {
 	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
 }
-//    
+//
 function op_return_add_settings_page() {
     add_options_page(
       'OP_RETURN Settings',
@@ -70,6 +70,19 @@ function op_return_render_settings_page() {
     </form>
 <?php
 }
+
+/**
+* Registers a text field setting for Wordpress 4.7 and higher.
+**/
+function register_my_setting() {
+    $args = array(
+            'type' => 'string', 
+            'sanitize_callback' => 'sanitize_text_field',
+            'default' => NULL,
+            );
+    register_setting( 'my_options_group', 'my_option_name', $args ); 
+} 
+add_action( 'admin_init', 'register_my_setting' );
 
 function op_return_register_settings() {
     register_setting(
@@ -182,7 +195,7 @@ function op_return_register_settings() {
     );
 
 }
-add_action( 'admin_init', 'op_return_register_settings' );
+//add_action( 'admin_init', 'op_return_register_settings' );
 
 function op_return_sanitize_callback( $input ) {
     $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
