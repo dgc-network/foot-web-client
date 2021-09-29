@@ -92,13 +92,13 @@ function op_return_register_settings() {
         'op_return_page'
         //'section_one'
     );
-/*
+
     add_settings_field(
         'port_number_field',
         'Port Number:',
         'op_return_render_port_number_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -106,7 +106,7 @@ function op_return_register_settings() {
         'RPC User:',
         'op_return_render_rpc_user_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -114,7 +114,7 @@ function op_return_register_settings() {
         'RPC Password:',
         'op_return_render_rpc_password_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -122,7 +122,7 @@ function op_return_register_settings() {
         'Send Amount:',
         'op_return_render_send_amount_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -130,7 +130,7 @@ function op_return_register_settings() {
         'Send Address:',
         'op_return_render_send_address_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -138,7 +138,7 @@ function op_return_register_settings() {
         'Transaction Fee:',
         'op_return_render_transaction_fee_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -146,7 +146,7 @@ function op_return_register_settings() {
         'Dust Amount:',
         'op_return_render_dust_amount_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -154,7 +154,7 @@ function op_return_register_settings() {
         'Max Bytes:',
         'op_return_render_max_bytes_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -162,7 +162,7 @@ function op_return_register_settings() {
         'Max Blocks:',
         'op_return_render_max_blocks_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -170,7 +170,7 @@ function op_return_register_settings() {
         'Connect Timeout:',
         'op_return_render_connect_timeout_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
 
     add_settings_field(
@@ -178,9 +178,9 @@ function op_return_register_settings() {
         'Receive Timeout:',
         'op_return_render_receive_timeout_field',
         'op_return_page',
-        'section_one'
+        //'section_one'
     );
-*/    
+
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
