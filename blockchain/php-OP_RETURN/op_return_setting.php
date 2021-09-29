@@ -89,7 +89,7 @@ function op_return_register_settings() {
         'ip_address_field',
         'IP Address:',
         'op_return_render_ip_address_field',
-        'op_return_page',
+        //'op_return_page',
         //'section_one'
     );
 /*
