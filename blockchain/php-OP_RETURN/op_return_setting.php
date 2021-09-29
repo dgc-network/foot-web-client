@@ -58,7 +58,8 @@ function op_return_render_settings_page() {
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">
         <?php 
-        settings_fields( 'op_return_group' );
+        settings_fields( 'my_option_group' );
+        //settings_fields( 'op_return_group' );
         //do_settings_sections( 'op_return_page' );
         ?>
         <input
