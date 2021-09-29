@@ -75,7 +75,7 @@ function op_return_register_settings() {
     register_setting(
         'op_return_group',
         'op_return_settings',
-        'op_return_validate_callback'
+        'op_return_sanitize_callback'
     );
 /*
     add_settings_section(
@@ -89,7 +89,7 @@ function op_return_register_settings() {
         'ip_address_field',
         'IP Address:',
         'op_return_render_ip_address_field',
-        //'op_return_page',
+        'op_return_page'
         //'section_one'
     );
 /*
@@ -184,7 +184,7 @@ function op_return_register_settings() {
 }
 add_action( 'admin_init', 'op_return_register_settings' );
 
-function op_return_validate_callback( $input ) {
+function op_return_sanitize_callback( $input ) {
     $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
     $output['port_number_field']     = sanitize_text_field( $input['port_number_field'] );
     $output['rpc_user_field']        = sanitize_text_field( $input['rpc_user_field'] );
