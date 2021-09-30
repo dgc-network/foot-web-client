@@ -2,16 +2,26 @@
 
 if( isset($_POST['submit']) ) {
     $options = get_option( 'op_return_settings' );
-    //return $options['ip_address_field'];
-	//$op_options = get_option( 'op_return_settings' );
-	//$op_options = get_option( 'ip_address_field' );
-    //return $op_options;
-    //echo $my_options['title'];
-    //echo $my_options['id_number'];
+	define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
+	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
+    define('OP_RETURN_BITCOIN_PORT', $options['port_number_field']); // leave empty to use default port for mainnet/testnet
+    define('OP_RETURN_BITCOIN_USER', $options['rpc_user_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
+    define('OP_RETURN_BITCOIN_PASSWORD', $options['rpc_password_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
+	define('OP_RETURN_SEND_AMOUNT', $options['send_amount_field']); // BTC send amount per transaction
+	define('OP_RETURN_SEND_ADDRESS', $options['send_address_field']); // BTC send address per transaction
+
+	define('OP_RETURN_BTC_FEE', $options['transaction_fee_field']); // BTC fee to pay per transaction
+	define('OP_RETURN_BTC_DUST', $options['dust_amount_field']); // omit BTC outputs smaller than this
+
+	define('OP_RETURN_MAX_BYTES', $options['max_bytes_field']); // maximum bytes in an OP_RETURN (80 as of Bitcoin 0.11)
+	define('OP_RETURN_MAX_BLOCKS', $options['max_blocks_field']); // maximum number of blocks to try when retrieving data
+
+	define('OP_RETURN_NET_TIMEOUT_CONNECT', $options['connect_timeout_field']); // how long to time out when connecting to bitcoin node
+	define('OP_RETURN_NET_TIMEOUT_RECEIVE', $options['receive_timeout_field']); // how long to time out retrieving data from bitcoin node
+/*
     //define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '218.161.56.168'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
 	
@@ -42,6 +52,7 @@ if( isset($_POST['submit']) ) {
 
 	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
+*/    
 }
 //
 function op_return_add_settings_page() {
