@@ -405,7 +405,7 @@
 			
 		$send_txid=OP_RETURN_bitcoin_cmd('sendrawtransaction', $testnet, $signed_txn['hex']);
 		if (strlen($send_txid)!=64)
-			//return array('error' => 'Could not send the transaction');
+			return array('error' => 'Could not send the transaction');
 		
 		return array('txid' => $send_txid);
 	}
