@@ -13,6 +13,8 @@ class MySettingsPage
     {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
+        //remove_action( 'admin_init', array( 'easyFancyBox_Admin', 'add_settings_section' ) );
+        remove_action( 'admin_init', array( $this, 'add_settings_section' ) );
     }
 
     /**
@@ -45,7 +47,7 @@ class MySettingsPage
             <?php
                 // This prints out all hidden setting fields
                 settings_fields( 'my_option_group' );   
-                //do_settings_sections( 'my-setting-admin' );
+                do_settings_sections( 'my-setting-admin' );
                 submit_button(); 
             ?>
             </form>
