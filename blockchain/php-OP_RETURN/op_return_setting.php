@@ -97,7 +97,8 @@ function op_return_register_settings() {
 
     add_settings_section(
         'section_one',
-        'Digitalcoin Configuration',
+        //'Digitalcoin Configuration',
+        '',
         'op_return_section_one_callback',
         'op_return_page'
     );
