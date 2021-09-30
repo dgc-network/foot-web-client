@@ -1,6 +1,8 @@
 <?php
 
 if( isset($_POST['submit']) ) {
+    $options = get_option( 'op_return_settings' );
+    return $options['ip_address_field'];
 	//$op_options = get_option( 'op_return_settings' );
 	//$op_options = get_option( 'ip_address_field' );
     //return $op_options;
@@ -58,9 +60,9 @@ function op_return_render_settings_page() {
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">
         <?php 
-        settings_fields( 'my_options_group' );
-        //settings_fields( 'op_return_group' );
-        //do_settings_sections( 'op_return_page' );
+        //settings_fields( 'my_options_group' );
+        settings_fields( 'op_return_group' );
+        do_settings_sections( 'op_return_page' );
         ?>
         <input
            type="submit"
@@ -83,7 +85,7 @@ function register_my_setting() {
             );
     register_setting( 'my_options_group', 'my_option_name', $args ); 
 } 
-add_action( 'admin_init', 'register_my_setting' );
+//add_action( 'admin_init', 'register_my_setting' );
 
 function op_return_register_settings() {
     register_setting(
@@ -91,20 +93,20 @@ function op_return_register_settings() {
         'op_return_settings',
         'op_return_sanitize_callback'
     );
-/*
+
     add_settings_section(
         'section_one',
         'Digitalcoin Configuration',
-        'op_return_section_one_text',
+        'op_return_section_one_callback',
         'op_return_page'
     );
-*/
+
     add_settings_field(
         'ip_address_field',
         'IP Address:',
         'op_return_render_ip_address_field',
-        'op_return_page'
-        //'section_one'
+        'op_return_page',
+        'section_one'
     );
 
     add_settings_field(
@@ -112,7 +114,7 @@ function op_return_register_settings() {
         'Port Number:',
         'op_return_render_port_number_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -120,7 +122,7 @@ function op_return_register_settings() {
         'RPC User:',
         'op_return_render_rpc_user_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -128,7 +130,7 @@ function op_return_register_settings() {
         'RPC Password:',
         'op_return_render_rpc_password_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -136,7 +138,7 @@ function op_return_register_settings() {
         'Send Amount:',
         'op_return_render_send_amount_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -144,7 +146,7 @@ function op_return_register_settings() {
         'Send Address:',
         'op_return_render_send_address_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -152,7 +154,7 @@ function op_return_register_settings() {
         'Transaction Fee:',
         'op_return_render_transaction_fee_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -160,7 +162,7 @@ function op_return_register_settings() {
         'Dust Amount:',
         'op_return_render_dust_amount_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -168,7 +170,7 @@ function op_return_register_settings() {
         'Max Bytes:',
         'op_return_render_max_bytes_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -176,7 +178,7 @@ function op_return_register_settings() {
         'Max Blocks:',
         'op_return_render_max_blocks_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -184,7 +186,7 @@ function op_return_register_settings() {
         'Connect Timeout:',
         'op_return_render_connect_timeout_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
     add_settings_field(
@@ -192,11 +194,11 @@ function op_return_register_settings() {
         'Receive Timeout:',
         'op_return_render_receive_timeout_field',
         'op_return_page',
-        //'section_one'
+        'section_one'
     );
 
 }
-//add_action( 'admin_init', 'op_return_register_settings' );
+add_action( 'admin_init', 'op_return_register_settings' );
 
 function op_return_sanitize_callback( $input ) {
     $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
@@ -215,14 +217,14 @@ function op_return_sanitize_callback( $input ) {
     return $output;
 }
 
-function op_return_section_one_text() {
-    echo '<p>This is the first (and only) section in my settings.</p>';
+function op_return_section_one_callback() {
+    //echo '<p>This is the first (and only) section in my settings.</p>';
 }
   
 function op_return_render_ip_address_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" name="%s" value="%s" />',
+      '<input type="text" size="50"  name="%s" value="%s" />',
       esc_attr( 'op_return_settings[ip_address_field]' ),
       esc_attr( $options['ip_address_field'] )
     );
@@ -231,7 +233,7 @@ function op_return_render_ip_address_field() {
 function op_return_render_port_number_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" name="%s" value="%s" />',
+      '<input type="text" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[port_number_field]' ),
       esc_attr( $options['port_number_field'] )
     );
@@ -240,7 +242,7 @@ function op_return_render_port_number_field() {
 function op_return_render_rpc_user_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" name="%s" value="%s" />',
+      '<input type="text" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[rpc_user_field]' ),
       esc_attr( $options['rpc_user_field'] )
     );
@@ -249,7 +251,7 @@ function op_return_render_rpc_user_field() {
 function op_return_render_rpc_password_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" name="%s" value="%s" />',
+      '<input type="text" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[rpc_password_field]' ),
       esc_attr( $options['rpc_password_field'] )
     );
@@ -258,7 +260,7 @@ function op_return_render_rpc_password_field() {
 function op_return_render_send_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[send_amount_field]' ),
       esc_attr( $options['send_amount_field'] )
     );
@@ -267,7 +269,7 @@ function op_return_render_send_amount_field() {
 function op_return_render_send_address_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" name="%s" value="%s" />',
+      '<input type="text" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[send_address_field]' ),
       esc_attr( $options['send_address_field'] )
     );
@@ -276,7 +278,7 @@ function op_return_render_send_address_field() {
 function op_return_render_transaction_fee_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[transaction_fee_field]' ),
       esc_attr( $options['transaction_fee_field'] )
     );
@@ -285,7 +287,7 @@ function op_return_render_transaction_fee_field() {
 function op_return_render_dust_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[dust_amount_field]' ),
       esc_attr( $options['dust_amount_field'] )
     );
@@ -294,7 +296,7 @@ function op_return_render_dust_amount_field() {
 function op_return_render_max_bytes_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_bytes_field]' ),
       esc_attr( $options['max_bytes_field'] )
     );
@@ -303,7 +305,7 @@ function op_return_render_max_bytes_field() {
 function op_return_render_max_blocks_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_blocks_field]' ),
       esc_attr( $options['max_blocks_field'] )
     );
@@ -312,7 +314,7 @@ function op_return_render_max_blocks_field() {
 function op_return_render_connect_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[connect_timeout_field]' ),
       esc_attr( $options['connect_timeout_field'] )
     );
@@ -321,7 +323,7 @@ function op_return_render_connect_timeout_field() {
 function op_return_render_receive_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="number" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[receive_timeout_field]' ),
       esc_attr( $options['receive_timeout_field'] )
     );
