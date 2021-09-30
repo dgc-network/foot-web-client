@@ -2,7 +2,7 @@
 
 if( isset($_POST['submit']) ) {
     $options = get_option( 'op_return_settings' );
-    return $options['ip_address_field'];
+    //return $options['ip_address_field'];
 	//$op_options = get_option( 'op_return_settings' );
 	//$op_options = get_option( 'ip_address_field' );
     //return $op_options;
@@ -10,7 +10,8 @@ if( isset($_POST['submit']) ) {
     //echo $my_options['id_number'];
     //define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
+	//define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
+	define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '218.161.56.168'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
 	
@@ -260,7 +261,7 @@ function op_return_render_rpc_password_field() {
 function op_return_render_send_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[send_amount_field]' ),
       esc_attr( $options['send_amount_field'] )
     );
@@ -278,7 +279,7 @@ function op_return_render_send_address_field() {
 function op_return_render_transaction_fee_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[transaction_fee_field]' ),
       esc_attr( $options['transaction_fee_field'] )
     );
@@ -287,7 +288,7 @@ function op_return_render_transaction_fee_field() {
 function op_return_render_dust_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[dust_amount_field]' ),
       esc_attr( $options['dust_amount_field'] )
     );
@@ -296,7 +297,7 @@ function op_return_render_dust_amount_field() {
 function op_return_render_max_bytes_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_bytes_field]' ),
       esc_attr( $options['max_bytes_field'] )
     );
@@ -305,7 +306,7 @@ function op_return_render_max_bytes_field() {
 function op_return_render_max_blocks_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_blocks_field]' ),
       esc_attr( $options['max_blocks_field'] )
     );
@@ -314,7 +315,7 @@ function op_return_render_max_blocks_field() {
 function op_return_render_connect_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[connect_timeout_field]' ),
       esc_attr( $options['connect_timeout_field'] )
     );
@@ -323,7 +324,7 @@ function op_return_render_connect_timeout_field() {
 function op_return_render_receive_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" size="50" name="%s" value="%s" />',
+      '<input type="number" style="width:50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[receive_timeout_field]' ),
       esc_attr( $options['receive_timeout_field'] )
     );
