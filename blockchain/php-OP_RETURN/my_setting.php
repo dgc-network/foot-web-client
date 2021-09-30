@@ -14,7 +14,7 @@ class MySettingsPage
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
         //remove_action( 'admin_init', array( 'easyFancyBox_Admin', 'add_settings_section' ) );
-        remove_action( 'admin_init', array( $this, 'add_settings_section' ) );
+        //remove_action( 'admin_init', array( $this, 'add_settings_section' ) );
     }
 
     /**
@@ -65,14 +65,14 @@ class MySettingsPage
             'my_option_name', // Option name
             array( $this, 'sanitize' ) // Sanitize
         );
-
+/*
         add_settings_section(
             'setting_section_id', // ID
             'My Custom Settings', // Title
             array( $this, 'print_section_info' ), // Callback
             'my-setting-admin' // Page
         );  
-
+*/
         add_settings_field(
             'id_number', // ID
             'ID Number', // Title 
