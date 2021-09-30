@@ -89,20 +89,21 @@ class MySettingsPage
             'my_option_name', // Option name
             array( $this, 'sanitize' ) // Sanitize
         );
-/*
+
         add_settings_section(
             'setting_section_id', // ID
             'My Custom Settings', // Title
             array( $this, 'print_section_info' ), // Callback
             'my-setting-admin' // Page
         );  
-*/
+
         add_settings_field(
             'id_number', // ID
             'ID Number', // Title 
             array( $this, 'id_number_callback' ), // Callback
             'my-setting-admin', // Page
             //'setting_section_id' // Section           
+            'default' // Section           
         );      
 
         add_settings_field(
@@ -111,6 +112,7 @@ class MySettingsPage
             array( $this, 'title_callback' ), 
             'my-setting-admin', 
             //'setting_section_id'
+            'default' // Section           
         );      
     }
 
