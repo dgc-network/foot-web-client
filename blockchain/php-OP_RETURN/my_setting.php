@@ -1,4 +1,28 @@
 <?php
+class ClassName {
+    public function __construct() {
+        add_action( 'admin_init', array( $this, 'your_function' ) );
+    }
+ 
+    function your_function() {
+        add_settings_field(
+            'myprefix_setting-id',
+            'This is the setting title',
+            array( $this, 'myprefix_setting_callback_function' ),
+            'general',
+            'default',
+            array( 'label_for' => 'myprefix_setting-id' ),
+        );
+    }
+ 
+    function myprefix_setting_callback_function( $args ) {
+        echo 'Content here';
+    }
+}
+ 
+$ClassName = new ClassName();
+
+
 class MySettingsPage
 {
     /**
@@ -78,7 +102,7 @@ class MySettingsPage
             'ID Number', // Title 
             array( $this, 'id_number_callback' ), // Callback
             'my-setting-admin', // Page
-            'setting_section_id' // Section           
+            //'setting_section_id' // Section           
         );      
 
         add_settings_field(
@@ -86,7 +110,7 @@ class MySettingsPage
             'Title', 
             array( $this, 'title_callback' ), 
             'my-setting-admin', 
-            'setting_section_id'
+            //'setting_section_id'
         );      
     }
 
