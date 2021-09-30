@@ -205,12 +205,12 @@ function op_return_sanitize_callback( $input ) {
     $output['rpc_password_field']    = sanitize_text_field( $input['rpc_password_field'] );
     $output['send_amount_field']     = floatval( $input['send_amount_field'] );
     $output['send_address_field']    = sanitize_text_field( $input['send_address_field'] );
-    $output['transaction_fee_field'] = (float)$input['transaction_fee_field'];
-    $output['dust_amount_field']     = (float)$input['dust_amount_field'];
-    $output['max_bytes_field']       = (int)$input['max_bytes_field'];
-    $output['max_blocks_field']      = (int)$input['max_blocks_field'];
-    $output['connect_timeout_field'] = (int)$input['connect_timeout_field'];
-    $output['receive_timeout_field'] = (int)$input['receive_timeout_field'];
+    $output['transaction_fee_field'] = floatval($input['transaction_fee_field']);
+    $output['dust_amount_field']     = floatval($input['dust_amount_field']);
+    $output['max_bytes_field']       = intval($input['max_bytes_field']);
+    $output['max_blocks_field']      = intval($input['max_blocks_field']);
+    $output['connect_timeout_field'] = intval($input['connect_timeout_field']);
+    $output['receive_timeout_field'] = intval($input['receive_timeout_field']);
     // ...
     return $output;
 }
