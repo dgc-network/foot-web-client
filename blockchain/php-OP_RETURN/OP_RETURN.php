@@ -26,6 +26,7 @@
  * THE SOFTWARE.
  */
 
+/*
 	//define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
 	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
@@ -59,7 +60,7 @@
 
 	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
 	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
-	
+*/	
 
 //	User-facing functions
 
@@ -404,7 +405,7 @@
 			
 		$send_txid=OP_RETURN_bitcoin_cmd('sendrawtransaction', $testnet, $signed_txn['hex']);
 		if (strlen($send_txid)!=64)
-			return array('error' => 'Could not send the transaction');
+			//return array('error' => 'Could not send the transaction');
 		
 		return array('txid' => $send_txid);
 	}

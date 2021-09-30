@@ -72,7 +72,6 @@ function op_return_render_settings_page() {
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">
         <?php 
-        //settings_fields( 'my_options_group' );
         settings_fields( 'op_return_group' );
         do_settings_sections( 'op_return_page' );
         ?>
@@ -86,19 +85,6 @@ function op_return_render_settings_page() {
 <?php
 }
 
-/**
-* Registers a text field setting for Wordpress 4.7 and higher.
-**/
-function register_my_setting() {
-    $args = array(
-            'type' => 'string', 
-            'sanitize_callback' => 'sanitize_text_field',
-            'default' => NULL,
-            );
-    register_setting( 'my_options_group', 'my_option_name', $args ); 
-} 
-//add_action( 'admin_init', 'register_my_setting' );
-
 function op_return_register_settings() {
     register_setting(
         'op_return_group',
@@ -108,7 +94,6 @@ function op_return_register_settings() {
 
     add_settings_section(
         'section_one',
-        //'Digitalcoin Configuration',
         '',
         'op_return_section_one_callback',
         'op_return_page'
@@ -273,7 +258,7 @@ function op_return_render_rpc_password_field() {
 function op_return_render_send_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[send_amount_field]' ),
       esc_attr( $options['send_amount_field'] )
     );
@@ -291,7 +276,7 @@ function op_return_render_send_address_field() {
 function op_return_render_transaction_fee_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[transaction_fee_field]' ),
       esc_attr( $options['transaction_fee_field'] )
     );
@@ -300,7 +285,7 @@ function op_return_render_transaction_fee_field() {
 function op_return_render_dust_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[dust_amount_field]' ),
       esc_attr( $options['dust_amount_field'] )
     );
@@ -309,7 +294,7 @@ function op_return_render_dust_amount_field() {
 function op_return_render_max_bytes_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_bytes_field]' ),
       esc_attr( $options['max_bytes_field'] )
     );
@@ -318,7 +303,7 @@ function op_return_render_max_bytes_field() {
 function op_return_render_max_blocks_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[max_blocks_field]' ),
       esc_attr( $options['max_blocks_field'] )
     );
@@ -327,7 +312,7 @@ function op_return_render_max_blocks_field() {
 function op_return_render_connect_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[connect_timeout_field]' ),
       esc_attr( $options['connect_timeout_field'] )
     );
@@ -336,34 +321,10 @@ function op_return_render_connect_timeout_field() {
 function op_return_render_receive_timeout_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" style="width:50" name="%s" value="%s" />',
+      '<input type="number" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[receive_timeout_field]' ),
       esc_attr( $options['receive_timeout_field'] )
     );
 }
 
-/*
-//Add Custom Admin Menu Item and Sub Menus
-function theme_options_panel(){
-  add_menu_page('Theme page title', 'OP_RETURN', 'manage_options', 'theme-options', 'wps_theme_func');
-  add_submenu_page( 'theme-options', 'Settings page title', 'Settings menu label', 'manage_options', 'theme-op-settings', 'wps_theme_func_settings');
-  add_submenu_page( 'theme-options', 'FAQ page title', 'FAQ menu label', 'manage_options', 'theme-op-faq', 'wps_theme_func_faq');
-}
-add_action('admin_menu', 'theme_options_panel');
-
-function wps_theme_func(){
-                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>OP_RETURN Configuration</h2></div>';
-}
-
-function wps_theme_func_settings(){
-                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>Settings</h2></div>';
-}
-
-function wps_theme_func_faq(){
-                echo '<div class="wrap"><div id="icon-options-general" class="icon32"><br></div>
-                <h2>FAQ</h2></div>';
-}
-*/
 ?>
