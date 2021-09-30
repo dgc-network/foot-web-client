@@ -45,7 +45,7 @@ class MySettingsPage
             <?php
                 // This prints out all hidden setting fields
                 settings_fields( 'my_option_group' );   
-                do_settings_sections( 'my-setting-admin' );
+                //do_settings_sections( 'my-setting-admin' );
                 submit_button(); 
             ?>
             </form>
