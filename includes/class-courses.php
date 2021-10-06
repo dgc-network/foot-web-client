@@ -323,9 +323,10 @@ if (!class_exists('courses')) {
                     'course_title' => $_POST['_course_title'],
                     'created_date' => current_time('timestamp'), 
                 );
-                $format = array('%d');
+                $format = array('%s', '%d');
                 $wpdb->insert($table, $data, $format);
-                $insert_id = $wpdb->insert_id;
+                //$wpdb->last_query;
+                $insert_id = $wpdb->insert_id;                
                 return $insert_id;
 
                 $CreateCourseAction = new CreateCourseAction();                
