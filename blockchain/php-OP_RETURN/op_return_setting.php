@@ -231,11 +231,17 @@ function op_return_section_one_callback() {
   
 function op_return_render_in_production_field() {
     $options = get_option( 'op_return_settings' );
-    printf(
-      '<input type="checkbox" name="%s" value="%s" />',
-      esc_attr( 'op_return_settings[in_production_field]' ),
-      esc_attr( $options['in_production_field'] )
-    );
+    if (esc_attr( $options['in_production_field'] )){
+        printf(
+            '<input type="checkbox" name="%s" checked />',
+            esc_attr( 'op_return_settings[in_production_field]' )
+        );      
+    } else {
+        printf(
+            '<input type="checkbox" name="%s" />',
+            esc_attr( 'op_return_settings[in_production_field]' )
+        );      
+    }
 }
 
 function op_return_render_ip_address_field() {
