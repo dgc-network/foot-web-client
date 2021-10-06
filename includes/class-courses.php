@@ -566,8 +566,8 @@ if (!class_exists('courses')) {
                 created_date int NOT NULL,
                 public_key varchar(255),
                 txid varchar(255),
-                PRIMARY KEY  (course_id)
                 is_deleted boolean,
+                PRIMARY KEY  (course_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
