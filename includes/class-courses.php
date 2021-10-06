@@ -326,6 +326,7 @@ if (!class_exists('courses')) {
                 $format = array('%d');
                 $wpdb->insert($table, $data, $format);
                 $insert_id = $wpdb->insert_id;
+                return $insert_id;
 
                 $CreateCourseAction = new CreateCourseAction();                
                 //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
