@@ -461,7 +461,7 @@ if (!class_exists('courses')) {
              */                    
             $output  = '<figure class="wp-block-table"><table><tbody>';
             //$output .= '<tr><td>Title</td><td>Created</td><td>--</td><td>--</td></tr>';
-            $output .= '<tr><td>Title</td><td>TxID</td><td>--</td><td>--</td></tr>';
+            $output .= '<tr><td width="30%">Title</td><td>TxID</td><td>--</td><td>--</td></tr>';
         
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
