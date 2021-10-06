@@ -460,8 +460,8 @@ if (!class_exists('courses')) {
              * List Mode
              */                    
             $output  = '<figure class="wp-block-table"><table><tbody>';
-            //$output .= '<tr><td>Title</td><td>Created</td><td>--</td><td>--</td></tr>';
-            $output .= '<tr><td width="30%">Title</td><td width="50%">TxID</td><td width="10%">--</td><td width="10%">--</td></tr>';
+            $output .= '<tr><td>Title</td><td>Created</td><td>--</td><td>--</td></tr>';
+            //$output .= '<tr><td width="30%">Title</td><td width="50%">TxID</td><td width="10%">--</td><td width="10%">--</td></tr>';
         
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
@@ -475,8 +475,8 @@ if (!class_exists('courses')) {
                 $output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
-                //$output .= '<td>'.$CreatedDate.'</td>';
-                $output .= '<td>'.$txid.'</td>';
+                $output .= '<td>'.$CreatedDate.'</td>';
+                //$output .= '<td>'.$txid.'</td>';
                 $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
