@@ -2,6 +2,7 @@
 
 //if( isset($_POST['submit']) ) {
     $options = get_option( 'op_return_settings' );
+	define('OP_RETURN_IN_PRODUCTION', $options['in_production_field']); // development mode or production mode
 	define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
 	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
     define('OP_RETURN_BITCOIN_PORT', $options['port_number_field']); // leave empty to use default port for mainnet/testnet
@@ -97,6 +98,14 @@ function op_return_register_settings() {
         '',
         'op_return_section_one_callback',
         'op_return_page'
+    );
+
+    add_settings_field(
+        'in_production_field',
+        'Production Mode:',
+        'op_return_render_in_production_field',
+        'op_return_page',
+        'section_one'
     );
 
     add_settings_field(
@@ -199,6 +208,7 @@ function op_return_register_settings() {
 add_action( 'admin_init', 'op_return_register_settings' );
 
 function op_return_sanitize_callback( $input ) {
+    $output['in_production_field']   = rest_sanitize_boolean( $input['in_production_field'] );
     $output['ip_address_field']      = sanitize_text_field( $input['ip_address_field'] );
     $output['port_number_field']     = sanitize_text_field( $input['port_number_field'] );
     $output['rpc_user_field']        = sanitize_text_field( $input['rpc_user_field'] );
@@ -219,10 +229,19 @@ function op_return_section_one_callback() {
     //echo '<p>This is the first (and only) section in my settings.</p>';
 }
   
+function op_return_render_in_production_field() {
+    $options = get_option( 'op_return_settings' );
+    printf(
+      '<input type="checkbox" name="%s" value="%s" />',
+      esc_attr( 'op_return_settings[in_production_field]' ),
+      esc_attr( $options['in_production_field'] )
+    );
+}
+
 function op_return_render_ip_address_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="text" size="50"  name="%s" value="%s" />',
+      '<input type="text" size="50" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[ip_address_field]' ),
       esc_attr( $options['ip_address_field'] )
     );

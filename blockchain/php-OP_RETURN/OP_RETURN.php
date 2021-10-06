@@ -68,6 +68,9 @@
 		
 	//	Validate some parameters
 		
+		if (!OP_RETURN_IN_PRODUCTION)
+			return array('txid' => 'System is in development mode');
+
 		if (!OP_RETURN_bitcoin_check($testnet))
 			return array('error' => 'Please check Bitcoin Core is running and OP_RETURN_BITCOIN_* constants are set correctly');
 
