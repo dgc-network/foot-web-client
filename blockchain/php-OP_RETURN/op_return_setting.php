@@ -258,7 +258,7 @@ function op_return_render_rpc_password_field() {
 function op_return_render_send_amount_field() {
     $options = get_option( 'op_return_settings' );
     printf(
-      '<input type="number" name="%s" value="%s" />',
+      '<input type="text" name="%s" value="%s" />',
       esc_attr( 'op_return_settings[send_amount_field]' ),
       esc_attr( $options['send_amount_field'] )
     );
