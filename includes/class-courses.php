@@ -320,6 +320,7 @@ if (!class_exists('courses')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'courses';
                 $data = array(
+                    'course_title' => $_POST['_course_title'],
                     'created_date' => current_time('timestamp'), 
                 );
                 $format = array('%d');
@@ -345,7 +346,6 @@ if (!class_exists('courses')) {
 
                     $table = $wpdb->prefix.'courses';
                     $data = array(
-                        'course_title' => $_POST['_course_title'],
                         'txid' => $op_result['txid'], 
                     );
                     $where = array('course_id' => $insert_id);
@@ -558,7 +558,7 @@ if (!class_exists('courses')) {
         
             $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
                 course_id int NOT NULL AUTO_INCREMENT,
-                course_title varchar(255),
+                course_title varchar(255) NOT NULL,
                 created_date int NOT NULL,
                 public_key varchar(255),
                 txid varchar(255),
