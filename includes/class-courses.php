@@ -320,13 +320,13 @@ if (!class_exists('courses')) {
                 global $wpdb;
                 $table = $wpdb->prefix.'courses';
                 $data = array(
-                    'course_title' => $_POST['_course_title'],
                     'created_date' => current_time('timestamp'), 
+                    'course_title' => $_POST['_course_title'],
                 );
-                $format = array('%s', '%d');
-                //$insert = $wpdb->insert($table, $data, $format);
-                $insert = $wpdb->insert($table, $data);
-                return var_dump($insert);
+                $format = array('%d', '%s');
+                $insert_id = $wpdb->insert($table, $data, $format);
+                //$insert = $wpdb->insert($table, $data);
+                return var_dump($insert_id);
                 $wpdb->last_query;
                 $insert_id = $wpdb->insert_id;                
                 return $insert_id;
