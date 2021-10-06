@@ -324,7 +324,8 @@ if (!class_exists('courses')) {
                     'created_date' => current_time('timestamp'), 
                 );
                 $format = array('%s', '%d');
-                $wpdb->insert($table, $data, $format);
+                $insert = $wpdb->insert($table, $data, $format);
+                return var_dump($insert);
                 $wpdb->last_query;
                 $insert_id = $wpdb->insert_id;                
                 return $insert_id;
