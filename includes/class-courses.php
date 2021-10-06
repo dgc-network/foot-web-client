@@ -352,7 +352,7 @@ if (!class_exists('courses')) {
                     $wpdb->update( $table, $data, $where );
                 }
 
-                ?><script>window.location='/courses'</script><?php
+                /*?><script>window.location='/courses'</script><?php*/
             }
         
             if( isset($_POST['update_action']) ) {
