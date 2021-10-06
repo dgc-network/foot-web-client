@@ -325,7 +325,7 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%s', '%d');
                 $wpdb->insert($table, $data, $format);
-                //$wpdb->last_query;
+                $wpdb->last_query;
                 $insert_id = $wpdb->insert_id;                
                 return $insert_id;
 
