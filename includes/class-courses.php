@@ -558,7 +558,7 @@ if (!class_exists('courses')) {
         
             $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
                 course_id int NOT NULL AUTO_INCREMENT,
-                course_title varchar(255) NOT NULL,
+                course_title varchar(255),
                 created_date int NOT NULL,
                 public_key varchar(255),
                 txid varchar(255),
