@@ -7,6 +7,7 @@ global $wpdb;
 //$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}course_lecturers_witnesses" );
 //$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}user_course_learnings" );
 //$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}course_learnings" );
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}courses" );
 /*
 $option_name = 'wporg_option';
  
