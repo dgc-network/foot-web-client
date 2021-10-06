@@ -325,12 +325,13 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%d', '%s');
                 $insert_id = $wpdb->insert($table, $data, $format);
+/*                
                 //$insert = $wpdb->insert($table, $data);
                 return var_dump($insert_id);
                 $wpdb->last_query;
                 $insert_id = $wpdb->insert_id;                
                 return $insert_id;
-
+*/
                 $CreateCourseAction = new CreateCourseAction();                
                 //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $CreateCourseAction->setCourseId(intval($insert_id));
@@ -415,6 +416,7 @@ if (!class_exists('courses')) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreateDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
             }
