@@ -67,14 +67,14 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
-            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
+            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -233,11 +233,11 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$row->course_title.'</a></td></tr>';
-            $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreateDate.'</td></tr>';
+            $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -341,13 +341,14 @@ if (!class_exists('courses')) {
                 $send_data = $CreateCourseAction->serializeToString();
 
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+                return var_dump($op_result);
             
                 if (isset($op_result['error'])) {
 
                     $result_output = 'Error: '.$op_result['error']."\n";
                     return $result_output;
                 } else {
-                    $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+                    //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                     $table = $wpdb->prefix.'courses';
                     $data = array(
@@ -357,7 +358,7 @@ if (!class_exists('courses')) {
                     $wpdb->update( $table, $data, $where );
                 }
 
-                /*?><script>window.location='/courses'</script><?php*/
+                ?><script>window.location='/courses'</script><?php
             }
         
             if( isset($_POST['update_action']) ) {
@@ -376,7 +377,7 @@ if (!class_exists('courses')) {
                     $result_output = 'Error: '.$op_result['error']."\n";
                     return $result_output;
                 } else {
-                    $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+                    //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                     global $wpdb;
                     $table = $wpdb->prefix.'courses';
@@ -405,17 +406,18 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreateDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             if( $_mode=='Update' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreateDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Delete' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreateDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
@@ -466,12 +468,12 @@ if (!class_exists('courses')) {
 
                 $CourseId = $results[$index]->course_id;
                 $CourseTitle = $results[$index]->course_title;
-                $CreateDate = wp_date( get_option( 'date_format' ), $results[$index]->created_date );
+                $CreatedDate = wp_date( get_option( 'date_format' ), $results[$index]->created_date );
         
                 $output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
-                $output .= '<td>'.$CreateDate.'</td>';
+                $output .= '<td>'.$CreatedDate.'</td>';
                 $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
