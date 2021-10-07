@@ -141,7 +141,8 @@ if (!class_exists('courses')) {
                         $table = $wpdb->prefix.'user_course_learnings';
                         $data = array(
                             'learning_id' => $_POST['_learning_id_'.$index],
-                            'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index],
+                            'witness_id' => $_POST['_witness_id_'.$index],
                         );
                         $where = array(
                             'u_c_l_id' => $results[$index]->u_c_l_id
@@ -153,11 +154,12 @@ if (!class_exists('courses')) {
                     $table = $wpdb->prefix.'user_course_learnings';
                     $data = array(
                         'student_id' => $current_user_id,
-                        'course_id' => $_id,
                         'learning_id' => $_POST['_learning_id'],
-                        'lecturer_witness_id' => $_POST['_lecturer_witness_id'],
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'witness_id' => $_POST['_witness_id'],
+                        'course_id' => $_id,
                     );
-                    $format = array('%d', '%d', '%d', '%d');
+                    $format = array('%d', '%d', '%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
             }
@@ -181,18 +183,21 @@ if (!class_exists('courses')) {
              * user course relationship with learning
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers</td><td>Witnesses</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.self::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.self::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
                 //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
                 //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
-            $output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers_witnesses($_id).'</select>'.'</td>';
+            $output .= '<td></td><td></td>';
+            //$output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers($_id).'</select>'.'</td>';
+            //$output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_witnesses($_id).'</select>'.'</td>';
             //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
             $output .= '</tbody></table></figure>';
             
@@ -683,6 +688,54 @@ if (!class_exists('courses')) {
             return $output;    
         }
 
+        function select_lecturers( $learning_id=null, $default_id=null ) {
+
+            if ($learning_id==null){
+                $output = '<option value="no_select">-- learning id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($t_results as $t_index => $t_result) {
+                $t_learning_id = $t_results[$t_index]->learning_id;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $results[$index]->lecturer_id == $default_id ) {
+                        $output .= '<option value="'.$results[$index]->lecturer_id.'" selected>';
+                    } else {
+                        $output .= '<option value="'.$results[$index]->lecturer_id.'">';
+                    }
+                    $output .= get_userdata($results[$index]->lecturer_id)->display_name;
+                    $output .= '</option>';        
+                }
+                $output .= '<option value="delete_select">-- Remove this --</option>';
+            }
+            return $output;    
+        }
+
+        function select_witnesses( $learning_id=null, $default_id=null ) {
+
+            if ($learning_id==null){
+                $output = '<option value="no_select">-- learning id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$learning_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->witness_id == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->witness_id.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->witness_id.'">';
+                }
+                $output .= get_userdata($results[$index]->witness_id)->display_name;
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+            return $output;    
+        }
+
         function select_lecturers_witnesses( $course_id=null, $default_id=null ) {
 
             if ($course_id==null){
@@ -746,6 +799,22 @@ if (!class_exists('courses')) {
                 txid varchar(255),
                 is_deleted boolean,
                 PRIMARY KEY  (l_p_s_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
+                u_c_l_id int NOT NULL AUTO_INCREMENT,
+                student_id int NOT NULL,
+                learning_id int,
+                lecturer_id int,
+                lecture_date int,
+                witness_id int,
+                certified_date int,
+                txid varchar(255),
+                is_deleted boolean,
+                course_id int,
+                teaching_id int,
+                PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
 /*

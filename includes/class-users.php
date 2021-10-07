@@ -329,7 +329,7 @@ if (!class_exists('users')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
+/*
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
@@ -342,6 +342,7 @@ if (!class_exists('users')) {
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
+*/            
         }
         
     }
