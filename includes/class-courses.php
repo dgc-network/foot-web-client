@@ -340,6 +340,8 @@ if (!class_exists('courses')) {
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$row->course_title.'</a></td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
+            $output .= '<tr><td>'.'List Price:'.'</td><td>'.$row->list_price.'</td></tr>';
+            $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$row->sale_price.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -347,6 +349,7 @@ if (!class_exists('courses')) {
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td></tr>';
+            $TotalHours=0;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 //$output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
@@ -355,11 +358,15 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
+                $TotalHours += floatval($results[$index]->learning_hours);
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
+            $output .= '</tr>';
+            $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
+            $output .= '<td>'.$TotalHours.'</td><td></td>';
             $output .= '</tr></tbody></table></figure>';
             
             /** 
@@ -436,18 +443,18 @@ if (!class_exists('courses')) {
                 $CreateCourseAction->setCourseId(intval($insert_id));
                 $CreateCourseAction->setCourseTitle($_POST['_course_title']);
                 $CreateCourseAction->setCreatedDate(intval(current_time('timestamp')));
+                //$CreateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                //$CreateCourseAction->setSalePrice(floadval($_POST['_sale_price']));
                 $CreateCourseAction->setPublicKey($_POST['_public_key']);
                 $send_data = $CreateCourseAction->serializeToString();
 
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                //return var_dump($op_result);
             
                 if (isset($op_result['error'])) {
 
                     $result_output = 'Error: '.$op_result['error']."\n";
                     return $result_output;
                 } else {
-                    //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                     $table = $wpdb->prefix.'courses';
                     $data = array(
@@ -466,22 +473,24 @@ if (!class_exists('courses')) {
                 $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
                 $UpdateCourseAction->setCreatedDate(intval(strtotime($_POST['_created_date'])));
+                //$UpdateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                //$UpdateCourseAction->setSalePrice(floatval($_POST['_sale_price']));
                 $UpdateCourseAction->setPublicKey($_POST['_public_key']);
                 $send_data = $UpdateCourseAction->serializeToString();
 
                 $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                //return var_dump($op_result);
             
                 if (isset($op_result['error'])) {
                     $result_output = 'Error: '.$op_result['error']."\n";
                     return $result_output;
                 } else {
-                    //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                     global $wpdb;
                     $table = $wpdb->prefix.'courses';
                     $data = array(
                         'course_title' => $_POST['_course_title'],
+                        'list_price' => $_POST['_list_price'],
+                        'sale_price' => $_POST['_sale_price'],
                         'txid' => $op_result['txid'], 
                     );
                     $where = array('course_id' => $_POST['_course_id']);
@@ -512,14 +521,20 @@ if (!class_exists('courses')) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'"></td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'List Price:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value="'.$row->list_price.'"></td></tr>';
+                $output .= '<tr><td>'.'Sale Price:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value="'.$row->list_price.'"></td></tr>';
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Delete' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_course_id" value="'.$row->course_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$row->course_title.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'Created:'.'</td><td><input style="width: 100%" type="text" name="_created_date" value="'.$CreatedDate.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'List Price:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value="'.$row->list_price.'" disabled></td></tr>';
+                $output .= '<tr><td>'.'Sale Price:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value="'.$row->list_price.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value=""></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value=""></td></tr>';
             }
             $output .= '</tbody></table></figure>';
     
@@ -560,7 +575,7 @@ if (!class_exists('courses')) {
              * List Mode
              */                    
             $output  = '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Created</td><td>--</td><td>--</td></tr>';
+            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             //$output .= '<tr><td width="30%">Title</td><td width="50%">TxID</td><td width="10%">--</td><td width="10%">--</td></tr>';
         
             global $wpdb;
@@ -570,12 +585,15 @@ if (!class_exists('courses')) {
                 $CourseId = $results[$index]->course_id;
                 $CourseTitle = $results[$index]->course_title;
                 $CreatedDate = wp_date( get_option( 'date_format' ), $results[$index]->created_date );
+                $ListPrice = $results[$index]->list_price;
+                $SalePrice = $results[$index]->sale_price;
                 $txid = $results[$index]->txid;
         
                 $output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
-                $output .= '<td>'.$CreatedDate.'</td>';
+                $output .= '<td>'.$ListPrice.'</td>';
+                //$output .= '<td>'.$CreatedDate.'</td>';
                 //$output .= '<td>'.$txid.'</td>';
                 $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
@@ -671,6 +689,8 @@ if (!class_exists('courses')) {
                 course_id int NOT NULL AUTO_INCREMENT,
                 course_title varchar(255) NOT NULL,
                 created_date int NOT NULL,
+                list_price float,
+                sale_price float,
                 public_key varchar(255),
                 txid varchar(255),
                 is_deleted boolean,
