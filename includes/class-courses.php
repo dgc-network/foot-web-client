@@ -246,6 +246,7 @@ if (!class_exists('courses')) {
                             'learning_hours' => $_POST['_learning_hours_'.$index],
                             'learning_link' => $_POST['_learning_link_'.$index],
                             'teaching_id' => $_POST['_teaching_id_'.$index],
+                            'is_witness' => $_POST['_is_witness_'.$index],
                         );
                         $where = array(
                             'learning_id' => $results[$index]->learning_id
@@ -261,8 +262,9 @@ if (!class_exists('courses')) {
                         'learning_hours' => $_POST['_learning_hours'],
                         'learning_link' => $_POST['_learning_link'],
                         'teaching_id' => $_POST['_teaching_id'],
+                        'is_witness' => $_POST['_is_witness'],
                     );
-                    $format = array('%d', '%s', '%d', '%s', '%d');
+                    $format = array('%d', '%s', '%d', '%s', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
 
@@ -355,7 +357,7 @@ if (!class_exists('courses')) {
              * course relationship with learnings
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Teaching</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Teaching</td><td>Witness</td></tr>';
             $TotalHours=0;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
@@ -365,6 +367,9 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '<td><select name="_teaching_id_'.$index.'">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
+                if ($results[$index]->is_witness) {$output .= ' checked';}
+                $output .= '"></td>';
                 $output .= '</tr>';
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
@@ -721,18 +726,22 @@ if (!class_exists('courses')) {
                 return $output;    
             }
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$learning_id}", OBJECT );
+            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id} AND is_witness", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($results as $index => $result) {
-                if ( $results[$index]->witness_id == $default_id ) {
-                    $output .= '<option value="'.$results[$index]->witness_id.'" selected>';
-                } else {
-                    $output .= '<option value="'.$results[$index]->witness_id.'">';
+            foreach ($t_results as $t_index => $t_result) {
+                $t_learning_id = $t_results[$t_index]->learning_id;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $results[$index]->student_id == $default_id ) {
+                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
+                    } else {
+                        $output .= '<option value="'.$results[$index]->student_id.'">';
+                    }
+                    $output .= get_userdata($results[$index]->student_id)->display_name;
+                    $output .= '</option>';        
                 }
-                $output .= get_userdata($results[$index]->witness_id)->display_name;
-                $output .= '</option>';        
+                $output .= '<option value="delete_select">-- Remove this --</option>';
             }
-            $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
         }
 
@@ -784,6 +793,7 @@ if (!class_exists('courses')) {
                 learning_title varchar(255),
                 learning_link varchar(255),
                 teaching_id int,
+                is_witness boolean,
                 txid varchar(255),
                 is_deleted boolean,
                 PRIMARY KEY  (learning_id)
