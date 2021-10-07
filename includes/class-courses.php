@@ -366,7 +366,7 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
-                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:20px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:20;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                 if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                 $output .= '></td>';
@@ -377,7 +377,7 @@ if (!class_exists('courses')) {
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
-            $output .= '<td><select name="_teaching_id" style="max-width:20px;">'.self::select_teachings().'</select>'.'</td>';
+            $output .= '<td><select name="_teaching_id" style="max-width:20;">'.self::select_teachings().'</select>'.'</td>';
             $output .= '</tr>';
             $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
             $output .= '<td>'.$TotalHours.'</td><td></td>';
