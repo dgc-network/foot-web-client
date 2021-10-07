@@ -271,6 +271,7 @@ if (!class_exists('courses')) {
                 /** 
                  * submit lecturer
                  */
+/*                
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=false", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_lecturer_id_'.$index]=='delete_select' ){
@@ -301,10 +302,11 @@ if (!class_exists('courses')) {
                     $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
-
+*/
                 /** 
                  * submit witness
                  */
+/*                
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_lecturers_witnesses WHERE course_id = {$_id} AND is_witness=true", OBJECT );
                 foreach ($results as $index => $result) {
                     if ( $_POST['_witness_id_'.$index]=='delete_select' ){
@@ -337,6 +339,7 @@ if (!class_exists('courses')) {
                     //$wpdb->insert($table, $data, $format);
                     $wpdb->insert($table, $data);
                 }
+*/                
             }
 
             /** 
@@ -686,7 +689,9 @@ if (!class_exists('courses')) {
                 } else {
                     $output .= '<option value="'.$results[$index]->learning_id.'">';
                 }
-                $output .= $results[$index]->learning_title . '(course)';
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
+                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+                $output .= $results[$index]->learning_title . '('. $row->course_title . ')';
                 $output .= '</option>';        
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
@@ -744,7 +749,7 @@ if (!class_exists('courses')) {
             }
             return $output;    
         }
-
+/*
         function select_lecturers_witnesses( $course_id=null, $default_id=null ) {
 
             if ($course_id==null){
@@ -766,7 +771,7 @@ if (!class_exists('courses')) {
             $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
         }
-
+*/
         function create_tables() {
         
             global $wpdb;
@@ -845,7 +850,7 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (c_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
-*/
+
             $sql = "CREATE TABLE `{$wpdb->prefix}course_lecturers_witnesses` (
                 c_l_w_id int NOT NULL AUTO_INCREMENT,
                 course_id int NOT NULL,
@@ -870,6 +875,7 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (c_l_w_id)
             ) $charset_collate;";        
             dbDelta($sql);
+*/            
         }        
     }
     //if ( is_admin() )
