@@ -368,8 +368,8 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '<td><select name="_teaching_id_'.$index.'">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
-                if ($results[$index]->is_witness) {$output .= 'value="true" checked';}
-                $output .= '"></td>';
+                if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
+                $output .= '></td>';
                 $output .= '</tr>';
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
