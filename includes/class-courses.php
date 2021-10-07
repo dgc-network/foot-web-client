@@ -434,8 +434,10 @@ if (!class_exists('courses')) {
                 $data = array(
                     'created_date' => current_time('timestamp'), 
                     'course_title' => $_POST['_course_title'],
+                    'list_price' => $_POST['_list_price'],
+                    'sale_price' => $_POST['_sale_price'],
                 );
-                $format = array('%d', '%s');
+                $format = array('%d', '%s', '%f', '%f');
                 $insert_id = $wpdb->insert($table, $data, $format);
 
                 $CreateCourseAction = new CreateCourseAction();                
@@ -533,8 +535,8 @@ if (!class_exists('courses')) {
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value=""></td></tr>';
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value=""></td></tr>';
+                $output .= '<tr><td>'.'List Price:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value=""></td></tr>';
+                $output .= '<tr><td>'.'Sale Price:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value=""></td></tr>';
             }
             $output .= '</tbody></table></figure>';
     
