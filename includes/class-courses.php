@@ -67,14 +67,20 @@ if (!class_exists('courses')) {
              * profit_sharing header
              */
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
-            $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE l_p_s_id = {$_id}", OBJECT );
+            $learning_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$row->learning_id}", OBJECT );
+            $course_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$learning_row->course_id}", OBJECT );
+            
+            //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            //$CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
+            
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
-            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
-            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            //$output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
+            //$output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
+            $output .= '<tr><td>'.'Course:'.'</td><td>'.$course_row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Learning:'.'</td><td>'.$learning_row->learning_title.'</td></tr>';
             //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
@@ -86,16 +92,18 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
-                $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
-                //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
-                //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+                //$output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
+                //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                $output .= '<td><input size="20" type="text" name="_sharing_title_'.$index.'" value="'.$results[$index]->sharing_title.'"></td>';
+                $output .= '<td>'.'<select name="_sharing_id_'.$index.'">'.users::select_options($results[$index]->sharing_id).'</select></td>';
+                $output .= '<td><input size="5" type="text" name="_sharing_profit_'.$index.'" value="'.$results[$index]->sharing_profit.'"></td>';
+                $output .= '</tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
-            $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
-            $output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers_witnesses($_id).'</select>'.'</td>';
-            //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
-            $output .= '</tbody></table></figure>';
+            $output .= '<td><input size="20" type="text" name="_sharing_title"></td>';
+            $output .= '<td>'.'<select name="_sharing_id">'.users::select_options().'</select>'.'</td>';
+            $output .= '<td><input size="5" type="text" name="_sharing_profit"></td>';
+            $output .= '</tr></tbody></table></figure>';
             
             /** 
              * profit sharing footer
@@ -349,13 +357,13 @@ if (!class_exists('courses')) {
                 //$output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
                 $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
-                $output .= '<td><input size="2" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
+                $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
-            $output .= '<td><input size="2" type="text" name="_learning_hours"></td>';
+            $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
             $output .= '</tr></tbody></table></figure>';
             
@@ -690,8 +698,9 @@ if (!class_exists('courses')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
                 l_p_s_id int NOT NULL AUTO_INCREMENT,
                 learning_id int NOT NULL,
-                sharing_id int NOT NULL,
                 sharing_title varchar(255),
+                sharing_id int,
+                sharing_profit float,
                 txid varchar(255),
                 is_deleted boolean,
                 PRIMARY KEY  (l_p_s_id)
