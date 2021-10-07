@@ -11,9 +11,108 @@ if (!class_exists('courses')) {
          */
         public function __construct() {
             add_shortcode('course_list', __CLASS__ . '::list_mode');
-            add_shortcode('course_edit', __CLASS__ . '::edit_mode');
-            add_shortcode('course_view', __CLASS__ . '::view_mode');
+            add_shortcode('course-list', __CLASS__ . '::list_mode');
+            //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
+            //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
+        }
+
+        function profit_sharing( $_id=null ) {
+
+            if ($_id==null){
+                return '<div>learning ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+        
+                global $wpdb;
+                /** 
+                 * submit learning
+                 */
+                $current_user_id = get_current_user_id();
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_learning_id_'.$index]=='select_delete' ) || ( $_POST['_lecturer_witness_id_'.$index]=='select_delete' ) ){
+                        $table = $wpdb->prefix.'learning_profit_sharing';
+                        $where = array(
+                            'l_p_s_id' => $results[$index]->l_p_s_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'learning_profit_sharing';
+                        $data = array(
+                            'learning_id' => $_POST['_learning_id_'.$index],
+                            'lecturer_witness_id' => $_POST['_lecturer_witness_id_'.$index],
+                        );
+                        $where = array(
+                            'l_p_s_id' => $results[$index]->l_p_s_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( !($_POST['_learning_id']=='no_select') ){
+                    $table = $wpdb->prefix.'learning_profit_sharing';
+                    $data = array(
+                        'student_id' => $current_user_id,
+                        'course_id' => $_id,
+                        'learning_id' => $_POST['_learning_id'],
+                        'lecturer_witness_id' => $_POST['_lecturer_witness_id'],
+                    );
+                    $format = array('%d', '%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
+
+            /** 
+             * profit_sharing header
+             */
+            global $wpdb;
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
+            $current_user_id = get_current_user_id();
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * profit sharing relationship with learning
+             */
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.($index+1).'</td>';
+                $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_witness_id_'.$index.'">'.self::select_lecturers_witnesses($_id, $results[$index]->lecturer_witness_id).'</select></td>';
+                //$ExpireDate = wp_date( get_option( 'date_format' ), $results[$index]->expired_date );
+                //$output .= '<td><input type="text" name="_expired_date_'.$index.'" value="'.$ExpireDate.'">'.'</td></tr>';
+            }
+            $output .= '<tr><td>'.'#'.'</td>';
+            $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_lecturer_witness_id">'.self::select_lecturers_witnesses($_id).'</select>'.'</td>';
+            //$output .= '<td><input type="date" name="_expired_date"></td></tr>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * profit sharing footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
         }
 
         function course_learnings( $_id=null ) {
@@ -244,16 +343,19 @@ if (!class_exists('courses')) {
              * course relationship with learnings
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Link</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
-                $output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
+                //$output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
+                $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                $output .= '<td><input size="2" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
+            $output .= '<td><input size="2" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
             $output .= '</tr></tbody></table></figure>';
             
@@ -325,13 +427,7 @@ if (!class_exists('courses')) {
                 );
                 $format = array('%d', '%s');
                 $insert_id = $wpdb->insert($table, $data, $format);
-/*                
-                //$insert = $wpdb->insert($table, $data);
-                return var_dump($insert_id);
-                $wpdb->last_query;
-                $insert_id = $wpdb->insert_id;                
-                return $insert_id;
-*/
+
                 $CreateCourseAction = new CreateCourseAction();                
                 //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $CreateCourseAction->setCourseId(intval($insert_id));
@@ -448,6 +544,7 @@ if (!class_exists('courses')) {
         function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
+                if ($_GET['view_mode']=='profit_sharing'){return self::profit_sharing($_GET['_id']);}
                 if ($_GET['view_mode']=='course_learnings'){return self::course_learnings($_GET['_id']);}
                 return self::view_mode($_GET['_id']);
             }
@@ -581,11 +678,23 @@ if (!class_exists('courses')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}course_learnings` (
                 learning_id int NOT NULL AUTO_INCREMENT,
                 course_id int NOT NULL,
+                learning_hours float DEFAULT 1.0,
                 learning_title varchar(255),
                 learning_link varchar(255),
                 txid varchar(255),
                 is_deleted boolean,
                 PRIMARY KEY  (learning_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
+                l_p_s_id int NOT NULL AUTO_INCREMENT,
+                learning_id int NOT NULL,
+                sharing_id int NOT NULL,
+                sharing_title varchar(255),
+                txid varchar(255),
+                is_deleted boolean,
+                PRIMARY KEY  (l_p_s_id)
             ) $charset_collate;";        
             dbDelta($sql);
 /*
