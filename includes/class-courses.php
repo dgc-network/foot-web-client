@@ -246,7 +246,7 @@ if (!class_exists('courses')) {
                             'learning_hours' => $_POST['_learning_hours_'.$index],
                             'learning_link' => $_POST['_learning_link_'.$index],
                             'teaching_id' => $_POST['_teaching_id_'.$index],
-                            'is_witness' => $_POST['_is_witness_'.$index],
+                            'is_witness' => rest_sanitize_boolean($_POST['_is_witness_'.$index]),
                         );
                         $where = array(
                             'learning_id' => $results[$index]->learning_id
@@ -262,7 +262,7 @@ if (!class_exists('courses')) {
                         'learning_hours' => $_POST['_learning_hours'],
                         'learning_link' => $_POST['_learning_link'],
                         'teaching_id' => $_POST['_teaching_id'],
-                        'is_witness' => $_POST['_is_witness'],
+                        'is_witness' => rest_sanitize_boolean($_POST['_is_witness']),
                     );
                     $format = array('%d', '%s', '%d', '%s', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
