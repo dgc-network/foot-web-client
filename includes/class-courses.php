@@ -701,12 +701,12 @@ if (!class_exists('courses')) {
                 $t_learning_id = $t_results[$t_index]->learning_id;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
                 foreach ($results as $index => $result) {
-                    if ( $results[$index]->lecturer_id == $default_id ) {
-                        $output .= '<option value="'.$results[$index]->lecturer_id.'" selected>';
+                    if ( $results[$index]->student_id == $default_id ) {
+                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
                     } else {
-                        $output .= '<option value="'.$results[$index]->lecturer_id.'">';
+                        $output .= '<option value="'.$results[$index]->student_id.'">';
                     }
-                    $output .= get_userdata($results[$index]->lecturer_id)->display_name;
+                    $output .= get_userdata($results[$index]->student_id)->display_name;
                     $output .= '</option>';        
                 }
                 $output .= '<option value="delete_select">-- Remove this --</option>';
