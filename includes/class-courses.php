@@ -67,8 +67,8 @@ if (!class_exists('courses')) {
              * profit_sharing header
              */
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE l_p_s_id = {$_id}", OBJECT );
-            $learning_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$row->learning_id}", OBJECT );
+            //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE l_p_s_id = {$_id}", OBJECT );
+            $learning_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$_id}", OBJECT );
             $course_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$learning_row->course_id}", OBJECT );
             
             //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
@@ -79,18 +79,19 @@ if (!class_exists('courses')) {
             $output .= '<figure class="wp-block-table"><table><tbody>';
             //$output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
             //$output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
-            //$output .= '<tr><td>'.'Course:'.'</td><td>'.$course_row->course_title.'</td></tr>';
-            //$output .= '<tr><td>'.'Learning:'.'</td><td>'.$learning_row->learning_title.'</td></tr>';
+            $output .= '<tr><td>'.'Course:'.'</td><td>'.$course_row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Learning:'.'</td><td>'.$learning_row->learning_title.'</td></tr>';
             //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
-            //$output .= '</tbody></table></figure>';
+            $output .= '</tbody></table></figure>';
 
             /** 
              * profit sharing relationship with learning
              */
-            //$output .= '<figure class="wp-block-table"><table><tbody>';
-            //$output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers/Witnesses</td></tr>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
+/*            
                 if ($index==0){
                     $learning_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
                     $course_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$learning_row->course_id}", OBJECT );
@@ -100,6 +101,7 @@ if (!class_exists('courses')) {
                     $output .= '<figure class="wp-block-table"><table><tbody>';
                     $output .= '<tr><td>'.'#'.'</td><td>Titles</td><td>Sharing</td><td>Profit</td></tr>';
                 }
+*/                
                 $output .= '<tr><td>'.($index+1).'</td>';
                 //$output .= '<tr><td><a href="'.$results[$index]->learning_link.'">'.($index+1).'</a></td>';
                 //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
