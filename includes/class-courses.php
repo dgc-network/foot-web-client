@@ -238,6 +238,7 @@ if (!class_exists('courses')) {
                         $table = $wpdb->prefix.'course_learnings';
                         $data = array(
                             'learning_title' => $_POST['_learning_title_'.$index],
+                            'learning_hours' => $_POST['_learning_hours_'.$index],
                             'learning_link' => $_POST['_learning_link_'.$index],
                         );
                         $where = array(
@@ -250,10 +251,11 @@ if (!class_exists('courses')) {
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
                         'learning_title' => $_POST['_learning_title'],
+                        'learning_hours' => $_POST['_learning_hours'],
                         'learning_link' => $_POST['_learning_link'],
                         'course_id' => $_GET['_id']
                     );
-                    $format = array('%s', '%s', '%d');
+                    $format = array('%s', '%d', '%s', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
 
