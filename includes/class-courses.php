@@ -274,6 +274,7 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
+            return $output;
 
             /** 
              * course relationship with learnings
