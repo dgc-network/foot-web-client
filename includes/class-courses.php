@@ -599,7 +599,7 @@ if (!class_exists('courses')) {
             $args = array(
                 'post_type'      => 'product',
                 'posts_per_page' => 10,
-                'product_cat'    => 'hoodies'
+                'product_cat'    => 'Courses'
             );
         
             $loop = new WP_Query( $args );
