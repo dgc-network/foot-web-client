@@ -274,7 +274,7 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
-            return $output;
+            //return $output;
 
             /** 
              * course relationship with learnings
@@ -285,6 +285,7 @@ if (!class_exists('courses')) {
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
             foreach ($results as $index => $result) {
+/*                
                 $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
@@ -295,6 +296,7 @@ if (!class_exists('courses')) {
                 $output .= '></td>';
                 $output .= '</tr>';
                 $TotalHours += floatval($results[$index]->learning_hours);
+*/                
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
