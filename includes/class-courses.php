@@ -285,7 +285,7 @@ if (!class_exists('courses')) {
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
             foreach ($results as $index => $result) {
-/*                
+                
                 $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
@@ -296,7 +296,7 @@ if (!class_exists('courses')) {
                 $output .= '></td>';
                 $output .= '</tr>';
                 $TotalHours += floatval($results[$index]->learning_hours);
-*/                
+                
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
@@ -692,18 +692,6 @@ if (!class_exists('courses')) {
             ) $charset_collate;";        
             dbDelta($sql);
 
-            $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
-                l_p_s_id int NOT NULL AUTO_INCREMENT,
-                learning_id int NOT NULL,
-                sharing_title varchar(255),
-                sharing_id int,
-                sharing_profit float,
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (l_p_s_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
@@ -719,6 +707,19 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
+            
+            $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
+                l_p_s_id int NOT NULL AUTO_INCREMENT,
+                learning_id int NOT NULL,
+                sharing_title varchar(255),
+                sharing_id int,
+                sharing_profit float,
+                txid varchar(255),
+                is_deleted boolean,
+                PRIMARY KEY  (l_p_s_id)
+            ) $charset_collate;";        
+            dbDelta($sql);
+
         }        
     }
     //if ( is_admin() )
