@@ -345,6 +345,19 @@ if (!class_exists('courses')) {
             /** 
              * view_mode header
              */
+
+            $product = wc_get_product( $_id );
+            $output  = '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
+            $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
+            $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
+            $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            return $output;
+
+
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
@@ -643,7 +656,7 @@ if (!class_exists('courses')) {
         
             wp_reset_query();
             return $output;
-            
+/*            
             $output  = '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             //$output .= '<tr><td width="30%">Title</td><td width="50%">TxID</td><td width="10%">--</td><td width="10%">--</td></tr>';
@@ -685,6 +698,7 @@ if (!class_exists('courses')) {
             $output .= '</form>';
         
             return $output;
+*/            
         }
         
         function select_options( $default_id=null ) {
