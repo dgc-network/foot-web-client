@@ -604,10 +604,42 @@ if (!class_exists('courses')) {
         
             $loop = new WP_Query( $args );
         
+            $output  = '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
-                $output .= '<br /><a href="'.get_permalink().'">' . woocommerce_get_product_thumbnail().' '.get_the_title().'</a>';
+                //$output .= '<br /><a href="'.get_permalink().'">' . woocommerce_get_product_thumbnail().' '.get_the_title().'</a>';
+                $CourseId = $product->get_id();
+                $CourseTitle = $product->get_name();
+                //$CreatedDate = wp_date( get_option( 'date_format' ), $product->get_date_created() );
+                $CreatedDate = $product->get_date_created();
+                $ListPrice = $product->get_price();
+                $SalePrice = $product->get_sale_price();
+                //$txid = $results[$index]->txid;
+                $output .= '<form method="get">';
+                $output .= '<tr>';
+                $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
+                $output .= '<td>'.$ListPrice.'</td>';
+                //$output .= '<td>'.$CreatedDate.'</td>';
+                //$output .= '<td>'.$txid.'</td>';
+                $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
+                $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
+                $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                $output .= '</tr>';
+                $output .= '</form>';
             endwhile;
+            $output .= '</tbody></table></figure>';
+        
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
         
             wp_reset_query();
             return $output;
