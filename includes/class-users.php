@@ -14,48 +14,6 @@ if (!class_exists('users')) {
             add_shortcode('user_edit', __CLASS__ . '::edit_mode');
             add_shortcode('user_view', __CLASS__ . '::view_mode');
             self::create_tables();
-        /*
-                $KeyValueEntry = new KeyValueEntry();
-                $KeyValueEntry->setKey('email');
-                $KeyValueEntry->setValue($_POST['_LoginName']);
-                $KeyValueEntries[]=$KeyValueEntry;
-        
-                $CreateAgentAction = new CreateAgentAction();
-                $CreateAgentAction->setOrgId($_GET['_OrgId']);
-                $CreateAgentAction->setPublicKey($_POST['_PublicKey']);
-                $CreateAgentAction->setActive($_GET['_Active']);
-                $CreateAgentAction->setRoles($Roles);
-                $CreateAgentAction->setMetadata($KeyValueEntries);
-        
-                $send_data = $CreateAgentAction->serializeToString();
-                $send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                $private_key = 'L44NzghbN6UD737kG6ukfdCq6BXyyTY2W15UkNhHnBff6acYWtsZ';
-                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
-                $private_key = 'L12R3yCmcUDK1aEebqUUA3N8bzTMAnSR8GdN2VniMrJTnmWDS9f7';
-                $send_address = 'D7z8KC655SrPEG6QrsAahJHbvwy22ehmZP';
-                $private_key = 'KyX3d7a8PjLgS8aK6XSoqXV6aJTZieZ9LCJtoy4iQBJtLsx97Kwy';
-                $send_amount = 0.001;
-            
-                try {
-                    $agents = $AgentList->getAgents();
-                    $Agent->mergeFromString($send_data);
-                    $agents[] = $Agent;
-                    $AgentList->setAgents($agents);
-                    //$send_data = $AgentList->serializeToString();
-                } catch (Exception $e) {
-                    // Handle parsing error from invalid data.
-                    // ...
-                }
-        */        
-        /*
-                $result = OP_RETURN_send($send_address, $send_amount, $send_data);
-            
-                if (isset($result['error']))
-                    $result_output = 'Error: '.$result['error']."\n";
-                else
-                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-        */
-
         }
 
         function view_mode($_id=null) {
@@ -72,7 +30,7 @@ if (!class_exists('users')) {
                  */
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
                 foreach ($results as $index => $result) {
-
+/*
                     $send_address = OP_RETURN_SEND_ADDRESS;
                     $send_amount = OP_RETURN_SEND_AMOUNT;
                     $UpdateUserCourseLearningAction = new UpdateUserCourseLearningAction();
@@ -84,11 +42,15 @@ if (!class_exists('users')) {
                     $UpdateUserCourseLearningAction->setLecturerWitnessId($results[$index]->lecturer_witness_id);
                     $send_data = $UpdateUserCourseLearningAction->serializeToString();
                     //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
+*/                    
                     $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
                     //return var_dump($op_result);
                 
-                    if (isset($op_result['error']))
+                    if (isset($op_result['error'])) {
+
                         $result_output = 'Error: '.$op_result['error']."\n";
+                        return $result_output;
+                    }
                     else {
                         $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
@@ -104,55 +66,14 @@ if (!class_exists('users')) {
                         $wpdb->update( $table, $data, $where );
     
                     }
-    
-                    //return $result_output;
-                        
-                
                 }
-
-                //$send_address = 'DFcP5QFjbYtfgzWoqGedhxecCrRe41G3RD';
-                $send_address = 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66';
-                $send_amount = 0.99399;
-                $send_data = 'this is my second test';
-/*
-                $result=OP_RETURN_bitcoin_cmd('listunspent', $testnet);
-
-                $output_amount=$send_amount+OP_RETURN_BTC_FEE;		
-                $inputs_spend=OP_RETURN_select_inputs($output_amount, $testnet);
-		
-                if (isset($inputs_spend['error']))
-                    return $inputs_spend;
-                
-                $change_amount=$inputs_spend['total']-$output_amount;		
-        
-                $change_address=OP_RETURN_bitcoin_cmd('getrawchangeaddress', $testnet);
-		
-                $outputs=array($send_address => (float)$send_amount);
-                
-                if ($change_amount>=OP_RETURN_BTC_DUST)
-                    $outputs[$change_address]=$change_amount;
-        
-                $raw_txn=OP_RETURN_create_txn($inputs_spend['inputs'], $outputs, $metadata, count($outputs), $testnet);
-
-                return var_dump($outputs);
-*/        
-/*
-                $result = OP_RETURN_send($send_address, $send_amount, $send_data);
-                return var_dump($result);
-            
-                if (isset($result['error']))
-                    $result_output = 'Error: '.$result['error']."\n";
-                else
-                    $result_output = 'TxID: '.$result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-
-                return $result_output;
-*/                
             }
             
             /** 
              * view_mode header
              */
-            $output  = '<form method="post">';
+            $output  = '<h2>個人學習歷程</h2>';
+            $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_id)->display_name.'</td></tr>';
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
@@ -169,18 +90,23 @@ if (!class_exists('users')) {
                 if ($course_id == $results[$index]->course_id){$course_header=false;}
                 if ($course_header) {
                     $course_id = $results[$index]->course_id;
-                    $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
-                    $output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
-                    $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer/Witness</td><td>Date</td></tr>';
+                    $product = wc_get_product( $results[$index]->course_id );
+                    //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
+                    //$output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
+                    $output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
+                    $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer</td><td>Date</td><td>Witness</td><td>Date</td></tr>';
                 }
 
-                $learningDate = wp_date( get_option( 'date_format' ), $results[$index]->learning_date );
+                $lectureDate = wp_date( get_option( 'date_format' ), $results[$index]->lecture_date );
+                $certifidDate = wp_date( get_option( 'date_format' ), $results[$index]->certifid_date );
                 $output .= '<tr><td>'.$index.'</td>';
                 $learning_id = $results[$index]->learning_id;
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$learning_id}", OBJECT );
                 $output .= '<td>'.$row->learning_title.'</td>';
-                $output .= '<td>'.get_userdata($results[$index]->lecturer_witness_id)->display_name.'</td>';
-                $output .= '<td><input type="text" name="_learning_date_'.$index.'" value="'.$learningDate.'">'.'</td>';
+                $output .= '<td>'.get_userdata($results[$index]->lecturer_id)->display_name.'</td>';
+                $output .= '<td><input type="text" name="_lecture_date_'.$index.'" value="'.$lectureDate.'">'.'</td>';
+                $output .= '<td>'.get_userdata($results[$index]->witness_id)->display_name.'</td>';
+                $output .= '<td><input type="text" name="_certifid_date_'.$index.'" value="'.$certifidDate.'">'.'</td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';
@@ -286,13 +212,13 @@ if (!class_exists('users')) {
                 $output .= '<td>'.$userTitle.'</td>';
                 $output .= '<td><a href="?view_mode=true&_id='.$userId.'">'.$userEmail.'</a></td>';
                 $output .= '<input type="hidden" value="'.$userId.'" name="_id">';
-                $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
                 $output .= '</form>';
             }        
             $output .= '</tbody></table></figure>';
-        
+/*        
             $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
@@ -303,7 +229,7 @@ if (!class_exists('users')) {
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-        
+*/        
             return $output;    
         }
         
