@@ -78,7 +78,7 @@ if (!class_exists('users')) {
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_id)->display_name.'</td></tr>';
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
             $output .= '</tbody></table></figure>';
-            return $output;
+            //return $output;
 
             /** 
              * user relationship with course learnings
@@ -97,7 +97,7 @@ if (!class_exists('users')) {
                     $output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
                     $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer</td><td>Date</td><td>Witness</td><td>Date</td></tr>';
                 }
-
+/*
                 $lectureDate = wp_date( get_option( 'date_format' ), $results[$index]->lecture_date );
                 $certifidDate = wp_date( get_option( 'date_format' ), $results[$index]->certifid_date );
                 $output .= '<tr><td>'.$index.'</td>';
@@ -109,6 +109,7 @@ if (!class_exists('users')) {
                 $output .= '<td>'.get_userdata($results[$index]->witness_id)->display_name.'</td>';
                 $output .= '<td><input type="text" name="_certifid_date_'.$index.'" value="'.$certifidDate.'">'.'</td>';
                 $output .= '</tr>';
+*/
             }
             $output .= '</tbody></table></figure>';
 
@@ -198,7 +199,8 @@ if (!class_exists('users')) {
             /**
              * List Mode
              */                    
-            $output  = '<figure class="wp-block-table"><table><tbody>';
+            $output  = '<h2>使用者列表</h2>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Name</td><td>Email</td><td>--</td><td>--</td></tr>';
         
             $results = get_users();
