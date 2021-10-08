@@ -355,10 +355,11 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
 
-            return $output;
+            //return $output;
 
 
             global $wpdb;
+/*            
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
@@ -368,7 +369,7 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$row->list_price.'</td></tr>';
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$row->sale_price.'</td></tr>';
             $output .= '</tbody></table></figure>';
-
+*/
             /** 
              * course relationship with learnings
              */
