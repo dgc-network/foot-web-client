@@ -93,8 +93,8 @@ if (!class_exists('users')) {
                     $course_id = $results[$index]->course_id;
                     //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
                     //$output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
-                    $product = wc_get_product( $results[$index]->course_id );
-                    $output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
+                    //$product = wc_get_product( $results[$index]->course_id );
+                    //$output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
                     $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer</td><td>Date</td><td>Witness</td><td>Date</td></tr>';
                 }
 /*
