@@ -594,7 +594,24 @@ if (!class_exists('courses')) {
 
             /**
              * List Mode
-             */                    
+             */
+
+            $args = array(
+                'post_type'      => 'product',
+                'posts_per_page' => 10,
+                'product_cat'    => 'hoodies'
+            );
+        
+            $loop = new WP_Query( $args );
+        
+            while ( $loop->have_posts() ) : $loop->the_post();
+                global $product;
+                $output .= '<br /><a href="'.get_permalink().'">' . woocommerce_get_product_thumbnail().' '.get_the_title().'</a>';
+            endwhile;
+        
+            wp_reset_query();
+            return $output;
+            
             $output  = '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             //$output .= '<tr><td width="30%">Title</td><td width="50%">TxID</td><td width="10%">--</td><td width="10%">--</td></tr>';
@@ -635,7 +652,7 @@ if (!class_exists('courses')) {
             $output .= '</div>';
             $output .= '</form>';
         
-            return $output;    
+            return $output;
         }
         
         function select_options( $default_id=null ) {
@@ -690,7 +707,6 @@ if (!class_exists('courses')) {
                     $output .= '<option value="'.$results[$index]->learning_id.'">';
                 }
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
-                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
                 $output .= $results[$index]->learning_title . '('. $row->course_title . ')';
                 $output .= '</option>';        
             }
