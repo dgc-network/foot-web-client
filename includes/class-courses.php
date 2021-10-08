@@ -75,7 +75,7 @@ if (!class_exists('courses')) {
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
-            $output .= '<tr><td>'.'Learning:'.'</td><td>'.$learning_row->learning_title.'</td></tr>';
+            $output .= '<tr><td>'.'Learning:'.'</td><td>'.$row->learning_title.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -594,8 +594,10 @@ if (!class_exists('courses')) {
                 } else {
                     $output .= '<option value="'.$results[$index]->learning_id.'">';
                 }
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
-                $output .= $results[$index]->learning_title . '('. $row->course_title . ')';
+                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
+                //$output .= $results[$index]->learning_title . '('. $row->course_title . ')';
+                $product = wc_get_product( $product_id );
+                $output .= $results[$index]->learning_title . '('. $product->get_name() . ')';
                 $output .= '</option>';        
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
