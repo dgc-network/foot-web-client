@@ -69,11 +69,14 @@ if (!class_exists('courses')) {
              */
             global $wpdb;
             $learning_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$_id}", OBJECT );
-            $course_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$learning_row->course_id}", OBJECT );
-            
+            //$course_row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$learning_row->course_id}", OBJECT );
+            $product = wc_get_product( $learning_row->course_id );
+
             $output  = '<form method="post">';
+            $output .= '<h2>課程成本結構設定</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Course:'.'</td><td>'.$course_row->course_title.'</td></tr>';
+            //$output .= '<tr><td>'.'Course:'.'</td><td>'.$course_row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Learning:'.'</td><td>'.$learning_row->learning_title.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
@@ -168,14 +171,18 @@ if (!class_exists('courses')) {
              * course_learnings header
              */
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            $product = wc_get_product( $_id );
+
             $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $current_user_id = get_current_user_id();
             $output  = '<form method="post">';
+            $output .= '<h2>學習項目的輔導與認證</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
-            $output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            //$output .= '<tr><td>'.'Title:'.'</td><td>'.$row->course_title.'</td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             //$output .= '<tr><td>'.'Created:'.'</td><td>'.$CreatedDate.'</td></tr>';
             $output .= '</tbody></table></figure>';
 
@@ -348,6 +355,7 @@ if (!class_exists('courses')) {
 
             $product = wc_get_product( $_id );
             $output  = '<form method="post">';
+            $output .= '<h2>課程vs學習項目</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
@@ -374,7 +382,7 @@ if (!class_exists('courses')) {
              * course relationship with learnings
              */
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Teaching</td><td>Witness</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
             $TotalHours=0;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             foreach ($results as $index => $result) {
@@ -383,7 +391,7 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
-                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:100px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                 if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                 $output .= '></td>';
@@ -394,7 +402,8 @@ if (!class_exists('courses')) {
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
-            $output .= '<td><select name="_teaching_id" style="max-width:100px;">'.self::select_teachings().'</select>'.'</td>';
+            $output .= '<td><select name="_teaching_id" style="max-width:80px;">'.self::select_teachings().'</select>'.'</td>';
+            $output .= '<td><input type="checkbox" name="_is_witness"></td>';
             $output .= '</tr>';
             $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
             $output .= '<td>'.$TotalHours.'</td><td></td>';
@@ -637,13 +646,13 @@ if (!class_exists('courses')) {
                 //$output .= '<td>'.$CreatedDate.'</td>';
                 //$output .= '<td>'.$txid.'</td>';
                 $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
-                $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
                 $output .= '</form>';
             endwhile;
             $output .= '</tbody></table></figure>';
-        
+/*        
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
@@ -654,7 +663,7 @@ if (!class_exists('courses')) {
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-        
+*/        
             wp_reset_query();
             return $output;
 /*            
