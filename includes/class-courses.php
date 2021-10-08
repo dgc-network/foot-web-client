@@ -481,7 +481,7 @@ if (!class_exists('courses')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                'posts_per_page' => 10,
+                //'posts_per_page' => 10,
                 'product_cat'    => 'Courses'
             );
         
@@ -521,6 +521,29 @@ if (!class_exists('courses')) {
         
         function select_options( $default_id=null ) {
 
+            $args = array(
+                'post_type'      => 'product',
+                //'posts_per_page' => 10,
+                'product_cat'    => 'Courses'
+            );       
+            $loop = new WP_Query( $args );
+        
+            $output = '<option value="no_select">-- Select an option --</option>';
+            while ( $loop->have_posts() ) : $loop->the_post();
+                global $product;
+                if ( $product->get_id() == $default_id ) {
+                    $output .= '<option value="'.$product->get_id().'" selected>';
+                } else {
+                    $output .= '<option value="'.$product->get_id().'">';
+                }
+                $output .= $product->get_name();
+                $output .= '</option>';        
+            endwhile;
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+
+            wp_reset_query();
+            return $output;
+/*
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
@@ -534,7 +557,8 @@ if (!class_exists('courses')) {
                 $output .= '</option>';        
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
-            return $output;    
+            return $output;
+*/            
         }
 
         function select_learnings( $course_id=null, $default_id=null ) {
