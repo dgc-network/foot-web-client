@@ -355,7 +355,7 @@ if (!class_exists('courses')) {
 
             $product = wc_get_product( $_id );
             $output  = '<form method="post">';
-            $output .= '<h2>課程vs學習項目</h2>';
+            $output .= '<h2>課程vs學習項目設定</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
@@ -627,25 +627,26 @@ if (!class_exists('courses')) {
         
             $loop = new WP_Query( $args );
         
-            $output  = '<figure class="wp-block-table"><table><tbody>';
+            $output  = '<h2>課程列表</h2>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 //$output .= '<br /><a href="'.get_permalink().'">' . woocommerce_get_product_thumbnail().' '.get_the_title().'</a>';
-                $CourseId = $product->get_id();
-                $CourseTitle = $product->get_name();
+                //$CourseId = $product->get_id();
+                //$CourseTitle = $product->get_name();
                 //$CreatedDate = wp_date( get_option( 'date_format' ), $product->get_date_created() );
-                $CreatedDate = $product->get_date_created();
-                $ListPrice = $product->get_price();
-                $SalePrice = $product->get_sale_price();
+                //$CreatedDate = $product->get_date_created();
+                //$ListPrice = $product->get_price();
+                //$SalePrice = $product->get_sale_price();
                 //$txid = $results[$index]->txid;
                 $output .= '<form method="get">';
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=true&_id='.$CourseId.'">'.$CourseTitle.'</a></td>';
-                $output .= '<td>'.$ListPrice.'</td>';
+                $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
+                $output .= '<td>'.$product->get_price().'</td>';
                 //$output .= '<td>'.$CreatedDate.'</td>';
                 //$output .= '<td>'.$txid.'</td>';
-                $output .= '<input type="hidden" value="'.$CourseId.'" name="_id">';
+                $output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                 //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                 //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
