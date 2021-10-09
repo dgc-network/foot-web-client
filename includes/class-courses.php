@@ -257,7 +257,7 @@ if (!class_exists('courses')) {
                         'teaching_id' => intval($_POST['_teaching_id']),
                         'is_witness' => rest_sanitize_boolean($_POST['_is_witness']),
                     );
-                    $format = array('%d', '%s', '%d', '%s', '%d', '%d');
+                    $format = array('%d', '%s', '%f', '%s', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
             }
