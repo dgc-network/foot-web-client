@@ -250,11 +250,11 @@ if (!class_exists('courses')) {
                 if ( !($_POST['_learning_title']=='') ){
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
-                        'course_id' => $_GET['_id'],
-                        'learning_title' => $_POST['_learning_title'],
-                        'learning_hours' => $_POST['_learning_hours'],
-                        'learning_link' => $_POST['_learning_link'],
-                        'teaching_id' => $_POST['_teaching_id'],
+                        'course_id' => intval($_GET['_id']),
+                        'learning_title' => sanitize_text_field($_POST['_learning_title']),
+                        'learning_hours' => floatval($_POST['_learning_hours']),
+                        'learning_link' => sanitize_text_field($_POST['_learning_link']),
+                        'teaching_id' => intval($_POST['_teaching_id']),
                         'is_witness' => rest_sanitize_boolean($_POST['_is_witness']),
                     );
                     $format = array('%d', '%s', '%d', '%s', '%d', '%d');
@@ -707,7 +707,7 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
             dbDelta($sql);
-            
+
             $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
                 l_p_s_id int NOT NULL AUTO_INCREMENT,
                 learning_id int NOT NULL,
