@@ -589,7 +589,7 @@ if (!class_exists('courses')) {
         function select_teachings( $default_id=null ) {
 
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id>0", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
                 if ( $results[$index]->learning_id == $default_id ) {
@@ -599,7 +599,7 @@ if (!class_exists('courses')) {
                 }
                 //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
                 //$output .= $results[$index]->learning_title . '('. $row->course_title . ')';
-                $product = wc_get_product( $product_id );
+                $product = wc_get_product( $results[$index]->course_id );
                 $output .= $results[$index]->learning_title . '('. $product->get_name() . ')';
                 $output .= '</option>';        
             }
