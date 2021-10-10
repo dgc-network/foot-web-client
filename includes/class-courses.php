@@ -290,7 +290,7 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
-                //$output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                 if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                 $output .= '></td>';
@@ -302,7 +302,7 @@ if (!class_exists('courses')) {
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
             $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
-            //$output .= '<td><select name="_teaching_id" style="max-width:80px;">'.self::select_teachings().'</select>'.'</td>';
+            $output .= '<td><select name="_teaching_id" style="max-width:80px;">'.self::select_teachings().'</select>'.'</td>';
             $output .= '<td><input type="checkbox" name="_is_witness"></td>';
             $output .= '</tr>';
             $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
@@ -589,7 +589,7 @@ if (!class_exists('courses')) {
         function select_teachings( $default_id=null ) {
 
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id>0", OBJECT );
             $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($results as $index => $result) {
                 if ( $results[$index]->learning_id == $default_id ) {
@@ -684,7 +684,7 @@ if (!class_exists('courses')) {
                 learning_hours float DEFAULT 1.0,
                 learning_title varchar(255),
                 learning_link varchar(255),
-                teaching_id int,
+                teaching_id int DEFAULT 0,
                 is_witness boolean,
                 txid varchar(255),
                 is_deleted boolean,
