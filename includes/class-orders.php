@@ -212,7 +212,7 @@ if (!class_exists('orders')) {
             foreach ($customer_orders as $order){
                 //$output .= $order->get_id();
             }
-            //return var_dump($customer_orders);
+            return var_dump($customer_orders);
             return $output;
             
             extract( shortcode_atts( array(
