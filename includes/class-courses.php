@@ -104,7 +104,7 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            //$output .= '</form>';
+            $output .= '</form>';
             //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
             //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
@@ -112,7 +112,7 @@ if (!class_exists('courses')) {
             //$output .= '<a href="javascript:history.go(-1)">Back</a>';
             $output .= '</div>';
             $output .= '</div>';
-            $output .= '</form>';
+            //$output .= '</form>';
 
             return $output;
         }
