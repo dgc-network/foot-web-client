@@ -210,7 +210,7 @@ if (!class_exists('orders')) {
             ) );
             $output  = '<h2>訂單列表</h2>';
             foreach ($customer_orders as $order){
-                $output .= $order->get_id();
+                //$output .= $order->get_id();
             }
             //return var_dump($customer_orders);
             return $output;
