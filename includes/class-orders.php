@@ -10,8 +10,8 @@ if (!class_exists('orders')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('order_list', __CLASS__ . '::list_mode');
-            add_shortcode('order-list', __CLASS__ . '::list_mode');
+            add_shortcode('my_order_list', __CLASS__ . '::list_mode');
+            add_shortcode('my-order-list', __CLASS__ . '::list_mode');
             add_shortcode('order_edit', __CLASS__ . '::edit_mode');
             add_shortcode('order_view', __CLASS__ . '::view_mode');
             self::create_tables();
