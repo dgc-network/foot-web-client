@@ -23,12 +23,6 @@ if (!class_exists('courses')) {
                 return '<div>learning ID is required</div>';
             }
 
-            if( isset($_POST['cancel_action']) ) {
-                ?><script>
-                    history.go(-1)
-                </script><?php
-            }
-
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
@@ -113,7 +107,8 @@ if (!class_exists('courses')) {
             //$output .= '</form>';
             //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="cancel_action"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<a href="javascript:history.go(-1)">Back</a>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
