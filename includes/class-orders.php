@@ -200,18 +200,28 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
+
+            $customer_orders = get_posts( array(
+                'numberposts' => -1,
+                'meta_key'    => '_customer_user',
+                'meta_value'  => get_current_user_id(),
+                'post_type'   => wc_get_order_types(),
+                'post_status' => array_keys( wc_get_order_statuses() ),
+            ) );
+            return var_dump($customer_orders);
             
             extract( shortcode_atts( array(
                 'order_count' => -1
             ), $atts ) );
         
             ob_start();
+            // /my-account/orders/
             wc_get_template( 'myaccount/my-orders.php', array(
                 'current_user'  => get_user_by( 'id', get_current_user_id() ),
                 'order_count'   => $order_count
             ) );
             return ob_get_clean();
-            
+
             $output  = '<h2>訂單列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Name</td><td>Email</td><td>--</td><td>--</td></tr>';
