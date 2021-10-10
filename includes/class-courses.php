@@ -23,6 +23,12 @@ if (!class_exists('courses')) {
                 return '<div>learning ID is required</div>';
             }
 
+            if( isset($_POST['cancel_action']) ) {
+                ?><script>
+                    history.go(-1)
+                </script><?php
+            }
+
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
@@ -104,10 +110,10 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="cancel_action"';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -484,7 +490,6 @@ if (!class_exists('courses')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                //'posts_per_page' => 10,
                 'product_cat'    => 'Courses'
             );
         
@@ -546,22 +551,6 @@ if (!class_exists('courses')) {
 
             wp_reset_query();
             return $output;
-/*
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}courses", OBJECT );
-            $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($results as $index => $result) {
-                if ( $results[$index]->course_id == $default_id ) {
-                    $output .= '<option value="'.$results[$index]->course_id.'" selected>';
-                } else {
-                    $output .= '<option value="'.$results[$index]->course_id.'">';
-                }
-                $output .= $results[$index]->course_title;
-                $output .= '</option>';        
-            }
-            $output .= '<option value="delete_select">-- Remove this --</option>';
-            return $output;
-*/            
         }
 
         function select_learnings( $course_id=null, $default_id=null ) {
@@ -597,8 +586,6 @@ if (!class_exists('courses')) {
                 } else {
                     $output .= '<option value="'.$results[$index]->learning_id.'">';
                 }
-                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id={$results[$index]->course_id}", OBJECT );
-                //$output .= $results[$index]->learning_title . '('. $row->course_title . ')';
                 $product = wc_get_product( $results[$index]->course_id );
                 $output .= $results[$index]->learning_title . '('. $product->get_name() . ')';
                 $output .= '</option>';        
