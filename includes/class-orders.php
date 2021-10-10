@@ -208,7 +208,12 @@ if (!class_exists('orders')) {
                 'post_type'   => wc_get_order_types(),
                 'post_status' => array_keys( wc_get_order_statuses() ),
             ) );
-            return var_dump($customer_orders);
+            $output  = '<h2>訂單列表</h2>';
+            foreach ($customer_orders as $order){
+                $output .= $order->get_id();
+            }
+            //return var_dump($customer_orders);
+            return $output;
             
             extract( shortcode_atts( array(
                 'order_count' => -1
