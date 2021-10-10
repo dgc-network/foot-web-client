@@ -108,7 +108,8 @@ if (!class_exists('courses')) {
             //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
             //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '<a href="javascript:history.go(-1)">Back</a>';
+            $output .= '<button class="wp-block-button__link" onclick="location.href=`javascript:history.go(-1)`">Back</button>';
+            //$output .= '<a href="javascript:history.go(-1)">Back</a>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
