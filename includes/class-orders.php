@@ -211,116 +211,30 @@ if (!class_exists('orders')) {
                 ] );
             }
 
-            $output  = '<h2>課程列表</h2>';
+            $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td>Date</td><td></td><td></td></tr>';
             $total = 0;
             foreach ( $customer_orders as $order ) {
                 $total += $order->get_total();
 
                 // your code is here
                 $items = $order->get_items();
-                //return var_dump($items);       
 
-                foreach ( $items as $item ) {
+                foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
-                    //return var_dump($product);
-                    $output .= $product->get_name();
-                    //return var_dump($product->get_name());
-
+                    //$output .= $product->get_name();
+                    $output .= '<form method="post">';
+                    $output .= '<tr>';
+                    $output .= '<td>'.$product->get_name().'</td>';
+                    $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$order->get_status().'</a></td>';
+                    $output .= '<input type="hidden" value="'.$order->get_id().'" name="_id">';
+                    $output .= '</tr>';
+                    $output .= '</form>';
                 }
             }
-
-            return $output;
-            return $total;
-
-
-            //$orders = wc_get_orders();
-            //return var_dump($orders);
-
-            $customer_orders = get_posts( array(
-                'numberposts' => -1,
-                'meta_key'    => '_customer_user',
-                'meta_value'  => get_current_user_id(),
-                'post_type'   => wc_get_order_types(),
-                'post_status' => array_keys( wc_get_order_statuses() ),
-            ) );
-            $output  = '<h2>訂單列表</h2>';
-            //return $output;
-            foreach ($customer_orders as $order_object){
-                //return var_dump($order_object);
-                $items = $order->get_items();
-                return var_dump($items);
-
-                foreach ($order_object as $order_id){
-                    //return var_dump($order_id);
-                    $order = wc_get_order( $order_id );
-                    //return var_dump($order);
-                    $items = $order->get_items();
-                    //return var_dump($items);       
-
-                    foreach ( $items as $item ) {
-                        $product = $item->get_product();
-                        //return var_dump($product);
-                        //$output .= $product->get_name();
-                        //return var_dump($product->get_name());
-
-                    }
-
-                }
-            }
-            //return var_dump($output);
-            return $output;
-            
-            extract( shortcode_atts( array(
-                'order_count' => -1
-            ), $atts ) );
-        
-            ob_start();
-            // /my-account/orders/
-            wc_get_template( 'myaccount/my-orders.php', array(
-                'current_user'  => get_user_by( 'id', get_current_user_id() ),
-                'order_count'   => $order_count
-            ) );
-            return ob_get_clean();
-
-            $output  = '<h2>訂單列表</h2>';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Name</td><td>Email</td><td>--</td><td>--</td></tr>';
-        
-
-
-            $results = get_orders();
-            foreach ($results as $index => $result) {
-
-                $orderId = $results[$index]->ID;
-                $orderTitle = $results[$index]->display_name;
-                $orderEmail = $results[$index]->order_email;
-
-                $output .= '<form method="post">';
-                $output .= '<tr>';
-                $output .= '<td>'.$orderTitle.'</td>';
-                $output .= '<td><a href="?view_mode=true&_id='.$orderId.'">'.$orderEmail.'</a></td>';
-                $output .= '<input type="hidden" value="'.$orderId.'" name="_id">';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
-                $output .= '</tr>';
-                $output .= '</form>';
-            }        
             $output .= '</tbody></table></figure>';
-/*        
-            $output .= '<form method="post">';
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-*/        
-            return $output;    
+            return $output;
         }
         
         function select_options( $default_id=null ) {
