@@ -218,7 +218,9 @@ if (!class_exists('orders')) {
                     if (sizeof($order->get_items()) > 0) {
                         $partner_email_array = array();
                         foreach ($order->get_items() as $item_id => $item) {
-                            return var_dump($item);
+                            $product = $item->get_product();
+                            $output .= $product->get_name();
+                            //return var_dump($item);
 
                             if (!empty($item['item_meta']['_st_st_booking_id'][0]) and $st_booking_id = $item['item_meta']['_st_st_booking_id'][0]) {
                                 $post_type = !empty($item['item_meta']['_st_st_booking_post_type']) ? $item['item_meta']['_st_st_booking_post_type'] : false;
@@ -240,7 +242,7 @@ if (!class_exists('orders')) {
                     //return var_dump($order);
                     //return $order_id;
                     //$output .= $order->get_id();
-                    $output .= $order->get_status();
+                    //$output .= $order->get_status();
                     //return var_dump($order_detail);
                 }
             }
