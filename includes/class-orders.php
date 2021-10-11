@@ -211,50 +211,29 @@ if (!class_exists('orders')) {
                 ] );
             }
 
+            $output  = '<h2>課程列表</h2>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             $total = 0;
             foreach ( $customer_orders as $order ) {
                 $total += $order->get_total();
 
                 // your code is here
+                $items = $order->get_items();
+                //return var_dump($items);       
+
+                foreach ( $items as $item ) {
+                    $product = $item->get_product();
+                    //return var_dump($product);
+                    $output .= $product->get_name();
+                    //return var_dump($product->get_name());
+
+                }
             }
 
+            return $output;
             return $total;
 
-            global $woocommerce;
-            $orders = $woocommerce->get('orders');
-            return var_dump($orders);
-
-            $args = array(
-                'numberposts' => -1,
-                'meta_key'    => '_customer_user',
-                'meta_value'  => get_current_user_id(),
-                'post_type'   => wc_get_order_types(),
-                'post_status' => array_keys( wc_get_order_statuses() ),
-            );
-        
-            $loop = new WP_Query( $args );
-            return var_dump($loop);
-        
-            $output  = '<h2>課程列表</h2>';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
-
-            while ( $loop->have_posts() ) : $loop->the_post();
-                return var_dump($loop->the_post());
-                global $order;
-                $output .= '<form method="get">';
-                $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$order->get_staus().'</a></td>';
-                //$output .= '<td>'.$product->get_price().'</td>';
-                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
-                $output .= '</tr>';
-                $output .= '</form>';
-            endwhile;
-            $output .= '</tbody></table></figure>';
-            wp_reset_query();
-            return $output;
 
             //$orders = wc_get_orders();
             //return var_dump($orders);
