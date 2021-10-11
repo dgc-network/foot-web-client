@@ -200,6 +200,25 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
+            $user_id = get_current_user_id();
+            $customer_orders = [];
+            foreach ( wc_get_is_paid_statuses() as $paid_status ) {
+                $customer_orders += wc_get_orders( [
+                    'type'        => 'shop_order',
+                    'limit'       => - 1,
+                    'customer_id' => $user_id,
+                    'status'      => $paid_status,
+                ] );
+            }
+
+            $total = 0;
+            foreach ( $customer_orders as $order ) {
+                $total += $order->get_total();
+
+                // your code is here
+            }
+
+            return $total;
 
             global $woocommerce;
             $orders = $woocommerce->get('orders');
