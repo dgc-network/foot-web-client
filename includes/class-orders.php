@@ -214,9 +214,9 @@ if (!class_exists('orders')) {
                 //return var_dump($order);
                 foreach ($order_object as $order_id){
                     $order = wc_get_order( $order_id );
-                    return $order_id;
+                    //return $order_id;
                     $output .= $order->get_id();
-                    $output .= $order->get_status();
+                    //$output .= $order->get_status();
                     //return var_dump($order_detail);
                 }
             }
