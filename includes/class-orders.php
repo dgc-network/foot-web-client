@@ -218,15 +218,16 @@ if (!class_exists('orders')) {
                     $order = wc_get_order( $order_id );
                     //return var_dump($order);
                     $items = $order->get_items();
-                    return var_dump($items);                    
-/*
+                    //return var_dump($items);       
+
                     foreach ( $items as $item ) {
-                        //$product = $item->get_product();
+                        $product = $item->get_product();
+                        return var_dump($product);           
                         //$output .= $product->get_name();
                         //$output .= '$product->get_name()';
 
                     }
-*/
+
                     if (sizeof($order->get_items()) > 0) {
                         $partner_email_array = array();
                         foreach ($order->get_items() as $item_id => $item) {
