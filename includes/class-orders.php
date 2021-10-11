@@ -201,6 +201,9 @@ if (!class_exists('orders')) {
              * List Mode
              */
 
+            $orders = wc_get_orders();
+            return var_dump($orders);
+
             $customer_orders = get_posts( array(
                 'numberposts' => -1,
                 'meta_key'    => '_customer_user',
