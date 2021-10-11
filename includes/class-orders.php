@@ -209,10 +209,12 @@ if (!class_exists('orders')) {
             );
         
             $loop = new WP_Query( $args );
+            return var_dump($loop);
         
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
+
             while ( $loop->have_posts() ) : $loop->the_post();
                 return var_dump($loop->the_post());
                 global $order;
