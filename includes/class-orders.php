@@ -212,6 +212,7 @@ if (!class_exists('orders')) {
                 'post_status' => array_keys( wc_get_order_statuses() ),
             ) );
             $output  = '<h2>訂單列表</h2>';
+            return $output;
             foreach ($customer_orders as $order_object){
                 foreach ($order_object as $order_id){
                     //return var_dump($order_id);
