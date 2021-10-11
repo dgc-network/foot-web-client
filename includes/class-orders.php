@@ -213,9 +213,11 @@ if (!class_exists('orders')) {
             ) );
             $output  = '<h2>訂單列表</h2>';
             //return $output;
-            foreach ($customer_orders as $order_object){
+            foreach ($customer_orders as $order){
                 return var_dump($order_object);
-                
+                $items = $order->get_items();
+                return var_dump($items);
+
                 foreach ($order_object as $order_id){
                     //return var_dump($order_id);
                     $order = wc_get_order( $order_id );
