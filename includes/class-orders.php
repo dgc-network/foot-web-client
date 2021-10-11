@@ -215,6 +215,7 @@ if (!class_exists('orders')) {
             foreach ($customer_orders as $order_object){
                 foreach ($order_object as $order_id){
                     $order = wc_get_order( $order_id );
+/*                    
                     $items = $order->get_items();
 
                     foreach ( $items as $item ) {
@@ -223,7 +224,7 @@ if (!class_exists('orders')) {
                         //$output .= '$product->get_name()';
 
                     }
-
+*/
                     if (sizeof($order->get_items()) > 0) {
                         $partner_email_array = array();
                         foreach ($order->get_items() as $item_id => $item) {
