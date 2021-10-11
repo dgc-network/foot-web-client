@@ -220,7 +220,7 @@ if (!class_exists('orders')) {
                     foreach ( $items as $item ) {
                         //$product = $item->get_product();
                         //$output .= $product->get_name();
-                        $output .= '$product->get_name()';
+                        //$output .= '$product->get_name()';
 
                     }
 
