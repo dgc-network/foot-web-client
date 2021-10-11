@@ -230,7 +230,7 @@ if (!class_exists('orders')) {
 
                 }
             }
-            //return var_dump($customer_orders);
+            return var_dump($output);
             return $output;
             
             extract( shortcode_atts( array(
