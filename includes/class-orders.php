@@ -232,12 +232,12 @@ if (!class_exists('orders')) {
                             $emails .= ',' . implode(',', $partner_email_array);
                         }
                     }
-                    return $emails;
+                    //return $emails;
 
-                    return var_dump($order);
+                    //return var_dump($order);
                     //return $order_id;
-                    $output .= $order->get_id();
-                    //$output .= $order->get_status();
+                    //$output .= $order->get_id();
+                    $output .= $order->get_status();
                     //return var_dump($order_detail);
                 }
             }
