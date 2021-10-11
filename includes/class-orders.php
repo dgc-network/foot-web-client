@@ -213,8 +213,8 @@ if (!class_exists('orders')) {
                 //$output .= $order->get_id();
                 //return var_dump($order);
                 foreach ($order_object as $order_id){
-                    return $order_id;
                     $order = wc_get_order( $order_id );
+                    return $order_id;
                     $output .= $order->get_id();
                     $output .= $order->get_status();
                     //return var_dump($order_detail);
