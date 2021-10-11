@@ -706,6 +706,6 @@ if (!class_exists('certifications')) {
         }        
     }
     //if ( is_admin() )
-    new courses();
+    new certifications();
 }
 ?>
