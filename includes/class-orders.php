@@ -214,6 +214,7 @@ if (!class_exists('orders')) {
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
+                return var_dump($loop->the_post());
                 global $order;
                 $output .= '<form method="get">';
                 $output .= '<tr>';
