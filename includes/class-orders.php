@@ -219,7 +219,7 @@ if (!class_exists('orders')) {
                         $partner_email_array = array();
                         foreach ($order->get_items() as $item_id => $item) {
                             $product = $item->get_product();
-                            $output .= $product->get_name();
+                            //$output .= $product->get_name();
                             //return var_dump($item);
 
                             if (!empty($item['item_meta']['_st_st_booking_id'][0]) and $st_booking_id = $item['item_meta']['_st_st_booking_id'][0]) {
