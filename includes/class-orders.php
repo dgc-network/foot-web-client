@@ -209,14 +209,17 @@ if (!class_exists('orders')) {
                 'post_status' => array_keys( wc_get_order_statuses() ),
             ) );
             $output  = '<h2>訂單列表</h2>';
-            foreach ($customer_orders as $order){
+            foreach ($customer_orders as $order_object){
                 //$output .= $order->get_id();
                 //return var_dump($order);
-                foreach ($order as $order_detail){
-                    return var_dump($order_detail);
+                foreach ($order_object as $order_id){
+                    $order = wc_get_order( $order_id );
+                    $output .= $order->get_id();
+                    $output .= $order->get_status();
+                    //return var_dump($order_detail);
                 }
             }
-            return var_dump($customer_orders);
+            //return var_dump($customer_orders);
             return $output;
             
             extract( shortcode_atts( array(
