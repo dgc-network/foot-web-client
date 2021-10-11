@@ -200,6 +200,31 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
+            $args = array(
+                'post_type'      => 'order',
+                //'product_cat'    => 'Courses'
+            );
+        
+            $loop = new WP_Query( $args );
+        
+            $output  = '<h2>課程列表</h2>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
+            while ( $loop->have_posts() ) : $loop->the_post();
+                global $order;
+                $output .= '<form method="get">';
+                $output .= '<tr>';
+                $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$order->get_staus().'</a></td>';
+                //$output .= '<td>'.$product->get_price().'</td>';
+                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
+                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                $output .= '</tr>';
+                $output .= '</form>';
+            endwhile;
+            $output .= '</tbody></table></figure>';
+            wp_reset_query();
+            return $output;
 
             //$orders = wc_get_orders();
             //return var_dump($orders);
@@ -213,7 +238,7 @@ if (!class_exists('orders')) {
             ) );
             $output  = '<h2>訂單列表</h2>';
             //return $output;
-            foreach ($customer_orders as $order){
+            foreach ($customer_orders as $order_object){
                 //return var_dump($order_object);
                 $items = $order->get_items();
                 return var_dump($items);
