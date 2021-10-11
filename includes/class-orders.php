@@ -223,9 +223,8 @@ if (!class_exists('orders')) {
                     foreach ( $items as $item ) {
                         $product = $item->get_product();
                         //return var_dump($product);
-                        return var_dump($product->get_name());
-                        //$output .= $product->get_name();
-                        //$output .= '$product->get_name()';
+                        $output .= $product->get_name();
+                        //return var_dump($product->get_name());
 
                     }
 
