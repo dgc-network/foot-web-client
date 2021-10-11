@@ -216,10 +216,10 @@ if (!class_exists('orders')) {
                 foreach ($order_object as $order_id){
                     //return var_dump($order_id);
                     $order = wc_get_order( $order_id );
-                    return var_dump($order);
-/*                    
+                    //return var_dump($order);
                     $items = $order->get_items();
-
+                    return var_dump($items);                    
+/*
                     foreach ( $items as $item ) {
                         //$product = $item->get_product();
                         //$output .= $product->get_name();
