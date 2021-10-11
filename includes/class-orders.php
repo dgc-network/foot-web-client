@@ -201,8 +201,11 @@ if (!class_exists('orders')) {
              * List Mode
              */
             $args = array(
-                'post_type'      => 'order',
-                //'product_cat'    => 'Courses'
+                'numberposts' => -1,
+                'meta_key'    => '_customer_user',
+                'meta_value'  => get_current_user_id(),
+                'post_type'   => wc_get_order_types(),
+                'post_status' => array_keys( wc_get_order_statuses() ),
             );
         
             $loop = new WP_Query( $args );
