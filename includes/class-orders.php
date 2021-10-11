@@ -200,6 +200,9 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
+            $orders = $woocommerce->get('orders');
+            return var_dump($orders);
+            
             $args = array(
                 'numberposts' => -1,
                 'meta_key'    => '_customer_user',
