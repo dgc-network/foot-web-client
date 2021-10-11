@@ -214,6 +214,26 @@ if (!class_exists('orders')) {
                 //return var_dump($order);
                 foreach ($order_object as $order_id){
                     $order = wc_get_order( $order_id );
+                    if (sizeof($order->get_items()) > 0) {
+                        $partner_email_array = array();
+                        foreach ($order->get_items() as $item_id => $item) {
+                            if (!empty($item['item_meta']['_st_st_booking_id'][0]) and $st_booking_id = $item['item_meta']['_st_st_booking_id'][0]) {
+                                $post_type = !empty($item['item_meta']['_st_st_booking_post_type']) ? $item['item_meta']['_st_st_booking_post_type'] : false;
+                                $post_type = st_wc_parse_order_item_meta($post_type);
+                                $partner_email = apply_filters('st_get_owner_email_' . $post_type, $st_booking_id);
+                                if ($partner_email != $st_booking_id) {
+                                    if (!in_array($partner_email, $partner_email_array)) {
+                                        $partner_email_array[] = $partner_email;
+                                    }
+                                }
+                            }
+                        }
+                        if (!empty($partner_email_array)) {
+                            $emails .= ',' . implode(',', $partner_email_array);
+                        }
+                    }
+                    return $emails;
+
                     return var_dump($order);
                     //return $order_id;
                     $output .= $order->get_id();
