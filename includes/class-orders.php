@@ -201,8 +201,8 @@ if (!class_exists('orders')) {
              * List Mode
              */
 
-            $orders = wc_get_orders();
-            return var_dump($orders);
+            //$orders = wc_get_orders();
+            //return var_dump($orders);
 
             $customer_orders = get_posts( array(
                 'numberposts' => -1,
@@ -213,13 +213,13 @@ if (!class_exists('orders')) {
             ) );
             $output  = '<h2>訂單列表</h2>';
             foreach ($customer_orders as $order_object){
-                //$output .= $order->get_id();
-                //return var_dump($order);
                 foreach ($order_object as $order_id){
                     $order = wc_get_order( $order_id );
                     if (sizeof($order->get_items()) > 0) {
                         $partner_email_array = array();
                         foreach ($order->get_items() as $item_id => $item) {
+                            return var_dump($item);
+
                             if (!empty($item['item_meta']['_st_st_booking_id'][0]) and $st_booking_id = $item['item_meta']['_st_st_booking_id'][0]) {
                                 $post_type = !empty($item['item_meta']['_st_st_booking_post_type']) ? $item['item_meta']['_st_st_booking_post_type'] : false;
                                 $post_type = st_wc_parse_order_item_meta($post_type);
