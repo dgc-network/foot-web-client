@@ -491,11 +491,42 @@ if (!class_exists('certifications')) {
         
             $loop = new WP_Query( $args );
         
-            $output  = '<h2>認證列表</h2>';
+            $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
+                //$output .= '<figure class="wp-block-table"><table><tbody>';
+                //$output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
+                foreach ($results as $index => $result) {
+                    
+                    $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td>';
+                    //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                    //$output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                    //$output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
+                    //$output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
+                    //$output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                    //$output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
+                    //if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
+                    //$output .= '></td>';
+                    $output .= '</tr>';
+                    //$TotalHours += floatval($results[$index]->learning_hours);
+                    
+                }
+/*
+                $output .= '<tr><td>'.'#'.'</td>';
+                $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
+                $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
+                $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
+                $output .= '<td><select name="_teaching_id" style="max-width:80px;">'.self::select_teachings().'</select>'.'</td>';
+                $output .= '<td><input type="checkbox" name="_is_witness"></td>';
+                $output .= '</tr>';
+                $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
+                $output .= '<td>'.$TotalHours.'</td><td></td>';
+                $output .= '</tr></tbody></table></figure>';            
+                
                 $output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
@@ -505,6 +536,7 @@ if (!class_exists('certifications')) {
                 //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                 $output .= '</tr>';
                 $output .= '</form>';
+*/                
             endwhile;
             $output .= '</tbody></table></figure>';
 /*        
