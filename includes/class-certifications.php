@@ -494,6 +494,7 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<ul>';
             //$output .= '<tr><td>Title</td><td></td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
@@ -510,7 +511,7 @@ if (!class_exists('certifications')) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
 
-                                $output .= '<tr><td>.</td><td><a href="?view_mode=user_list&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                                $output .= '<tr><td><li><a href="?view_mode=user_list&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
                                 $student_id=$u_results[$u_index]->student_id;
                             }
                         }
@@ -549,6 +550,7 @@ if (!class_exists('certifications')) {
                 $output .= '</form>';
 */                
             endwhile;
+            $output .= '</ul>';
             $output .= '</tbody></table></figure>';
 /*        
             $output .= '<form method="get">';
