@@ -503,10 +503,12 @@ if (!class_exists('certifications')) {
                 foreach ($results as $index => $result) {
                     
                     $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td></tr>';
-                    $var = $wpdb->get_var( "SELECT learning_id FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
-                    $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$var}", OBJECT );
-                    foreach ($u_results as $u_index => $result) {
-                        $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.($u_index+1).'</a></td></tr>';
+                    $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
+                    foreach ($c_results as $c_index => $result) {
+                        $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id}", OBJECT );
+                        foreach ($u_results as $u_index => $result) {
+                            $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.($u_index+1).'</a></td></tr>';
+                        }
                     }
                     //$output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                     //$output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
