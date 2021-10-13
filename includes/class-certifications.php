@@ -615,7 +615,7 @@ if (!class_exists('certifications')) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
 
-                                $output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                                $output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->student_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
                                 $student_id=$u_results[$u_index]->student_id;
                             }
                         }
