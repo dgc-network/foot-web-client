@@ -491,12 +491,12 @@ if (!class_exists('certifications')) {
         
             $loop = new WP_Query( $args );
         
+            global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td></td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
-                global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
                 //$output .= '<figure class="wp-block-table"><table><tbody>';
                 //$output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
@@ -505,10 +505,15 @@ if (!class_exists('certifications')) {
                     $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td></tr>';
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
-                        $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
-                        $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id}", OBJECT );
+                        //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
+                        $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
                         foreach ($u_results as $u_index => $result) {
-                            $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                            if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
+                            if ($first_line) {
+
+                                $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                                $student_id=$u_results[$u_index]->student_id;
+                            }
                         }
                     }
                     //$output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
