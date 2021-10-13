@@ -507,6 +507,7 @@ if (!class_exists('certifications')) {
                     foreach ($c_results as $c_index => $result) {
                         //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
                         $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
+                        $first_line=true;
                         foreach ($u_results as $u_index => $result) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
