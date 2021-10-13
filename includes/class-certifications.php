@@ -493,7 +493,7 @@ if (!class_exists('certifications')) {
         
             $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td></td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 global $wpdb;
@@ -502,8 +502,12 @@ if (!class_exists('certifications')) {
                 //$output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
                 foreach ($results as $index => $result) {
                     
-                    $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td>';
-                    //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                    $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td></tr>';
+                    $var = $wpdb->get_var( "SELECT learning_id FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
+                    $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$var}", OBJECT );
+                    foreach ($u_results as $u_index => $result) {
+                        $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.($u_index+1).'</a></td></tr>';
+                    }
                     //$output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                     //$output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                     //$output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
@@ -511,7 +515,7 @@ if (!class_exists('certifications')) {
                     //$output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                     //if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                     //$output .= '></td>';
-                    $output .= '</tr>';
+                    //$output .= '</tr>';
                     //$TotalHours += floatval($results[$index]->learning_hours);
                     
                 }
