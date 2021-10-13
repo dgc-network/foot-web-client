@@ -494,15 +494,13 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td></td><td></td><td></td></tr>';
+            //$output .= '<tr><td>Title</td><td></td><td></td><td></td></tr>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
-                //$output .= '<figure class="wp-block-table"><table><tbody>';
-                //$output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Lecture</td><td>Witness</td></tr>';
                 foreach ($results as $index => $result) {
                     
-                    $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'</a></td></tr>';
+                    $output .= '<tr><td>'.$results[$index]->learning_title.'</td></tr>';
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
                         //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
@@ -512,7 +510,7 @@ if (!class_exists('certifications')) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
 
-                                $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                                $output .= '<tr><td>.</td><td><a href="?view_mode=user_list&_id='.$u_results[$u_index]->learning_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
                                 $student_id=$u_results[$u_index]->student_id;
                             }
                         }
