@@ -110,13 +110,15 @@ if (!class_exists('orders')) {
                 $output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
                 $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
                 $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
+                $output .= '</tr>';
             }
 /*            
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td>'.'<select name="_learning_id">'.courses::select_learnings($_id).'</select>'.'</td>';
             $output .= '<td></td><td></td>';
-            $output .= '</tbody></table></figure>';
 */            
+            $output .= '</tbody></table></figure>';
+            
             /** 
              * course_learnings footer
              */
