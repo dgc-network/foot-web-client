@@ -330,7 +330,7 @@ if (!class_exists('courses')) {
         }
 
         function edit_mode( $_id=null, $_mode ) {
-
+/*
             if ($_id==null){
                 $_mode='Create';
             }
@@ -418,10 +418,11 @@ if (!class_exists('courses')) {
                 $deleted = $wpdb->delete( $table, $where );
                 ?><script>window.location='/courses'</script><?php
             }
-
+*/
             /** 
              * edit_mode
              */
+/*            
             global $wpdb;
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
             $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
@@ -467,6 +468,7 @@ if (!class_exists('courses')) {
             $output .= '</form>';
         
             return $output;
+*/            
         }
 
         function list_mode() {

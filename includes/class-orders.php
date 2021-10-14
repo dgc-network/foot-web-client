@@ -17,6 +17,103 @@ if (!class_exists('orders')) {
             self::create_tables();
         }
 
+        function course_learnings( $_id=null ) {
+
+            if ($_id==null){
+                return '<div>course ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {        
+                /** 
+                 * submit
+                 */
+                $current_user_id = get_current_user_id();
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_learning_id_'.$index]=='select_delete' ) || ( $_POST['_lecturer_witness_id_'.$index]=='select_delete' ) ){
+                        $table = $wpdb->prefix.'user_course_learnings';
+                        $where = array(
+                            'u_c_l_id' => $results[$index]->u_c_l_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'user_course_learnings';
+                        $data = array(
+                            'learning_id' => $_POST['_learning_id_'.$index],
+                            'lecturer_id' => $_POST['_lecturer_id_'.$index],
+                            'witness_id' => $_POST['_witness_id_'.$index],
+                        );
+                        $where = array(
+                            'u_c_l_id' => $results[$index]->u_c_l_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( !($_POST['_learning_id']=='no_select') ){
+                    $table = $wpdb->prefix.'user_course_learnings';
+                    $data = array(
+                        'student_id' => $current_user_id,
+                        'learning_id' => $_POST['_learning_id'],
+                        'lecturer_id' => $_POST['_lecturer_id'],
+                        'witness_id' => $_POST['_witness_id'],
+                        'course_id' => $_id,
+                    );
+                    $format = array('%d', '%d', '%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
+
+            /** 
+             * course_learnings header
+             */
+            $current_user_id = get_current_user_id();
+            $product = wc_get_product( $_id );
+
+            $output  = '<h2>個人學習項目的輔導與認證</h2>';
+            $output .= '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($current_user_id)->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * user course relationship with learning
+             */
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers</td><td>Witnesses</td></tr>';
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.($index+1).'</td>';
+                $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.self::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.self::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
+            }
+            $output .= '<tr><td>'.'#'.'</td>';
+            $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
+            $output .= '<td></td><td></td>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * course_learnings footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
         function view_mode($_id=null) {
 
             if ($_id==null){
@@ -29,21 +126,9 @@ if (!class_exists('orders')) {
                 /** 
                  * submit the order relationship with course learning
                  */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}order_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
-/*
-                    $send_address = OP_RETURN_SEND_ADDRESS;
-                    $send_amount = OP_RETURN_SEND_AMOUNT;
-                    $UpdateorderCourseLearningAction = new UpdateorderCourseLearningAction();
-                    $UpdateorderCourseLearningAction->setUCLId($results[$index]->u_c_l_id);
-                    $UpdateorderCourseLearningAction->setStudentId($results[$index]->student_id);
-                    $UpdateorderCourseLearningAction->setCourseId($results[$index]->course_id);
-                    $UpdateorderCourseLearningAction->setLearningId($results[$index]->learning_id);
-                    $UpdateorderCourseLearningAction->setLearningDate(strtotime($_POST['_learning_date_'.$index]));
-                    $UpdateorderCourseLearningAction->setLecturerWitnessId($results[$index]->lecturer_witness_id);
-                    $send_data = $UpdateorderCourseLearningAction->serializeToString();
-                    //$op_result = OP_RETURN_send($send_address, $send_amount, $send_data);
-*/                    
+
                     $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
                     //return var_dump($op_result);
                 
@@ -53,7 +138,7 @@ if (!class_exists('orders')) {
                         return $result_output;
                     }
                     else {
-                        $result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
+                        //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
 
                         global $wpdb;
                         $table = $wpdb->prefix.'order_course_learnings';
@@ -190,6 +275,7 @@ if (!class_exists('orders')) {
         function list_mode() {
 
             if( isset($_GET['view_mode']) ) {
+                if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
 
@@ -219,7 +305,7 @@ if (!class_exists('orders')) {
 
             $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Date</td><td>Status</td><td></td></tr>';
+            $output .= '<tr><td>Item</td><td>Date</td><td>Status</td><td></td></tr>';
             $total = 0;
             foreach ( $customer_orders as $order ) {
                 $total += $order->get_total();
@@ -232,8 +318,8 @@ if (!class_exists('orders')) {
                     //$output .= $product->get_name();
                     $output .= '<form method="post">';
                     $output .= '<tr>';
-                    $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
-                    $output .= '<td>'.$order->get_date_paid().'</td>';
+                    $output .= '<td><a href="?view_mode="course_learnings"&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
+                    $output .= '<td>'.$order->get_date_created().'</td>';
                     $output .= '<td>'.$order->get_status().'</td>';
                     $output .= '<input type="hidden" value="'.$order->get_id().'" name="_id">';
                     $output .= '</tr>';
