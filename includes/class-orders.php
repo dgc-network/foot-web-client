@@ -84,7 +84,7 @@ if (!class_exists('orders')) {
              */
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
-            if ($results==[]) {
+            if (empty($results)) {
                 $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
                 foreach ($c_results as $index => $result) {
                     $table = $wpdb->prefix.'user_course_learnings';
@@ -99,6 +99,7 @@ if (!class_exists('orders')) {
                     $format = array('%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
             }
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers</td><td>Witnesses</td></tr>';
