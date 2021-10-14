@@ -106,7 +106,7 @@ if (!class_exists('orders')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
                 //$output .= '<td>'.'<select name="_learning_id_'.$index.'">'.courses::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
                 $output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
                 $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
                 $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
