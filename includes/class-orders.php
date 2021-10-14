@@ -318,7 +318,7 @@ if (!class_exists('orders')) {
                     //$output .= $product->get_name();
                     $output .= '<form method="post">';
                     $output .= '<tr>';
-                    $output .= '<td><a href="?view_mode="course_learnings"&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
+                    $output .= '<td><a href="?view_mode=course_learnings&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
                     $output .= '<td>'.$order->get_date_created().'</td>';
                     $output .= '<td>'.$order->get_status().'</td>';
                     $output .= '<input type="hidden" value="'.$order->get_id().'" name="_id">';
