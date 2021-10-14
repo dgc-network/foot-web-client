@@ -77,6 +77,7 @@ if (!class_exists('orders')) {
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '</tbody></table></figure>';
+            return $output;
 
             /** 
              * user course relationship with learning
