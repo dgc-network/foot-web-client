@@ -219,7 +219,7 @@ if (!class_exists('orders')) {
 
             $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Date</td><td></td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td>Date</td><td>Status</td><td></td></tr>';
             $total = 0;
             foreach ( $customer_orders as $order ) {
                 $total += $order->get_total();
@@ -233,6 +233,7 @@ if (!class_exists('orders')) {
                     $output .= '<form method="post">';
                     $output .= '<tr>';
                     $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
+                    $output .= '<td>'.$order->get_date_paid().'</td>';
                     $output .= '<td>'.$order->get_status().'</td>';
                     $output .= '<input type="hidden" value="'.$order->get_id().'" name="_id">';
                     $output .= '</tr>';
