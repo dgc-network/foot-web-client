@@ -352,7 +352,7 @@ if (!class_exists('orders')) {
                     }
                     */
                     $string = $product->get_categories();
-                    if (str_pos($string,'Courses')!==false) {
+                    if (strpos($product->get_categories(),'Courses')!==false) {
                         $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                     } else {
                         $output .= '<td></td>';
