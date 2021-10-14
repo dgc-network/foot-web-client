@@ -200,6 +200,12 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
+
+            global $current_user;
+            $email = $current_user->user_email;
+            $order = $email->object;
+            return var_dump($order);
+
             $user_id = get_current_user_id();
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
@@ -226,8 +232,8 @@ if (!class_exists('orders')) {
                     //$output .= $product->get_name();
                     $output .= '<form method="post">';
                     $output .= '<tr>';
-                    $output .= '<td>'.$product->get_name().'</td>';
-                    $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$order->get_status().'</a></td>';
+                    $output .= '<td><a href="?view_mode=true&_id='.$order->get_id().'">'.$product->get_name().'</a></td>';
+                    $output .= '<td>'.$order->get_status().'</td>';
                     $output .= '<input type="hidden" value="'.$order->get_id().'" name="_id">';
                     $output .= '</tr>';
                     $output .= '</form>';
