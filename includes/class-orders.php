@@ -341,17 +341,17 @@ if (!class_exists('orders')) {
                     //$output .= $product->get_name();
                     $output .= '<form method="post">';
                     $output .= '<tr>';
+                    $is_course = false;
                     $product->get_categories();
                     foreach ($product->get_categories() as $key => $category) {
                         if ($category->name == 'Courses') {
-                            $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                        } else
-                        if ($category->name == 'Services') {
-                            $output .= '<td><a href="?view_mode=calendar_mode&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                        } else {
-                            $output .= '<td></td>';
+                            $is_course = true;
                         }
-                        # code...
+                    }
+                    if ($is_course) {
+                        $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
+                    } else {
+                        $output .= '<td></td>';
                     }
                     $output .= '<td>'.$order->get_date_created().'</td>';
                     $output .= '<td>'.$order->get_status().'</td>';
@@ -436,15 +436,15 @@ function my_custom_checkout_field( $checkout ) {
         });
     </script>';
 
-   woocommerce_form_field( 'order_pickup_date', array(
+    woocommerce_form_field( 'order_pickup_date', array(
         'type'          => 'text',
         'class'         => array('my-field-class form-row-wide'),
         'id'            => 'datepicker',
         'required'      => true,
         'label'         => __('Delivery Date'),
-        'placeholder'       => __('Select Date'),
-        'options'     =>   $mydateoptions
-        ),$checkout->get_value( 'order_pickup_date' ));
+        'placeholder'   => __('Select Date'),
+        'options'       => $mydateoptions
+        ), $checkout->get_value( 'order_pickup_date' ));
 
     echo '</div>';
 }
