@@ -680,14 +680,14 @@ if (!class_exists('courses')) {
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
-                learning_id int,
+                learning_id int NOT NULL,
+                course_id int NOT NULL,
                 lecturer_id int,
                 lecture_date int,
                 witness_id int,
                 certified_date int,
                 txid varchar(255),
                 is_deleted boolean,
-                course_id int,
                 teaching_id int,
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
