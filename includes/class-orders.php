@@ -96,7 +96,7 @@ if (!class_exists('orders')) {
                         //'witness_id' => $_POST['_witness_id'],
                     );
                     //$format = array('%d', '%d', '%d', '%d', '%d');
-                    $format = array('%d', '%d');
+                    $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
