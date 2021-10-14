@@ -343,7 +343,7 @@ if (!class_exists('orders')) {
                     $output .= '<tr>';
                     $is_course = false;
                     $product->get_categories();
-                    return $product->get_categories();
+                    return var_dump($product->get_categories());
                     foreach ($product->get_categories() as $key => $category) {
                         if ($category->name == 'Courses') {
                             $is_course = true;
