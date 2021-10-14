@@ -77,23 +77,39 @@ if (!class_exists('orders')) {
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '</tbody></table></figure>';
-            return $output;
+            //return $output;
 
             /** 
              * user course relationship with learning
              */
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+            if ($results==[]) {
+                $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                foreach ($c_results as $index => $result) {
+                    $table = $wpdb->prefix.'user_course_learnings';
+                    $data = array(
+                        'student_id' => $current_user_id,
+                        'learning_id' => $c_results[$index]->learning_id,
+                        //'lecturer_id' => $_POST['_lecturer_id'],
+                        //'witness_id' => $_POST['_witness_id'],
+                        //'course_id' => $results[$index]->course_id,
+                    );
+                    //$format = array('%d', '%d', '%d', '%d', '%d');
+                    $format = array('%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers</td><td>Witnesses</td></tr>';
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
-                $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.self::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
-                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.self::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
-                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.self::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
+                $output .= '<td>'.'<select name="_learning_id_'.$index.'">'.courses::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
-            $output .= '<td>'.'<select name="_learning_id">'.self::select_learnings($_id).'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_learning_id">'.courses::select_learnings($_id).'</select>'.'</td>';
             $output .= '<td></td><td></td>';
             $output .= '</tbody></table></figure>';
             
