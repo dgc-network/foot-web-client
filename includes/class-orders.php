@@ -200,12 +200,12 @@ if (!class_exists('orders')) {
             /**
              * List Mode
              */
-
+/*
             global $current_user;
             $email = $current_user->user_email;
             $order = $email->object;
             return var_dump($order);
-
+*/
             $user_id = get_current_user_id();
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
