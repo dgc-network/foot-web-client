@@ -91,7 +91,7 @@ if (!class_exists('orders')) {
                     $data = array(
                         'student_id' => $current_user_id,
                         'learning_id' => $c_results[$index]->learning_id,
-                        'course_id' => $results[$index]->course_id,
+                        'course_id' => $_id,
                         //'lecturer_id' => $_POST['_lecturer_id'],
                         //'witness_id' => $_POST['_witness_id'],
                     );
