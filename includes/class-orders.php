@@ -338,30 +338,16 @@ if (!class_exists('orders')) {
 
                 foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
-                    //$output .= $product->get_name();
-                    $output .= '<form method="post">';
-                    $output .= '<tr>';
-                    /*
-                    $is_course = false;
-                    $product->get_categories();
-                    return var_dump($product->get_categories());
-                    foreach ($product->get_categories() as $key => $category) {
-                        if ($category->name == 'Courses') {
-                            $is_course = true;
-                        }
-                    }
-                    */
-                    $string = $product->get_categories();
                     if (strpos($product->get_categories(),'Courses')!==false) {
+                        //$output .= '<form method="post">';
+                        $output .= '<tr>';
                         $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                    } else {
-                        $output .= '<td></td>';
+                        $output .= '<td>'.$order->get_date_created().'</td>';
+                        $output .= '<td>'.$order->get_status().'</td>';
+                        //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
+                        $output .= '</tr>';
+                        //$output .= '</form>';
                     }
-                    $output .= '<td>'.$order->get_date_created().'</td>';
-                    $output .= '<td>'.$order->get_status().'</td>';
-                    $output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                    $output .= '</tr>';
-                    $output .= '</form>';
                 }
             }
             $output .= '</tbody></table></figure>';
