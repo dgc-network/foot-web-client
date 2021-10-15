@@ -17,10 +17,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+include_once dirname( __FILE__ ) . '/includes/class-calendars.php';
 include_once dirname( __FILE__ ) . '/includes/class-orders.php';
 include_once dirname( __FILE__ ) . '/includes/class-courses.php';
 include_once dirname( __FILE__ ) . '/includes/class-certifications.php';
-include_once dirname( __FILE__ ) . '/includes/class-users.php';
+//include_once dirname( __FILE__ ) . '/includes/class-users.php';
 include_once dirname( __FILE__ ) . '/vendor/autoload.php';
 include_once dirname( __FILE__ ) . '/blockchain/php-OP_RETURN/OP_RETURN.php';
 include_once dirname( __FILE__ ) . '/blockchain/php-OP_RETURN/op_return_setting.php';

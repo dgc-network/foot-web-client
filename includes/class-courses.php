@@ -271,7 +271,8 @@ if (!class_exists('courses')) {
             $output  = '<h2>課程vs學習項目設定</h2>';
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
+            //$output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
@@ -474,8 +475,8 @@ if (!class_exists('courses')) {
         function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
-                if ($_GET['view_mode']=='profit_sharing'){return self::profit_sharing($_GET['_id']);}
-                if ($_GET['view_mode']=='course_learnings'){return self::course_learnings($_GET['_id']);}
+                if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
+                //if ($_GET['view_mode']=='course_learnings'){return self::course_learnings($_GET['_id']);}
                 return self::view_mode($_GET['_id']);
             }
             

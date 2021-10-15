@@ -2,18 +2,18 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
-if (!class_exists('orders')) {
+if (!class_exists('calendars')) {
 
-    class orders {
+    class calendars {
 
         /**
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('my_order_list', __CLASS__ . '::list_mode');
-            add_shortcode('my-order-list', __CLASS__ . '::list_mode');
-            add_shortcode('order_edit', __CLASS__ . '::edit_mode');
-            add_shortcode('order_view', __CLASS__ . '::view_mode');
+            add_shortcode('my_calendar_list', __CLASS__ . '::list_mode');
+            add_shortcode('my-calendar-list', __CLASS__ . '::list_mode');
+            add_shortcode('calendar_edit', __CLASS__ . '::edit_mode');
+            add_shortcode('calendar_view', __CLASS__ . '::view_mode');
             self::create_tables();
         }
 
@@ -316,6 +316,7 @@ if (!class_exists('orders')) {
             return var_dump($order);
 */
             $user_id = get_current_user_id();
+/*
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
                 $customer_orders += wc_get_orders( [
@@ -325,30 +326,23 @@ if (!class_exists('orders')) {
                     'status'      => $paid_status,
                 ] );
             }
-
-            $output  = '<h2>註冊課程列表</h2>';
+*/
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}my_calendars WHERE event_host = {$user_id}", OBJECT );
+            $output  = '<h2>My Calendars</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Item</td><td>Date</td><td>Status</td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td>Begin</td><td>End</td><td></td></tr>';
             $total = 0;
-            foreach ( $customer_orders as $order ) {
-                $total += $order->get_total();
+            foreach ( $results as $index=>$result ) {
+                //$output .= '<form method="post">';
+                $output .= '<tr>';
+                $output .= '<td><a href="?view_mode=true&_id='.$result->event_id.'">'.$result->event_title.'</a></td>';
+                $output .= '<td>'.$result->event_begin.'</td>';
+                $output .= '<td>'.$result->event_end.'</td>';
+                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
+                $output .= '</tr>';
+                //$output .= '</form>';
 
-                // your code is here
-                $items = $order->get_items();
-
-                foreach ( $order->get_items() as $item ) {
-                    $product = $item->get_product();
-                    if (strpos($product->get_categories(),'Courses')!==false) {
-                        //$output .= '<form method="post">';
-                        $output .= '<tr>';
-                        $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                        $output .= '<td>'.$order->get_date_created().'</td>';
-                        $output .= '<td>'.$order->get_status().'</td>';
-                        //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                        $output .= '</tr>';
-                        //$output .= '</form>';
-                    }
-                }
             }
             $output .= '</tbody></table></figure>';
             return $output;
@@ -376,27 +370,27 @@ if (!class_exists('orders')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-/*
-            $sql = "CREATE TABLE `{$wpdb->prefix}order_course_learnings` (
-                u_c_l_id int NOT NULL AUTO_INCREMENT,
-                student_id int NOT NULL,
-                course_id int,
-                learning_id int,
-                learning_date int,
-                lecturer_witness_id int,
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}my_calendars` (
+                event_id int NOT NULL AUTO_INCREMENT,
+                event_begin int NOT NULL,
+                event_end int,
+                event_title varchar(255),
+                event_auther int,
+                event_hos int,
                 txid varchar(255),
                 is_deleted boolean,
-                PRIMARY KEY  (u_c_l_id)
+                PRIMARY KEY  (event_id)
             ) $charset_collate;";        
             dbDelta($sql);
-*/            
+
         }
         
     }
     //if ( is_admin() )
-    new orders();
+    new calendars();
 }
-/*
+
 // Register main datepicker jQuery plugin script
 add_action( 'wp_enqueue_scripts', 'enabling_date_picker' );
 function enabling_date_picker() {
@@ -438,5 +432,4 @@ function my_custom_checkout_field( $checkout ) {
 
     echo '</div>';
 }
-*/
 ?>
