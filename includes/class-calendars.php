@@ -10,8 +10,8 @@ if (!class_exists('calendars')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('my_calendar_list', __CLASS__ . '::list_mode');
-            add_shortcode('my-calendar-list', __CLASS__ . '::list_mode');
+            add_shortcode('calendar_list', __CLASS__ . '::list_mode');
+            add_shortcode('calendar-list', __CLASS__ . '::list_mode');
             add_shortcode('calendar_edit', __CLASS__ . '::edit_mode');
             add_shortcode('calendar_view', __CLASS__ . '::view_mode');
             self::create_tables();

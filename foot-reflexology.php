@@ -32,19 +32,4 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateCourseLearingAct
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateCourseLearingAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateUserCourseLearingAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearingAction.php';
-//include_once dirname( __FILE__ ) . '/includes/class-learnings.php';
-//include_once dirname( __FILE__ ) . '/includes/class-teaches.php';
-/*
-include_once dirname( __FILE__ ) . '/php-OP_RETURN/OP_RETURN.php';
-include_once dirname( __FILE__ ) . '/build/gen/GPBMetadata/PikePayload.php';
-include_once dirname( __FILE__ ) . '/build/gen/GPBMetadata/PikeState.php';
-include_once dirname( __FILE__ ) . '/build/gen/Agent.php';
-include_once dirname( __FILE__ ) . '/build/gen/AgentList.php';
-include_once dirname( __FILE__ ) . '/build/gen/PikePayload.php';
-include_once dirname( __FILE__ ) . '/build/gen/PikePayload/Action.php';
-include_once dirname( __FILE__ ) . '/build/gen/CreateAgentAction.php';
-include_once dirname( __FILE__ ) . '/build/gen/UpdateAgentAction.php';
-include_once dirname( __FILE__ ) . '/build/gen/KeyValueEntry.php';
-*/
-
 ?>
