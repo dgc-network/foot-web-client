@@ -301,38 +301,23 @@ if (!class_exists('calendars')) {
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-
+/*
             if( isset($_POST['edit_mode']) ) {
+                if ($_GET['edit_mode']=='Create') {
+                    ?><script>window.location='/courses'</script><?php
+                }
                 return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
             }            
-
+*/
             /**
              * List Mode
              */
-/*
-            global $current_user;
-            $email = $current_user->user_email;
-            $order = $email->object;
-            return var_dump($order);
-*/
-            $user_id = get_current_user_id();
-/*
-            $customer_orders = [];
-            foreach ( wc_get_is_paid_statuses() as $paid_status ) {
-                $customer_orders += wc_get_orders( [
-                    'type'        => 'shop_order',
-                    'limit'       => - 1,
-                    'customer_id' => $user_id,
-                    'status'      => $paid_status,
-                ] );
-            }
-*/
             global $wpdb;
+            $user_id = get_current_user_id();
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}my_calendars WHERE event_host = {$user_id}", OBJECT );
             $output  = '<h2>My Calendars</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title</td><td>Begin</td><td>End</td><td></td></tr>';
-            $total = 0;
             foreach ( $results as $index=>$result ) {
                 //$output .= '<form method="post">';
                 $output .= '<tr>';
@@ -345,6 +330,19 @@ if (!class_exists('calendars')) {
 
             }
             $output .= '</tbody></table></figure>';
+
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+            $output .= '<a class="wp-block-button__link" href="/Courses">Create</a>';
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
             return $output;
         }
         
