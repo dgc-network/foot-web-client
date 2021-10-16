@@ -443,7 +443,7 @@ function my_custom_checkout_field( $checkout ) {
             $("#datepicker").datepicker();
         });
     </script>';
-
+/*
     woocommerce_form_field(
         'order_pickup_date', 
         array(
@@ -457,7 +457,7 @@ function my_custom_checkout_field( $checkout ) {
         ), 
         $checkout->get_value( 'order_pickup_date' )
     );
-
+*/
     $technician_options = array('roverchen','李光祥');
     woocommerce_form_field(
         'pickup_technician', 
@@ -468,7 +468,7 @@ function my_custom_checkout_field( $checkout ) {
             'required'      => true,
             'label'         => __('Technician'),
             'placeholder'   => __('Select Technician'),
-            'options'       => $technician_options
+            'options'       => $mydateoptions
         ), 
         $checkout->get_value( 'pickup_technician' )
     );
