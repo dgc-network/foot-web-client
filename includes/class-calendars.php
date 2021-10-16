@@ -461,6 +461,9 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
  function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
     {
         $output = $product_name . "</a><dl class='variation'>";
+        $output .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
+        $output .= "<tr><td>" . $values['wdm_user_custom_data_value'] . "</td></tr>";
+        $output .= "</table></dl>"; 
         return $output;
 
         /*code to add custom data on Cart & checkout Page*/    
