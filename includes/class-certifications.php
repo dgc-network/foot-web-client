@@ -287,7 +287,7 @@ if (!class_exists('certifications')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
                 foreach ($results as $index => $result) {
                     
-                    $output .= '<tr><td>'.$results[$index]->learning_title.'</td></tr>';
+                    $output .= '<tr><td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td></tr>';
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
                         //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
