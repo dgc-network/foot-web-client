@@ -462,6 +462,8 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
     {
         $output = $product_name . "</a><dl class='variation'>";
         $output .= 'I am here';
+        $learning_id=4;
+        $output .= '<select name="_host_id">'.certifications::select_options($learning_id).'</select>';
 /*
         $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
         $output .= '';
