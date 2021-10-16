@@ -444,15 +444,34 @@ function my_custom_checkout_field( $checkout ) {
         });
     </script>';
 
-    woocommerce_form_field( 'order_pickup_date', array(
-        'type'          => 'text',
-        'class'         => array('my-field-class form-row-wide'),
-        'id'            => 'datepicker',
-        'required'      => true,
-        'label'         => __('Delivery Date'),
-        'placeholder'   => __('Select Date'),
-        'options'       => $mydateoptions
-        ), $checkout->get_value( 'order_pickup_date' ));
+    woocommerce_form_field(
+        'order_pickup_date', 
+        array(
+            'type'          => 'text',
+            'class'         => array('my-field-class form-row-wide'),
+            'id'            => 'datepicker',
+            'required'      => true,
+            'label'         => __('Delivery Date'),
+            'placeholder'   => __('Select Date'),
+            'options'       => $mydateoptions
+        ), 
+        $checkout->get_value( 'order_pickup_date' )
+    );
+
+    $technician_options = array('roverchen','李光祥');
+    woocommerce_form_field(
+        'pickup_technician', 
+        array(
+            'type'          => 'text',
+            'class'         => array('my-field-class form-row-wide'),
+            'id'            => 'technicianpicker',
+            'required'      => true,
+            'label'         => __('Technician'),
+            'placeholder'   => __('Select Technician'),
+            'options'       => $technician_options
+        ), 
+        $checkout->get_value( 'pickup_technician' )
+    );
 
     echo '</div>';
 }
