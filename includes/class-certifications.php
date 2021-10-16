@@ -325,8 +325,7 @@ if (!class_exists('certifications')) {
                 foreach ($u_results as $u_index => $result) {
                     if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                     if ($first_line) {
-                        //$output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->student_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
-                        if ( $product->get_id() == $default_id ) {
+                        if ( $u_results[$u_index]->student_id == $default_id ) {
                             $output .= '<option value="'.$u_results[$u_index]->student_id.'" selected>';
                         } else {
                             $output .= '<option value="'.$u_results[$u_index]->student_id.'">';
