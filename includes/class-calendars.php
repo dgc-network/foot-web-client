@@ -301,14 +301,15 @@ if (!class_exists('calendars')) {
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-/*
-            if( isset($_POST['edit_mode']) ) {
+
+            if( isset($_GET['edit_mode']) ) {
                 if ($_GET['edit_mode']=='Create') {
-                    ?><script>window.location='/courses'</script><?php
+                    add_product_to_cart();
+                    ?><script>window.location='/checkout'</script><?php
                 }
                 return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
             }            
-*/
+
             /**
              * List Mode
              */
@@ -334,8 +335,8 @@ if (!class_exists('calendars')) {
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
-            $output .= '<a class="wp-block-button__link" href="/Courses">Create</a>';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+            //$output .= '<a class="wp-block-button__link" href="/checkout">Create</a>';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
@@ -387,6 +388,31 @@ if (!class_exists('calendars')) {
     }
     //if ( is_admin() )
     new calendars();
+}
+
+/**
+ * Automatically add product to cart on visit
+ */
+add_action( 'template_redirect', 'add_product_to_cart' );
+function add_product_to_cart() {
+	if ( ! is_admin() ) {
+		$product_id = 295; //replace with your own product id
+		$found = false;
+		//check if product already in cart
+		if ( sizeof( WC()->cart->get_cart() ) > 0 ) {
+			foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
+				$_product = $values['data'];
+				if ( $_product->get_id() == $product_id )
+					$found = true;
+			}
+			// if product not found, add it
+			if ( ! $found )
+				WC()->cart->add_to_cart( $product_id );
+		} else {
+			// if no products in cart, add it
+			WC()->cart->add_to_cart( $product_id );
+		}
+	}
 }
 
 // Register main datepicker jQuery plugin script
