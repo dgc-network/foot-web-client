@@ -469,6 +469,13 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
 {
  function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
     {
+        echo '
+        <script>
+            jQuery(function($){
+                $("#datepicker").datepicker();
+            });
+        </script>';
+
         $output = $product_name . "</a><dl class='variation'>";
         $learning_id=1;
         $output .= '<select name="_event_host">'.certifications::select_options($learning_id).'</select>';
