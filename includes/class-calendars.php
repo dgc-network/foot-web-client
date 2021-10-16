@@ -414,13 +414,13 @@ function add_product_to_cart($product_id = 295) {
 		}
 	}
 }
-
+/*
 add_filter('woocommerce_add_cart_item_data','wdm_add_item_data',1,2);
 if(!function_exists('wdm_add_item_data'))
 {
     function wdm_add_item_data($cart_item_data,$product_id)
     {
-        /*Here, We are adding item in WooCommerce session with, wdm_user_custom_data_value name*/
+        // Here, We are adding item in WooCommerce session with, wdm_user_custom_data_value name
         global $woocommerce;
         session_start();    
         if (isset($_SESSION['wdm_user_custom_data'])) {
@@ -453,7 +453,7 @@ if(!function_exists('wdm_get_cart_items_from_session'))
         return $item;
     }
 }
-
+*/
 add_filter('woocommerce_checkout_cart_item_quantity','wdm_add_user_custom_option_from_session_into_cart',1,3);  
 add_filter('woocommerce_cart_item_price','wdm_add_user_custom_option_from_session_into_cart',1,3);
 if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
@@ -461,9 +461,15 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
  function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
     {
         $output = $product_name . "</a><dl class='variation'>";
+        $output .= 'I am here';
+/*
+        $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
+        $output .= '';
         $output .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
         $output .= "<tr><td>" . $values['wdm_user_custom_data_value'] . "</td></tr>";
         $output .= "</table></dl>"; 
+*/
+        $output .= "</dl>"; 
         return $output;
 
         /*code to add custom data on Cart & checkout Page*/    
