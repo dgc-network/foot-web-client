@@ -473,7 +473,7 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
         $learning_id=1;
         $output .= '<select name="_event_host">'.certifications::select_options($learning_id).'</select>';
         $output .= '<input name="_event_start_date" id="datepicker">';
-        $output .= '<select name="_event_start_time">'.calendar::select_time().'</select>';
+        $output .= '<select name="_event_start_time">'.calendars::select_time().'</select>';
         $output .= "</dl>"; 
         return $output;
     }
