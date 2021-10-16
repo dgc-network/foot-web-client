@@ -394,9 +394,9 @@ if (!class_exists('calendars')) {
  * Automatically add product to cart on visit
  */
 add_action( 'template_redirect', 'add_product_to_cart' );
-function add_product_to_cart() {
+function add_product_to_cart($product_id = 295) {
 	if ( ! is_admin() ) {
-		$product_id = 295; //replace with your own product id
+		//$product_id = 295; //replace with your own product id
 		$found = false;
 		//check if product already in cart
 		if ( sizeof( WC()->cart->get_cart() ) > 0 ) {
@@ -413,6 +413,70 @@ function add_product_to_cart() {
 			WC()->cart->add_to_cart( $product_id );
 		}
 	}
+}
+
+add_filter('woocommerce_add_cart_item_data','wdm_add_item_data',1,2);
+if(!function_exists('wdm_add_item_data'))
+{
+    function wdm_add_item_data($cart_item_data,$product_id)
+    {
+        /*Here, We are adding item in WooCommerce session with, wdm_user_custom_data_value name*/
+        global $woocommerce;
+        session_start();    
+        if (isset($_SESSION['wdm_user_custom_data'])) {
+            $option = $_SESSION['wdm_user_custom_data'];       
+            $new_value = array('wdm_user_custom_data_value' => $option);
+        }
+        if(empty($option))
+            return $cart_item_data;
+        else
+        {    
+            if(empty($cart_item_data))
+                return $new_value;
+            else
+                return array_merge($cart_item_data,$new_value);
+        }
+        unset($_SESSION['wdm_user_custom_data']); 
+        //Unset our custom session variable, as it is no longer needed.
+    }
+}
+
+add_filter('woocommerce_get_cart_item_from_session', 'wdm_get_cart_items_from_session', 1, 3 );
+if(!function_exists('wdm_get_cart_items_from_session'))
+{
+    function wdm_get_cart_items_from_session($item,$values,$key)
+    {
+        if (array_key_exists( 'wdm_user_custom_data_value', $values ) )
+        {
+        $item['wdm_user_custom_data_value'] = $values['wdm_user_custom_data_value'];
+        }       
+        return $item;
+    }
+}
+
+add_filter('woocommerce_checkout_cart_item_quantity','wdm_add_user_custom_option_from_session_into_cart',1,3);  
+add_filter('woocommerce_cart_item_price','wdm_add_user_custom_option_from_session_into_cart',1,3);
+if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
+{
+ function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
+    {
+        $output = $product_name . "</a><dl class='variation'>";
+        return $output;
+
+        /*code to add custom data on Cart & checkout Page*/    
+        if(count($values['wdm_user_custom_data_value']) > 0)
+        {
+            $return_string = $product_name . "</a><dl class='variation'>";
+            $return_string .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
+            $return_string .= "<tr><td>" . $values['wdm_user_custom_data_value'] . "</td></tr>";
+            $return_string .= "</table></dl>"; 
+            return $return_string;
+        }
+        else
+        {
+            return $product_name;
+        }
+    }
 }
 
 // Register main datepicker jQuery plugin script
@@ -507,4 +571,5 @@ function technician_options( $learning_id=null ) {
     }
     return $technician_options;
 }
+
 ?>
