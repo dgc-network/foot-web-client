@@ -347,6 +347,15 @@ if (!class_exists('calendars')) {
             return $output;
         }
         
+        function select_time() {
+            $output  = '<option value="no_select">-- Select a time --</option>';
+            $output .= '<option value="08000900">08:00-09:00</option>';
+            $output .= '<option value="09001000">09:00-10:00</option>';
+            $output .= '<option value="10001100">10:00-11:00</option>';
+            $output .= '<option value="11001200">11:00-12:00</option>';
+            return $output;
+        }
+        
         function select_options( $default_id=null ) {
 
             $results = get_orders();
@@ -358,7 +367,7 @@ if (!class_exists('calendars')) {
                     $output .= '<option value="'.$results[$index]->ID.'">';
                 }
                 $output .= $results[$index]->display_name;
-                $output .= '</option>';        
+                $output .= '</option>';
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
             return $output;    
@@ -461,32 +470,12 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
  function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
     {
         $output = $product_name . "</a><dl class='variation'>";
-        //$output .= 'I am here';
         $learning_id=1;
-        $output .= '<select name="_host_id">'.certifications::select_options($learning_id).'</select>';
-/*
-        $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
-        $output .= '';
-        $output .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
-        $output .= "<tr><td>" . $values['wdm_user_custom_data_value'] . "</td></tr>";
-        $output .= "</table></dl>"; 
-*/
+        $output .= '<select name="_event_host">'.certifications::select_options($learning_id).'</select>';
+        $output .= '<input name="_event_start_date" id="datepicker">';
+        $output .= '<select name="_event_start_time">'.calendar::select_time().'</select>';
         $output .= "</dl>"; 
         return $output;
-
-        /*code to add custom data on Cart & checkout Page*/    
-        if(count($values['wdm_user_custom_data_value']) > 0)
-        {
-            $return_string = $product_name . "</a><dl class='variation'>";
-            $return_string .= "<table class='wdm_options_table' id='" . $values['product_id'] . "'>";
-            $return_string .= "<tr><td>" . $values['wdm_user_custom_data_value'] . "</td></tr>";
-            $return_string .= "</table></dl>"; 
-            return $return_string;
-        }
-        else
-        {
-            return $product_name;
-        }
     }
 }
 

@@ -319,6 +319,7 @@ if (!class_exists('certifications')) {
             }
             global $wpdb;
             $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$learning_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
             foreach ($c_results as $c_index => $result) {
                 $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
                 $first_line=true;
@@ -336,29 +337,6 @@ if (!class_exists('certifications')) {
                     }
                 }
             }
-/*
-            $args = array(
-                'post_type'      => 'product',
-                //'posts_per_page' => 10,
-                'product_cat'    => 'Courses'
-            );       
-            $loop = new WP_Query( $args );
-        
-            $output = '<option value="no_select">-- Select an option --</option>';
-            while ( $loop->have_posts() ) : $loop->the_post();
-                global $product;
-                if ( $product->get_id() == $default_id ) {
-                    $output .= '<option value="'.$product->get_id().'" selected>';
-                } else {
-                    $output .= '<option value="'.$product->get_id().'">';
-                }
-                $output .= $product->get_name();
-                $output .= '</option>';        
-            endwhile;
-            $output .= '<option value="delete_select">-- Remove this --</option>';
-
-            wp_reset_query();
-*/            
             return $output;
         }
 /*
