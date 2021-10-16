@@ -310,9 +310,34 @@ if (!class_exists('certifications')) {
             wp_reset_query();
             return $output;
         }
-/*        
-        function select_options( $default_id=null ) {
 
+        function select_options( $learning_id, $default_id=null ) {
+
+            if ($learning_id==null){
+                $output = '<option value="no_select">-- $learning_id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$learning_id}", OBJECT );
+            foreach ($c_results as $c_index => $result) {
+                $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
+                $first_line=true;
+                foreach ($u_results as $u_index => $result) {
+                    if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
+                    if ($first_line) {
+                        //$output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->student_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
+                        if ( $product->get_id() == $default_id ) {
+                            $output .= '<option value="'.$u_results[$u_index]->student_id.'" selected>';
+                        } else {
+                            $output .= '<option value="'.$u_results[$u_index]->student_id.'">';
+                        }
+                        $output .= get_userdata($u_results[$u_index]->student_id)->display_name;
+                        $output .= '</option>';        
+                        $student_id=$u_results[$u_index]->student_id;
+                    }
+                }
+            }
+/*
             $args = array(
                 'post_type'      => 'product',
                 //'posts_per_page' => 10,
@@ -334,9 +359,10 @@ if (!class_exists('certifications')) {
             $output .= '<option value="delete_select">-- Remove this --</option>';
 
             wp_reset_query();
+*/            
             return $output;
         }
-
+/*
         function select_learnings( $course_id=null, $default_id=null ) {
 
             if ($course_id==null){
