@@ -469,7 +469,8 @@ function my_custom_checkout_field( $checkout ) {
             'label'         => __('Technician'),
             'placeholder'   => __('Select Technician'),
             'options'       => technician_options(),
-        ), 
+            //'default'       => 'N'
+        ),
         $checkout->get_value( 'pickup_technician' )
     );
 
@@ -478,10 +479,9 @@ function my_custom_checkout_field( $checkout ) {
 
 function technician_options( $learning_id=null ) {
 
+    $technician_options = array('' => __('Select Technician', 'woocommerce' ));
     if ($learning_id==null){
-        return array('' => __('Select PickupTechnician', 'woocommerce' ));
-        //$output = '<option value="no_select">-- $learning_id is required --</option>';
-        //return $output;    
+        return $technician_options;
     }
     global $wpdb;
     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$learning_id}", OBJECT );
@@ -492,16 +492,19 @@ function technician_options( $learning_id=null ) {
             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
             if ($first_line) {
                 //$output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->student_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
-                if ( $product->get_id() == $default_id ) {
-                    $output .= '<option value="'.$u_results[$u_index]->student_id.'" selected>';
-                } else {
-                    $output .= '<option value="'.$u_results[$u_index]->student_id.'">';
-                }
-                $output .= get_userdata($u_results[$u_index]->student_id)->display_name;
-                $output .= '</option>';        
+                //if ( $product->get_id() == $default_id ) {
+                //    $output .= '<option value="'.$u_results[$u_index]->student_id.'" selected>';
+                //} else {
+                //    $output .= '<option value="'.$u_results[$u_index]->student_id.'">';
+                //}
+                //$output .= get_userdata($u_results[$u_index]->student_id)->display_name;
+                //$output .= '</option>';
+                //array_push($technician_options,($u_results[$u_index]->student_id=>(get_userdata($u_results[$u_index]->student_id)->display_name)));
+                $$technician_options[$u_results[$u_index]->student_id] = get_userdata($u_results[$u_index]->student_id)->display_name;
                 $student_id=$u_results[$u_index]->student_id;
             }
         }
     }
+    return $technician_options;
 }
 ?>
