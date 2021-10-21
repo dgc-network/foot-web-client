@@ -15,6 +15,12 @@ if (!class_exists('courses')) {
             //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
+            wp_insert_term( 'Courses', 'product_cat', array(
+                'description' => 'Description for category', // optional
+                'parent' => 0, // optional
+                'slug' => 'courses-category' // optional
+            ) );
+            
         }
 
         function profit_sharing( $_id=null ) {

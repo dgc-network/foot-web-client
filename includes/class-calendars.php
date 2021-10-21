@@ -15,6 +15,11 @@ if (!class_exists('calendars')) {
             add_shortcode('calendar_edit', __CLASS__ . '::edit_mode');
             add_shortcode('calendar_view', __CLASS__ . '::view_mode');
             self::create_tables();
+            wp_insert_term( 'Reservation', 'product_cat', array(
+                'description' => 'Description for category', // optional
+                'parent' => 0, // optional
+                'slug' => 'reservation-category' // optional
+            ) );
         }
 
         function course_learnings( $_id=null ) {

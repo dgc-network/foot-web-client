@@ -15,6 +15,12 @@ if (!class_exists('certifications')) {
             //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
+            wp_insert_term( 'Certification', 'product_cat', array(
+                'description' => 'Description for category', // optional
+                'parent' => 0, // optional
+                'slug' => 'certification-category' // optional
+            ) );
+
         }
 
         function view_mode( $_id=null ) {
