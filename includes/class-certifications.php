@@ -306,8 +306,8 @@ if (!class_exists('certifications')) {
             $loop = new WP_Query( $args );
             if ( $loop->have_posts() ) {}
             else {
-                wp_reset_postdata();
-                //self::create_new_product();
+                //wp_reset_postdata();
+                self::create_new_product();
                 $loop = new WP_Query( $args );
             }
 
