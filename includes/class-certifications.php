@@ -15,11 +15,32 @@ if (!class_exists('certifications')) {
             //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
+            // Creates woocommerce product category
             wp_insert_term( 'Certification', 'product_cat', array(
                 'description' => 'Description for category', // optional
                 'parent' => 0, // optional
                 'slug' => 'certification-category' // optional
             ) );
+        }
+
+        function create_new_product( $_name='Certification' ) {
+
+            // Creates woocommerce product 
+            $product = array(
+                'post_title'    => $_name,
+                'post_content'  => '',
+                'post_status'   => 'publish',
+                //'post_author'   => $current_user->ID,
+                'post_type'     =>'product'
+            );
+
+            // Insert the post into the database
+            $product_ID = wp_insert_post($product);
+
+            // Gets term object from Tree in the database. 
+            $term = get_term_by('name', 'Certification', 'product_cat');
+
+            wp_set_object_terms($product_ID, $term->term_id, 'product_cat');
 
         }
 
@@ -279,10 +300,14 @@ if (!class_exists('certifications')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Certifications'
+                'product_cat'    => 'Certification'
             );
         
             $loop = new WP_Query( $args );
+            if (empty($loop)){
+                create_new_product();
+                $loop = new WP_Query( $args );
+            }
         
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
@@ -345,100 +370,7 @@ if (!class_exists('certifications')) {
             }
             return $output;
         }
-/*
-        function select_learnings( $course_id=null, $default_id=null ) {
 
-            if ($course_id==null){
-                $output = '<option value="no_select">-- course_id is required --</option>';
-                return $output;    
-            }
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id={$course_id}", OBJECT );
-            $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($results as $index => $result) {
-                if ( $results[$index]->learning_id == $default_id ) {
-                    $output .= '<option value="'.$results[$index]->learning_id.'" selected>';
-                } else {
-                    $output .= '<option value="'.$results[$index]->learning_id.'">';
-                }
-                $output .= $results[$index]->learning_title;
-                $output .= '</option>';        
-            }
-            $output .= '<option value="delete_select">-- Remove this --</option>';
-            return $output;    
-        }
-
-        function select_teachings( $default_id=null ) {
-
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings", OBJECT );
-            $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($results as $index => $result) {
-                if ( $results[$index]->learning_id == $default_id ) {
-                    $output .= '<option value="'.$results[$index]->learning_id.'" selected>';
-                } else {
-                    $output .= '<option value="'.$results[$index]->learning_id.'">';
-                }
-                $product = wc_get_product( $results[$index]->course_id );
-                $output .= $results[$index]->learning_title . '('. $product->get_name() . ')';
-                $output .= '</option>';        
-            }
-            $output .= '<option value="delete_select">-- Remove this --</option>';
-            return $output;    
-        }
-
-        function select_lecturers( $learning_id=null, $default_id=null ) {
-
-            if ($learning_id==null){
-                $output = '<option value="no_select">-- learning id is required --</option>';
-                return $output;    
-            }
-            global $wpdb;
-            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id}", OBJECT );
-            $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($t_results as $t_index => $t_result) {
-                $t_learning_id = $t_results[$t_index]->learning_id;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if ( $results[$index]->student_id == $default_id ) {
-                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
-                    } else {
-                        $output .= '<option value="'.$results[$index]->student_id.'">';
-                    }
-                    $output .= get_userdata($results[$index]->student_id)->display_name;
-                    $output .= '</option>';        
-                }
-                $output .= '<option value="delete_select">-- Remove this --</option>';
-            }
-            return $output;    
-        }
-
-        function select_witnesses( $learning_id=null, $default_id=null ) {
-
-            if ($learning_id==null){
-                $output = '<option value="no_select">-- learning id is required --</option>';
-                return $output;    
-            }
-            global $wpdb;
-            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id} AND is_witness", OBJECT );
-            $output = '<option value="no_select">-- Select an option --</option>';
-            foreach ($t_results as $t_index => $t_result) {
-                $t_learning_id = $t_results[$t_index]->learning_id;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if ( $results[$index]->student_id == $default_id ) {
-                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
-                    } else {
-                        $output .= '<option value="'.$results[$index]->student_id.'">';
-                    }
-                    $output .= get_userdata($results[$index]->student_id)->display_name;
-                    $output .= '</option>';        
-                }
-                $output .= '<option value="delete_select">-- Remove this --</option>';
-            }
-            return $output;    
-        }
-*/
         function create_tables() {
         
             global $wpdb;
@@ -472,18 +404,6 @@ if (!class_exists('certifications')) {
                 course_id int,
                 teaching_id int,
                 PRIMARY KEY  (u_c_l_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-
-            $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
-                l_p_s_id int NOT NULL AUTO_INCREMENT,
-                learning_id int NOT NULL,
-                sharing_title varchar(255),
-                sharing_id int,
-                sharing_profit float,
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (l_p_s_id)
             ) $charset_collate;";        
             dbDelta($sql);
 */
