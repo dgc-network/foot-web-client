@@ -306,12 +306,13 @@ if (!class_exists('certifications')) {
             $loop = new WP_Query( $args );
             //return var_dump($loop);
             //if (empty($loop)){
+/*                
             if ( $the_query->have_posts() ) {}
             else {
                 //self::create_new_product();
                 $loop = new WP_Query( $args );
             }
-        
+*/        
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
