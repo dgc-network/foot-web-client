@@ -315,12 +315,12 @@ if (!class_exists('certifications')) {
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 foreach ($results as $index => $result) {
                     
-                    $output .= '<form method="post">';
-                    $output .= '<tr><td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td></tr>';
+                    $output .= '<form method="post"><tr>';
+                    $output .= '<td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td>';
                     $output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
                     $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                     $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
-                    $output .= '</form>';
+                    $output .= '</tr></form>';
                     
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
