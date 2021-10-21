@@ -30,7 +30,7 @@ if (!class_exists('certifications')) {
                 'post_title'    => $_name,
                 'post_content'  => '',
                 'post_status'   => 'publish',
-                //'post_author'   => $current_user->ID,
+                'post_author'   => get_current_user_id(),
                 'post_type'     =>'product'
             );
 
