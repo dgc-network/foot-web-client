@@ -309,11 +309,12 @@ if (!class_exists('certifications')) {
             );
         
             $loop = new WP_Query( $args );
+/*            
             if ( !($loop->have_posts()) ) {
                 self::create_new_product();
                 $loop = new WP_Query( $args );
             }
-
+*/
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             while ( $loop->have_posts() ) : $loop->the_post();
