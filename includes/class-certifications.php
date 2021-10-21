@@ -244,8 +244,7 @@ if (!class_exists('certifications')) {
              */
 
             global $wpdb;
-            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$_id}", OBJECT );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             if( $_mode=='Update' ) {
