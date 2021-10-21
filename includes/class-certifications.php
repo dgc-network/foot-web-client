@@ -309,6 +309,7 @@ if (!class_exists('certifications')) {
             );
         
             $loop = new WP_Query( $args );
+            var_dump($loop);
             if ( !($loop->have_posts()) ) {
                 return 'No Certification Item';
             } else {
