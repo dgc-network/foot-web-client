@@ -318,6 +318,7 @@ if (!class_exists('certifications')) {
                     $output .= '<form method="get"><tr>';
                     $output .= '<td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td>';
                     $output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
+                    $output .= '<input type="hidden" value="'.$product->get_id().'" name="_course_id">';
                     $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
                     $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
                     $output .= '</tr></form>';
