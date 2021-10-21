@@ -143,8 +143,13 @@ if (!class_exists('certifications')) {
 
             return $output;
         }
-/*
-        function edit_mode( $_id=null, $_mode ) {
+
+        function edit_mode( $_course_id=null, $_id=null, $_mode ) {
+
+            if ($_course_id==null){
+                return 'course_id is required';
+            }
+            $product = wc_get_product( $_course_id );
 
             if ($_id==null){
                 $_mode='Create';
@@ -233,13 +238,14 @@ if (!class_exists('certifications')) {
                 $deleted = $wpdb->delete( $table, $where );
                 ?><script>window.location='/courses'</script><?php
             }
-*/
+
             /** 
              * edit_mode
              */
-/*            
+
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$_id}", OBJECT );
+            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             $CreatedDate = wp_date( get_option( 'date_format' ), $row->created_date );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
@@ -258,9 +264,8 @@ if (!class_exists('certifications')) {
                 $output .= '<tr><td>'.'Sale Price:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value="'.$row->list_price.'" disabled></td></tr>';
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
-                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value=""></td></tr>';
-                $output .= '<tr><td>'.'List Price:'.'</td><td><input style="width: 100%" type="text" name="_list_price" value=""></td></tr>';
-                $output .= '<tr><td>'.'Sale Price:'.'</td><td><input style="width: 100%" type="text" name="_sale_price" value=""></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value=""></td></tr>';
+                $output .= '<tr><td>'.'Course:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$product->get_name().'" disable></td></tr>';
             }
             $output .= '</tbody></table></figure>';
     
@@ -284,17 +289,17 @@ if (!class_exists('certifications')) {
         
             return $output;
         }
-*/
+
         function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
                 return self::view_mode($_GET['_id']);
             }
-/*            
+
             if( isset($_GET['edit_mode']) ) {
-                return self::edit_mode($_GET['_id'], $_GET['edit_mode']);
+                return self::edit_mode($_GET['_course_id'], $_GET['_id'], $_GET['edit_mode']);
             }            
-*/
+
             /**
              * List Mode
              */
@@ -304,8 +309,9 @@ if (!class_exists('certifications')) {
             );
         
             $loop = new WP_Query( $args );
-            if ( $loop->have_posts() ) {}
-            else {
+            if ( !$loop->have_posts() ) {
+
+            //} else {
                 //wp_reset_postdata();
                 self::create_new_product();
                 $loop = new WP_Query( $args );
@@ -313,19 +319,19 @@ if (!class_exists('certifications')) {
 
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<ul>';
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
+                $output .= '<figure class="wp-block-table"><table><tbody>';
                 foreach ($results as $index => $result) {
                     
                     $output .= '<tr><td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td></tr>';
+                    $output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
-                        //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$c_results[$c_index]->learning_id.'">'.$c_results[$c_index]->learning_title.'</a></td></tr>';
                         $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
                         $first_line=true;
+                        $output .= '<ul>';
                         foreach ($u_results as $u_index => $result) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
@@ -334,12 +340,25 @@ if (!class_exists('certifications')) {
                                 $student_id=$u_results[$u_index]->student_id;
                             }
                         }
+                        $output .= '</ul>';
                     }
-                }
-            endwhile;
-            $output .= '</ul>';
-            $output .= '</tbody></table></figure>';
 
+                }
+                $output .= '</tbody></table></figure>';
+
+                $output .= '<form method="get">';
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+                $output .= '<input type="hidden" value="'.$product->get_id().'" name="_course_id">';
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '</form>';
+
+            endwhile;
             wp_reset_query();
             return $output;
         }
