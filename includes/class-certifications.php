@@ -245,7 +245,11 @@ if (!class_exists('certifications')) {
             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$_id}", OBJECT );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_mode=='Update' ) {
+            if( $_mode=='true' ) {
+                $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_learning_id" value="'.$row->learning_id.'"></td></tr>';
+                $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value="'.$row->learning_title.'"></td></tr>';
+                $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
+            } else if( $_mode=='Update' ) {
                 $output .= '<tr><td>'.'ID:'.'</td><td style="width: 100%"><input style="width: 100%" type="text" name="_learning_id" value="'.$row->learning_id.'"></td></tr>';
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value="'.$row->learning_title.'"></td></tr>';
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
@@ -259,8 +263,18 @@ if (!class_exists('certifications')) {
             }
             $output .= '</tbody></table></figure>';
     
+            //$output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
+
+            if( $_mode=='true' ) {
+                $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            } else {
+                $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            }
+/*
             if( $_mode=='Update' ) {
                 $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
             } else if( $_mode=='Delete' ) {
@@ -268,15 +282,17 @@ if (!class_exists('certifications')) {
             } else if( $_mode=='Create' ){
                 $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
             }
+*/
             $output .= '</div>';
             $output .= '</form>';
+/*            
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-        
+*/        
             return $output;
         }
 
@@ -312,13 +328,14 @@ if (!class_exists('certifications')) {
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 foreach ($results as $index => $result) {
                     
-                    $output .= '<form method="get"><tr>';
-                    $output .= '<td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td>';
+                    //$output .= '<form method="get"><tr>';
+                    //$output .= '<td>'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</td>';
+                    $output .= '<td><a href="?edit_mode=true&_course_id='.$product->get_id().'&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</a></td>';
                     $output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
                     $output .= '<input type="hidden" value="'.$product->get_id().'" name="_course_id">';
-                    $output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                    $output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
-                    $output .= '</tr></form>';
+                    //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
+                    //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                    //$output .= '</tr></form>';
                     
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
                     foreach ($c_results as $c_index => $result) {
