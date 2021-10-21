@@ -305,16 +305,19 @@ if (!class_exists('certifications')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Certification'
+                //'product_cat'    => 'Certification',
+                'product_cat'    => 'Courses'
             );
         
             $loop = new WP_Query( $args );
+/*            
             var_dump($loop->the_post());
             if ( !($loop->have_posts()) ) {
                 return 'No Certification Item';
             } else {
                 return 'Have Certification Items';
             }
+*/            
 /*            
             if ( !($loop->have_posts()) ) {
                 self::create_new_product();
