@@ -216,27 +216,25 @@ if (!class_exists('certifications')) {
                 } else {
 
                     global $wpdb;
-                    $table = $wpdb->prefix.'courses';
+                    $table = $wpdb->prefix.'course_learnings';
                     $data = array(
-                        'course_title' => $_POST['_course_title'],
-                        'list_price' => $_POST['_list_price'],
-                        'sale_price' => $_POST['_sale_price'],
-                        'txid' => $op_result['txid'], 
+                        'learning_title' => $_POST['_learning_title'],
+                        //'txid' => $op_result['txid'], 
                     );
-                    $where = array('course_id' => $_POST['_course_id']);
+                    $where = array('learning_id' => $_POST['_learning_id']);
                     $wpdb->update( $table, $data, $where );
                 }
 
-                ?><script>window.location='/courses'</script><?php
+                ?><script>window.location='/certification'</script><?php
             }
         
             if( isset($_POST['delete_action']) ) {
         
                 global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $where = array('course_id' => $_POST['_course_id']);
+                $table = $wpdb->prefix.'course_learnings';
+                $where = array('learning_id' => $_POST['_learning_id']);
                 $deleted = $wpdb->delete( $table, $where );
-                ?><script>window.location='/courses'</script><?php
+                ?><script>window.location='/certification'</script><?php
             }
 
             /** 
