@@ -158,16 +158,14 @@ if (!class_exists('certifications')) {
             if( isset($_POST['create_action']) ) {
         
                 global $wpdb;
-                $table = $wpdb->prefix.'courses';
+                $table = $wpdb->prefix.'course_learnings';
                 $data = array(
-                    'created_date' => current_time('timestamp'), 
-                    'course_title' => $_POST['_course_title'],
-                    'list_price' => $_POST['_list_price'],
-                    'sale_price' => $_POST['_sale_price'],
+                    'learning_title' => $_POST['_learning_title'],
+                    'course_id' => $_course_id,
                 );
-                $format = array('%d', '%s', '%f', '%f');
+                $format = array('%s', '%d');
                 $insert_id = $wpdb->insert($table, $data, $format);
-
+/*
                 $CreateCourseAction = new CreateCourseAction();                
                 //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
                 $CreateCourseAction->setCourseId(intval($insert_id));
@@ -193,8 +191,10 @@ if (!class_exists('certifications')) {
                     $where = array('course_id' => $insert_id);
                     $wpdb->update( $table, $data, $where );
                 }
-
-                ?><script>window.location='/courses'</script><?php
+*/
+                global $post;
+                $post_slug = $post->post_name;
+                ?><script>window.location='/certification'</script><?php
             }
         
             if( isset($_POST['update_action']) ) {
@@ -265,7 +265,7 @@ if (!class_exists('certifications')) {
                 $output .= '<tr><td>'.'TxID:'.'</td><td><input style="width: 100%" type="text" name="_txid" value="'.$row->txid.'" disabled></td></tr>';
             } else if( $_mode=='Create' ){
                 $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_learning_title" value=""></td></tr>';
-                $output .= '<tr><td>'.'Course:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$product->get_name().'" disable></td></tr>';
+                $output .= '<tr><td>'.'Course:'.'</td><td><input style="width: 100%" type="text" name="_course_title" value="'.$product->get_name().'" disabled></td></tr>';
             }
             $output .= '</tbody></table></figure>';
     
@@ -305,25 +305,15 @@ if (!class_exists('certifications')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                //'product_cat'    => 'Certification',
-                'product_cat'    => 'Courses'
+                'product_cat'    => 'Certification',
             );
         
             $loop = new WP_Query( $args );
-/*            
-            var_dump($loop->the_post());
-            if ( !($loop->have_posts()) ) {
-                return 'No Certification Item';
-            } else {
-                return 'Have Certification Items';
-            }
-*/            
-/*            
             if ( !($loop->have_posts()) ) {
                 self::create_new_product();
                 $loop = new WP_Query( $args );
             }
-*/
+
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             while ( $loop->have_posts() ) : $loop->the_post();
