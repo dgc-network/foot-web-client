@@ -19,7 +19,7 @@ if (!class_exists('certifications')) {
             wp_insert_term( 'Certification', 'product_cat', array(
                 'description' => 'Description for category', // optional
                 'parent' => 0, // optional
-                'slug' => 'certification-category' // optional
+                'slug' => 'certification' // optional
             ) );
         }
 

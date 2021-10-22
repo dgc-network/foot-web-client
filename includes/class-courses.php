@@ -18,7 +18,7 @@ if (!class_exists('courses')) {
             wp_insert_term( 'Courses', 'product_cat', array(
                 'description' => 'Description for category', // optional
                 'parent' => 0, // optional
-                'slug' => 'courses-category' // optional
+                'slug' => 'courses' // optional
             ) );
             
         }
@@ -482,14 +482,13 @@ if (!class_exists('courses')) {
             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
-                //if ($_GET['view_mode']=='course_learnings'){return self::course_learnings($_GET['_id']);}
                 return self::view_mode($_GET['_id']);
             }
-            
+/*            
             if( isset($_GET['edit_mode']) ) {
                 return self::edit_mode($_GET['_id'], $_GET['edit_mode']);
             }            
-
+*/
             /**
              * List Mode
              */
@@ -497,38 +496,35 @@ if (!class_exists('courses')) {
                 'post_type'      => 'product',
                 'product_cat'    => 'Courses'
             );
-        
-            $loop = new WP_Query( $args );
-        
+                
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Price</td><td></td><td></td></tr>';
+            $output .= '<tr><td>Title</td><td>Price</td></tr>';
+            $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
-                $output .= '<form method="get">';
+                //$output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
-                $output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Update" name="edit_mode"></td>';
-                //$output .= '<td><input class="wp-block-button__link" type="submit" value="Delete" name="edit_mode"></td>';
+                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                 $output .= '</tr>';
-                $output .= '</form>';
+                //$output .= '</form>';
             endwhile;
+            wp_reset_query();
             $output .= '</tbody></table></figure>';
-/*        
+
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
+            $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-*/        
-            wp_reset_query();
             return $output;
         }
         

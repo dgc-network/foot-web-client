@@ -18,7 +18,7 @@ if (!class_exists('calendars')) {
             wp_insert_term( 'Reservation', 'product_cat', array(
                 'description' => 'Description for category', // optional
                 'parent' => 0, // optional
-                'slug' => 'reservation-category' // optional
+                'slug' => 'reservation' // optional
             ) );
         }
 
