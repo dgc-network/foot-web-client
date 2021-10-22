@@ -192,10 +192,9 @@ if (!class_exists('certifications')) {
                     $wpdb->update( $table, $data, $where );
                 }
 */
-                return self::list_mode();
-/*                
+                //return self::list_mode();
+
                 ?><script>window.location='/certification'</script><?php
-*/                
             }
         
             if( isset($_POST['update_action']) ) {
@@ -225,10 +224,10 @@ if (!class_exists('certifications')) {
                     $where = array('learning_id' => $_POST['_learning_id']);
                     $wpdb->update( $table, $data, $where );
                 }
-                return self::list_mode();
-/*
+                //return self::list_mode();
+
                 ?><script>window.location='/certification'</script><?php
-*/                
+                
             }
         
             if( isset($_POST['delete_action']) ) {
