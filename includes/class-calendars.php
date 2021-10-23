@@ -481,13 +481,13 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
             });
         </script>';
 
-        $cart = WC()->cart;
+        //$cart = WC()->cart;
         $cart = WC()->cart->get_cart();
         $cart_item = $cart[$cart_item_key];
         $product_id = $cart[$cart_item_key]['product_id'];
         $terms = get_the_terms( $productId, 'product_cat' );
         foreach ($terms as $term) {
-            $product_cat = $term->name;
+            return $product_cat = $term->name;
             if ($term->name=='Reservation'){
                 $output = $product_name . "</a><dl class='variation'>";
                 $learning_id=1;
