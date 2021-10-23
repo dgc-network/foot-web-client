@@ -485,17 +485,19 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
         $cart = WC()->cart->get_cart();
         $cart_item = $cart[$cart_item_key];
         $product_id = $cart[$cart_item_key]['product_id'];
-        return var_dump($product_id);
-        return var_dump($cart);
-        return var_dump($cart_item_key);
-
-        $output = $product_name . "</a><dl class='variation'>";
-        $learning_id=1;
-        $output .= '<select name="_event_host">'.certifications::select_options($learning_id).'</select>';
-        $output .= '<input name="_event_start_date" id="datepicker">';
-        $output .= '<select name="_event_start_time">'.calendars::select_time().'</select>';
-        $output .= "</dl>"; 
-        return $output;
+        $terms = get_the_terms( $productId, 'product_cat' );
+        foreach ($terms as $term) {
+            $product_cat = $term->name;
+            if ($term->name=='Reservation'){
+                $output = $product_name . "</a><dl class='variation'>";
+                $learning_id=1;
+                $output .= '<dd><select name="_event_host">'.certifications::select_options($learning_id).'</select></dd>';
+                $output .= '<dd><input name="_event_start_date" id="datepicker"></dd>';
+                $output .= '<dd><select name="_event_start_time">'.calendars::select_time().'</select></dd>';
+                $output .= "</dl>"; 
+                return $output;
+            }
+        }
     }
 }
 
