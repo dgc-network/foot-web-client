@@ -483,9 +483,12 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
 
         $cart = WC()->cart;
         $cart = WC()->cart->get_cart();
+        $cart_item = $cart[$cart_item_key];
+        $product_id = $cart[$cart_item_key]['product_id'];
+        return var_dump($product_id);
         return var_dump($cart);
         return var_dump($cart_item_key);
-        
+
         $output = $product_name . "</a><dl class='variation'>";
         $learning_id=1;
         $output .= '<select name="_event_host">'.certifications::select_options($learning_id).'</select>';
