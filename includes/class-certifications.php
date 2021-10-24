@@ -308,18 +308,15 @@ if (!class_exists('certifications')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 foreach ($results as $index => $result) {
-                    return $output;
-                    
                     $output .= '<td><a href="?edit_mode=true&_course_id='.$product->get_id().'&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</a></td>';
-                    //$output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
-                    //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_course_id">';
-                    
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
-                    foreach ($c_results as $c_index => $result) {
+                    foreach ($c_results as $c_index => $c_result) {
+                        return $output;
+                    
                         $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
                         $first_line=true;
                         $output .= '<ul>';
-                        foreach ($u_results as $u_index => $result) {
+                        foreach ($u_results as $u_index => $u_result) {
                             if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
                             if ($first_line) {
 
