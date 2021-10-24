@@ -25,19 +25,91 @@ if (!class_exists('calendars')) {
         function edit_mode( $_id=null, $_mode ) {
 
             if ($_id==null){
-                $_mode='Update';
+                return 'event_id is required';
             }
-
+/*
             if( isset($_POST['create_action']) ) {
         
+                global $wpdb;
+                $table = $wpdb->prefix.'courses';
+                $data = array(
+                    'created_date' => current_time('timestamp'), 
+                    'course_title' => $_POST['_course_title'],
+                    'list_price' => $_POST['_list_price'],
+                    'sale_price' => $_POST['_sale_price'],
+                );
+                $format = array('%d', '%s', '%f', '%f');
+                $insert_id = $wpdb->insert($table, $data, $format);
+
+                $CreateCourseAction = new CreateCourseAction();                
+                //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
+                $CreateCourseAction->setCourseId(intval($insert_id));
+                $CreateCourseAction->setCourseTitle($_POST['_course_title']);
+                $CreateCourseAction->setCreatedDate(intval(current_time('timestamp')));
+                //$CreateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                //$CreateCourseAction->setSalePrice(floadval($_POST['_sale_price']));
+                $CreateCourseAction->setPublicKey($_POST['_public_key']);
+                $send_data = $CreateCourseAction->serializeToString();
+
+                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+            
+                if (isset($op_result['error'])) {
+
+                    $result_output = 'Error: '.$op_result['error']."\n";
+                    return $result_output;
+                } else {
+
+                    $table = $wpdb->prefix.'courses';
+                    $data = array(
+                        'txid' => $op_result['txid'], 
+                    );
+                    $where = array('course_id' => $insert_id);
+                    $wpdb->update( $table, $data, $where );
+                }
+
+                ?><script>window.location='/courses'</script><?php
             }
-        
+*/        
             if( isset($_POST['update_action']) ) {
-        
+/*        
+                $UpdateCourseAction = new UpdateCourseAction();                
+                $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
+                $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
+                $UpdateCourseAction->setCreatedDate(intval(strtotime($_POST['_created_date'])));
+                //$UpdateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                //$UpdateCourseAction->setSalePrice(floatval($_POST['_sale_price']));
+                $UpdateCourseAction->setPublicKey($_POST['_public_key']);
+                $send_data = $UpdateCourseAction->serializeToString();
+
+                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+*/            
+                if (isset($op_result['error'])) {
+                    $result_output = 'Error: '.$op_result['error']."\n";
+                    return $result_output;
+                } else {
+
+                    global $wpdb;
+                    $table = $wpdb->prefix.'calendars';
+                    $data = array(
+                        'event_title' => $_POST['_event_title'],
+                        'event_begin' => $_POST['_event_begin'],
+                        'event_end' => $_POST['_event_end'],
+                        //'txid' => $op_result['txid'], 
+                    );
+                    $where = array('event_id' => $_POST['_event_id']);
+                    $wpdb->update( $table, $data, $where );
+                }
+
+                ?><script>window.location='/calendars'</script><?php
             }
         
             if( isset($_POST['delete_action']) ) {
-
+        
+                global $wpdb;
+                $table = $wpdb->prefix.'calendars';
+                $where = array('event_id' => $_POST['_event_id']);
+                $deleted = $wpdb->delete( $table, $where );
+                ?><script>window.location='/calendars'</script><?php
             }
 
             /** 
@@ -143,7 +215,26 @@ if (!class_exists('calendars')) {
             return $output;
         }
         
-        function select_time() {
+        function select_available_time($host=0, $date=0) {
+            if ($host==0) return '$host is required';
+            if ($date==0) return '$date is required';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}calendars WHERE event_host = {$host}", OBJECT );
+            foreach ( $results as $index=>$result ) {
+                $output .= $result->event_start . ' - ' . $result->event_end;
+            }
+            return $output;
+
+            date(get_option('date_format'));
+            $output  = '<option value="no_select">-- Select a time --</option>';
+            $output .= '<option value="08000900">08:00-09:00</option>';
+            $output .= '<option value="09001000">09:00-10:00</option>';
+            $output .= '<option value="10001100">10:00-11:00</option>';
+            $output .= '<option value="11001200">11:00-12:00</option>';
+            return $output;
+        }
+        
+        function select_time($date) {
+            date(get_option('date_format'));
             $output  = '<option value="no_select">-- Select a time --</option>';
             $output .= '<option value="08000900">08:00-09:00</option>';
             $output .= '<option value="09001000">09:00-10:00</option>';
