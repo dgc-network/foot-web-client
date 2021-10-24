@@ -304,6 +304,7 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             while ( $loop->have_posts() ) : $loop->the_post();
+            return $output;
                 global $product;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
                 $output .= '<figure class="wp-block-table"><table><tbody>';
