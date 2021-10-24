@@ -304,11 +304,11 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $output  = '<h2>認證項目列表</h2>';
             while ( $loop->have_posts() ) : $loop->the_post();
-            return $output;
                 global $product;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$product->get_id()}", OBJECT );
                 $output .= '<figure class="wp-block-table"><table><tbody>';
                 foreach ($results as $index => $result) {
+                    return $output;
                     
                     $output .= '<td><a href="?edit_mode=true&_course_id='.$product->get_id().'&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</a></td>';
                     //$output .= '<input type="hidden" value="'.$results[$index]->learning_id.'" name="_id">';
