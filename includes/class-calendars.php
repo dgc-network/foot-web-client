@@ -374,7 +374,8 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
                 $output = $product_name . "</a><dl class='variation'>";
                 $learning_id=1;
                 $output .= '<dd><select name="_event_host">'.certifications::select_options($learning_id).'</select></dd>';
-                $output .= '<dd><input name="_event_start_date" id="datepicker"></dd>';
+                //$output .= '<dd><input name="_event_start_date" id="datepicker"></dd>';
+                $output .= '<dd><input name="_event_start_date" type="date"></dd>';
                 $output .= '<dd><select name="_event_start_time">'.calendars::select_time().'</select></dd>';
                 $output .= "</dl>"; 
                 return $output;
