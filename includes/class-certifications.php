@@ -310,7 +310,7 @@ if (!class_exists('certifications')) {
                 foreach ($results as $index => $result) {
                     $output .= '<tr><td><a href="?edit_mode=true&_course_id='.$product->get_id().'&_id='.$results[$index]->learning_id.'">'.$results[$index]->learning_title.'('.$results[$index]->learning_id.')</a></td></tr>';
                     $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$results[$index]->learning_id}", OBJECT );
-                    return $output;
+                    //return $output;
 /*                    
                     foreach ($c_results as $c_index => $c_result) {
                         //return $output;
