@@ -102,7 +102,7 @@ if (!class_exists('orders')) {
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
             }
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Lecturers</td><td>Witnesses</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Mentors</td><td>Witnesses</td></tr>';
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
                 //$output .= '<td>'.'<select name="_learning_id_'.$index.'">'.courses::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
@@ -328,7 +328,7 @@ if (!class_exists('orders')) {
 
             $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Item</td><td>Date</td><td>Status</td><td></td></tr>';
+            $output .= '<tr><td>Courses</td><td>Date</td><td>Status</td></tr>';
             $total = 0;
             foreach ( $customer_orders as $order ) {
                 $total += $order->get_total();
