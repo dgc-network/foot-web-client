@@ -81,7 +81,7 @@ if (!class_exists('courses')) {
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
-            $output .= '<tr><td>'.'Learning:'.'</td><td>'.$row->learning_title.'</td></tr>';
+            $output .= '<tr><td>'.'Learning:'.'</td><td><a href="'.$row->learning_link.'"'.$row->learning_title.'</a></td></tr>';
             $output .= '</tbody></table></figure>';
             //return $output;
 
@@ -181,7 +181,6 @@ if (!class_exists('courses')) {
             $output  = '<h2>課程vs學習項目設定</h2>';
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            //$output .= '<tr><td>'.'Title:'.'</td><td><a href="?view_mode=course_learnings&_id='.$_id.'">'.$product->get_name().'</a></td></tr>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
