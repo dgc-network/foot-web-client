@@ -166,7 +166,7 @@ if (!class_exists('calendars')) {
         function list_mode() {
 
             if( isset($_GET['view_mode']) ) {
-                if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
+                //if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
 
@@ -186,7 +186,7 @@ if (!class_exists('calendars')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}calendars WHERE event_host = {$user_id}", OBJECT );
             $output  = '<h2>My Calendars</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Begin</td><td>End</td><td></td></tr>';
+            $output .= '<tr><td>Events</td><td>Begin</td><td>End</td></tr>';
             foreach ( $results as $index=>$result ) {
                 //$output .= '<form method="post">';
                 $output .= '<tr>';
