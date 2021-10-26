@@ -94,13 +94,13 @@ if (!class_exists('courses')) {
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_sharing_title_'.$index.'" value="'.$results[$index]->sharing_title.'"></td>';
-                $output .= '<td>'.'<select name="_sharing_id_'.$index.'">'.users::select_options($results[$index]->sharing_id).'</select></td>';
+                $output .= '<td>'.'<select name="_sharing_id_'.$index.'">'.self::select_users($results[$index]->sharing_id).'</select></td>';
                 $output .= '<td><input size="5" type="text" name="_sharing_profit_'.$index.'" value="'.$results[$index]->sharing_profit.'"></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_sharing_title"></td>';
-            $output .= '<td>'.'<select name="_sharing_id">'.users::select_options().'</select>'.'</td>';
+            $output .= '<td>'.'<select name="_sharing_id">'.self::select_users().'</select>'.'</td>';
             $output .= '<td><input size="5" type="text" name="_sharing_profit"></td>';
             $output .= '</tr></tbody></table></figure>';
             
@@ -493,6 +493,23 @@ if (!class_exists('courses')) {
                 }
                 $product = wc_get_product( $results[$index]->course_id );
                 $output .= $results[$index]->learning_title . '('. $product->get_name() . ')';
+                $output .= '</option>';        
+            }
+            $output .= '<option value="delete_select">-- Remove this --</option>';
+            return $output;    
+        }
+
+        function select_users( $default_id=null ) {
+
+            $results = get_users();
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($results as $index => $result) {
+                if ( $results[$index]->ID == $default_id ) {
+                    $output .= '<option value="'.$results[$index]->ID.'" selected>';
+                } else {
+                    $output .= '<option value="'.$results[$index]->ID.'">';
+                }
+                $output .= $results[$index]->display_name;
                 $output .= '</option>';        
             }
             $output .= '<option value="delete_select">-- Remove this --</option>';
