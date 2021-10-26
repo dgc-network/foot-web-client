@@ -81,7 +81,7 @@ if (!class_exists('courses')) {
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
-            $output .= '<tr><td>'.'Learning:'.'</td><td><a href="'.$row->learning_link.'"'.$row->learning_title.'</a></td></tr>';
+            $output .= '<tr><td>'.'Learning:'.'</td><td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td></tr>';
             $output .= '</tbody></table></figure>';
             //return $output;
 
