@@ -83,7 +83,7 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Learning:'.'</td><td>'.$row->learning_title.'</td></tr>';
             $output .= '</tbody></table></figure>';
-            return $output;
+            //return $output;
 
             /** 
              * profit sharing relationship with learning
