@@ -12,8 +12,6 @@ if (!class_exists('badges')) {
         public function __construct() {
             add_shortcode('badge_list', __CLASS__ . '::list_mode');
             add_shortcode('badge-list', __CLASS__ . '::list_mode');
-            //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
-            //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
             wp_insert_term( 'Badges', 'product_cat', array(
                 'description' => 'Description for category', // optional
@@ -70,15 +68,11 @@ if (!class_exists('badges')) {
             /** 
              * user_badges header
              */
-            //$current_user_id = get_current_user_id();
-            //$product = wc_get_product( $_id );
-
             $output  = '<h2>個人認證項目</h2>';
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_id)->display_name.'</td></tr>';
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
-            //$output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '</tbody></table></figure>';
             //return $output;
 
@@ -87,34 +81,14 @@ if (!class_exists('badges')) {
              */
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_badges WHERE student_id = {$_id}", OBJECT );
-/*            
-            if (empty($results)) {
-                $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
-                foreach ($c_results as $index => $result) {
-                    $table = $wpdb->prefix.'user_course_learnings';
-                    $data = array(
-                        'student_id' => $current_user_id,
-                        'learning_id' => $c_results[$index]->learning_id,
-                        'course_id' => $_id,
-                    );
-                    $format = array('%d', '%d', '%d');
-                    $wpdb->insert($table, $data, $format);
-                }
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
-            }
-*/            
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'#'.'</td><td>Badges</td></tr>';
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';                
-                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
-                //$output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
                 $output .= '<td>'.'<select name="_badge_id_'.$index.'">'.self::select_options($results[$index]->badge_id).'</select></td>';
-                //$output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
                 $output .= '</tr>';
             }
             $output .= '<tr><td>'.'#'.'</td>';
-            //$output .= '<td><input size="20" type="text" name="_sharing_title"></td>';
             $output .= '<td>'.'<select name="_badge_id">'.self::select_options().'</select>'.'</td>';
             $output .= '<input type="hidden" name="_student_id" value="'.$_id.'">';
             $output .= '</tr>';
@@ -138,118 +112,17 @@ if (!class_exists('badges')) {
             return $output;
         }
 
-        function profit_sharing( $_id=null ) {
-
-            if ($_id==null){
-                return '<div>learning ID is required</div>';
-            }
-
-            if( isset($_POST['submit_action']) ) {
-        
-                global $wpdb;
-                /** 
-                 * submit
-                 */
-                $current_user_id = get_current_user_id();
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if (( $_POST['_sharing_id_'.$index]=='select_delete' )){
-                        $table = $wpdb->prefix.'learning_profit_sharing';
-                        $where = array(
-                            'l_p_s_id' => $results[$index]->l_p_s_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'learning_profit_sharing';
-                        $data = array(
-                            'sharing_title' => $_POST['_sharing_title_'.$index],
-                            'sharing_id' => $_POST['_sharing_id_'.$index],
-                            'sharing_profit' => $_POST['_sharing_profit_'.$index],
-                        );
-                        $where = array(
-                            'l_p_s_id' => $results[$index]->l_p_s_id
-                        );
-                        $wpdb->update( $table, $data, $where );    
-                    }
-                }
-                if ( !($_POST['_sharing_title']=='') ){
-                    $table = $wpdb->prefix.'learning_profit_sharing';
-                    $data = array(
-                        'learning_id' => $_id,
-                        'sharing_id' => $_POST['_sharing_id'],
-                        'sharing_title' => $_POST['_sharing_title'],
-                        'sharing_profit' => $_POST['_sharing_profit'],
-                    );
-                    $format = array('%d', '%d', '%s', '%f');
-                    $wpdb->insert($table, $data, $format);
-                }
-            }
-
-            /** 
-             * profit_sharing header
-             */
-            global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$_id}", OBJECT );
-            $product = wc_get_product( $row->course_id );
-
-            $output  = '<h2>課程成本結構設定</h2>';
-            $output .= '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
-            $output .= '<tr><td>'.'Learning:'.'</td><td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td></tr>';
-            $output .= '</tbody></table></figure>';
-            //return $output;
-
-            /** 
-             * profit sharing relationship with learning
-             */
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>Titles</td><td>Sharing</td><td>Profit</td></tr>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
-            foreach ($results as $index => $result) {
-                $output .= '<tr><td>'.($index+1).'</td>';
-                $output .= '<td><input size="20" type="text" name="_sharing_title_'.$index.'" value="'.$results[$index]->sharing_title.'"></td>';
-                $output .= '<td>'.'<select name="_sharing_id_'.$index.'">'.self::select_users($results[$index]->sharing_id).'</select></td>';
-                $output .= '<td><input size="5" type="text" name="_sharing_profit_'.$index.'" value="'.$results[$index]->sharing_profit.'"></td>';
-                $output .= '</tr>';
-            }
-            $output .= '<tr><td>'.'#'.'</td>';
-            $output .= '<td><input size="20" type="text" name="_sharing_title"></td>';
-            $output .= '<td>'.'<select name="_sharing_id">'.self::select_users().'</select>'.'</td>';
-            $output .= '<td><input size="5" type="text" name="_sharing_profit"></td>';
-            $output .= '</tr></tbody></table></figure>';
-            
-            /** 
-             * profit sharing footer
-             */
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
-            $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            //$output .= '<button class="wp-block-button__link" onclick="location.href=`javascript:history.go(-1)`">Back</button>';
-            //$output .= '<a href="javascript:history.go(-1)">Back</a>';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-
-            return $output;
-        }
-
         function view_mode( $_id=null ) {
 
             if ($_id==null){
                 return '<div>ID is required</div>';
             }
 
+            /** 
+             * submit
+             */
             if( isset($_POST['submit_action']) ) {
         
-                /** 
-                 * submit
-                 */
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
@@ -304,7 +177,7 @@ if (!class_exists('badges')) {
             //return $output;
 
             /** 
-             * course relationship with learnings
+             * cview_mode detail
              */
             $TotalHours=0;
             global $wpdb;
@@ -381,16 +254,20 @@ if (!class_exists('badges')) {
                 global $product;
                 $output .= '<td><a href="?view_mode=badge&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
             endwhile;
-            wp_reset_query();
             $output .= '</tr>';
 
             $results = get_users();
             foreach ($results as $index => $result) {
-
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=user&_id='.$results[$index]->ID.'">'.$results[$index]->display_name.'</a></td>';
+                $output .= '<td><a href="?view_mode=user_badges&_id='.$results[$index]->ID.'">'.$results[$index]->display_name.'</a></td>';
+                while ( $loop->have_posts() ) : $loop->the_post();
+                    global $product;
+                    $image = wp_get_attachment_image_src( get_post_thumbnail_id( $loop->post->ID ), 'single-post-thumbnail' );
+                    $output .= '<td><img src="'.$image[0].'" data-id="'.$loop->post->ID.'"></td>';
+                endwhile;
                 $output .= '</tr>';
             }
+            wp_reset_query();
             $output .= '</tbody></table></figure>';
 
             $output .= '<form method="get">';
