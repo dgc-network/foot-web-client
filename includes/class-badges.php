@@ -255,7 +255,7 @@ if (!class_exists('badges')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Courses'
+                'product_cat'    => 'Badges'
             );
                 
             $output  = '<h2>教師考取相關證照紀錄</h2>';
@@ -264,16 +264,18 @@ if (!class_exists('badges')) {
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
-                //$output .= '<form method="get">';
-                //$output .= '<tr>';
-                $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                //$output .= '<td>'.$product->get_price().'</td>';
-                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                //$output .= '</tr>';
-                //$output .= '</form>';
+                $output .= '<td><a href="?view_mode=badge&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
             endwhile;
             wp_reset_query();
             $output .= '</tr>';
+
+            $results = get_users();
+            foreach ($results as $index => $result) {
+
+                $output .= '<tr>';
+                $output .= '<td><a href="?view_mode=user&_id='.$results[$index]->ID.'">'.$results[$index]->display_name.'</a></td>';
+                $output .= '</tr>';
+            }
             $output .= '</tbody></table></figure>';
 
             $output .= '<form method="get">';
