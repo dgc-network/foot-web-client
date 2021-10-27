@@ -242,8 +242,10 @@ if (!class_exists('badges')) {
              * List Mode
              */
             $args = array(
-                'post_type'      => 'product',
-                'product_cat'    => 'Badges'
+                'post_type'     => 'product',
+                'product_cat'   => 'Badges',
+                'limit'         => 50,
+                'order'         => 'ASC'
             );
                 
             $output  = '<h2>教師考取相關證照紀錄</h2>';
@@ -292,8 +294,10 @@ if (!class_exists('badges')) {
         function select_options( $default_id=null ) {
 
             $args = array(
-                'post_type'      => 'product',
-                'product_cat'    => 'Badges'
+                'post_type'     => 'product',
+                'product_cat'   => 'Badges',
+                'limit'         => 50,
+                'order'         => 'ASC'
             );       
         
             $output = '<option value="no_select">-- Select an option --</option>';
