@@ -244,7 +244,7 @@ if (!class_exists('badges')) {
             $args = array(
                 'post_type'     => 'product',
                 'product_cat'   => 'Badges',
-                'limit'         => 50,
+                'posts_per_page'=> 200,
                 'order'         => 'ASC'
             );
                 
@@ -296,7 +296,7 @@ if (!class_exists('badges')) {
             $args = array(
                 'post_type'     => 'product',
                 'product_cat'   => 'Badges',
-                'limit'         => 50,
+                'posts_per_page'=> 200,
                 'order'         => 'ASC'
             );       
         
