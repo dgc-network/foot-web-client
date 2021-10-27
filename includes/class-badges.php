@@ -262,7 +262,7 @@ if (!class_exists('badges')) {
                 $output .= '<td><a href="?view_mode=user_badges&_id='.$results[$index]->ID.'">'.$results[$index]->display_name.'</a></td>';
                 while ( $loop->have_posts() ) : $loop->the_post();
                     $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}user_badges WHERE student_id = {$results[$index]->ID} AND badge_id = {$loop->post->ID}", OBJECT );
-                    if (!(empty($row))) {
+                    if ((empty($row))) {} else {
                         $image = wp_get_attachment_image_src( get_post_thumbnail_id( $loop->post->ID ), 'single-post-thumbnail' );
                         $output .= '<td><img src="'.$image[0].'" data-id="'.$loop->post->ID.'"></td>';
                     }
