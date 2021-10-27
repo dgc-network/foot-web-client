@@ -12,8 +12,6 @@ if (!class_exists('orders')) {
         public function __construct() {
             add_shortcode('order_list', __CLASS__ . '::list_mode');
             add_shortcode('order-list', __CLASS__ . '::list_mode');
-            //add_shortcode('order_edit', __CLASS__ . '::edit_mode');
-            //add_shortcode('order_view', __CLASS__ . '::view_mode');
             self::create_tables();
         }
 
@@ -50,6 +48,7 @@ if (!class_exists('orders')) {
                         $wpdb->update( $table, $data, $where );    
                     }
                 }
+/*                
                 if ( !($_POST['_learning_id']=='no_select') ){
                     $table = $wpdb->prefix.'user_course_learnings';
                     $data = array(
@@ -62,6 +61,7 @@ if (!class_exists('orders')) {
                     $format = array('%d', '%d', '%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
+*/                
             }
 
             /** 
@@ -92,10 +92,7 @@ if (!class_exists('orders')) {
                         'student_id' => $current_user_id,
                         'learning_id' => $c_results[$index]->learning_id,
                         'course_id' => $_id,
-                        //'lecturer_id' => $_POST['_lecturer_id'],
-                        //'witness_id' => $_POST['_witness_id'],
                     );
-                    //$format = array('%d', '%d', '%d', '%d', '%d');
                     $format = array('%d', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
@@ -105,18 +102,12 @@ if (!class_exists('orders')) {
             $output .= '<tr><td>'.'#'.'</td><td>Learnings</td><td>Mentors</td><td>Witnesses</td></tr>';
             foreach ($results as $index => $result) {
                 $output .= '<tr><td>'.($index+1).'</td>';
-                //$output .= '<td>'.'<select name="_learning_id_'.$index.'">'.courses::select_learnings($_id, $results[$index]->learning_id).'</select></td>';
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
                 $output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
                 $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
                 $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
                 $output .= '</tr>';
             }
-/*            
-            $output .= '<tr><td>'.'#'.'</td>';
-            $output .= '<td>'.'<select name="_learning_id">'.courses::select_learnings($_id).'</select>'.'</td>';
-            $output .= '<td></td><td></td>';
-*/            
             $output .= '</tbody></table></figure>';
             
             /** 
@@ -200,8 +191,6 @@ if (!class_exists('orders')) {
                 if ($course_id == $results[$index]->course_id){$course_header=false;}
                 if ($course_header) {
                     $course_id = $results[$index]->course_id;
-                    //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}courses WHERE course_id = {$course_id}", OBJECT );
-                    //$output .= '<tr><td colspan="4">'.$row->course_title.'</td></td>';
                     $product = wc_get_product( $results[$index]->course_id );
                     $output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
                     $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer</td><td>Date</td><td>Witness</td><td>Date</td></tr>';
@@ -240,81 +229,20 @@ if (!class_exists('orders')) {
             return $output;
         }
 
-        function edit_mode( $_id=null, $_mode ) {
-
-            if ($_id==null){
-                $_id=get_current_order_id();
-                $_mode='Update';
-            }
-
-            if( isset($_POST['create_action']) ) {
-        
-            }
-        
-            if( isset($_POST['update_action']) ) {
-        
-            }
-        
-            if( isset($_POST['delete_action']) ) {
-
-            }
-
-            /** 
-             * edit_mode
-             */
-            $output  = '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            if( $_mode=='Update' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_orderdata($_id)->display_name.'"></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value="'.get_orderdata($_id)->order_email.'"></td></tr>';
-            } else if( $_mode=='Delete' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_orderdata($_id)->display_name.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value="'.get_orderdata($_id)->order_email.'" disabled></td></tr>';
-            } else {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value=""></td></tr>';
-            }
-            $output .= '</tbody></table></figure>';
-    
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            if( $_mode=='Update' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            } else if( $_mode=='Delete' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-            } else {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
-            }
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-        
-            return $output;
-        }
-
         function list_mode() {
 
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-
+/*
             if( isset($_POST['edit_mode']) ) {
                 return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
             }            
-
+*/
             /**
              * List Mode
              */
-/*
-            global $current_user;
-            $email = $current_user->user_email;
-            $order = $email->object;
-            return var_dump($order);
-*/
             $user_id = get_current_user_id();
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
@@ -377,7 +305,7 @@ if (!class_exists('orders')) {
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 /*
-            $sql = "CREATE TABLE `{$wpdb->prefix}order_course_learnings` (
+            $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
                 course_id int,
@@ -396,47 +324,4 @@ if (!class_exists('orders')) {
     //if ( is_admin() )
     new orders();
 }
-/*
-// Register main datepicker jQuery plugin script
-add_action( 'wp_enqueue_scripts', 'enabling_date_picker' );
-function enabling_date_picker() {
-
-    // Only on front-end and checkout page
-    if( is_admin() || ! is_checkout() ) return;
-
-    // Load the datepicker jQuery-ui plugin script
-    wp_enqueue_script( 'jquery-ui-datepicker' );
-}
-
-// Call datepicker functionality in your custom text field
-add_action('woocommerce_after_order_notes', 'my_custom_checkout_field', 10, 1);
-function my_custom_checkout_field( $checkout ) {
-
-    date_default_timezone_set('America/Los_Angeles');
-    $mydateoptions = array('' => __('Select PickupDate', 'woocommerce' ));
-
-    echo '<div id="my_custom_checkout_field">
-    <h3>'.__('Delivery Info').'</h3>';
-
-    // YOUR SCRIPT HERE BELOW 
-    echo '
-    <script>
-        jQuery(function($){
-            $("#datepicker").datepicker();
-        });
-    </script>';
-
-    woocommerce_form_field( 'order_pickup_date', array(
-        'type'          => 'text',
-        'class'         => array('my-field-class form-row-wide'),
-        'id'            => 'datepicker',
-        'required'      => true,
-        'label'         => __('Delivery Date'),
-        'placeholder'   => __('Select Date'),
-        'options'       => $mydateoptions
-        ), $checkout->get_value( 'order_pickup_date' ));
-
-    echo '</div>';
-}
-*/
 ?>

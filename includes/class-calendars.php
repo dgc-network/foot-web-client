@@ -272,7 +272,7 @@ if (!class_exists('calendars')) {
                 event_end int,
                 event_title varchar(255),
                 event_auther int,
-                event_hos int,
+                event_host int,
                 txid varchar(255),
                 is_deleted boolean,
                 PRIMARY KEY  (event_id)
