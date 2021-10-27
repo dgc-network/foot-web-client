@@ -23,6 +23,121 @@ if (!class_exists('badges')) {
             
         }
 
+        function user_badges( $_id=null ) {
+
+            if ($_id==null){
+                return '<div>ID is required</div>';
+            }
+
+            /** 
+             * submit
+             */
+            if( isset($_POST['submit_action']) ) {        
+                $current_user_id = get_current_user_id();
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_badges WHERE u_b_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_badge_id_'.$index]=='select_delete' )){
+                        $table = $wpdb->prefix.'user_badges';
+                        $where = array(
+                            'u_b_id' => $results[$index]->u_b_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'user_badges';
+                        $data = array(
+                            'badge_id' => $_POST['_badge_id_'.$index],
+                        );
+                        $where = array(
+                            'u_b_id' => $results[$index]->u_b_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+
+                if ( !($_POST['_badge_id']=='no_select') ){
+                    $table = $wpdb->prefix.'user_badges';
+                    $data = array(
+                        'badge_id' => $_POST['_badge_id'],
+                        'student_id' => $_POST['_student_id'],
+                    );
+                    $format = array('%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+
+            }
+
+            /** 
+             * user_badges header
+             */
+            //$current_user_id = get_current_user_id();
+            //$product = wc_get_product( $_id );
+
+            $output  = '<h2>個人認證項目</h2>';
+            $output .= '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_userdata($_id)->display_name.'</td></tr>';
+            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($_id)->user_email.'</td></tr>';
+            //$output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
+            $output .= '</tbody></table></figure>';
+            //return $output;
+
+            /** 
+             * user_badges relationship
+             */
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_badges WHERE student_id = {$_id}", OBJECT );
+/*            
+            if (empty($results)) {
+                $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                foreach ($c_results as $index => $result) {
+                    $table = $wpdb->prefix.'user_course_learnings';
+                    $data = array(
+                        'student_id' => $current_user_id,
+                        'learning_id' => $c_results[$index]->learning_id,
+                        'course_id' => $_id,
+                    );
+                    $format = array('%d', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
+            }
+*/            
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>Badges</td></tr>';
+            foreach ($results as $index => $result) {
+                $output .= '<tr><td>'.($index+1).'</td>';                
+                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
+                //$output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
+                $output .= '<td>'.'<select name="_badge_id_'.$index.'">'.self::select_options($results[$index]->badge_id).'</select></td>';
+                //$output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
+                $output .= '</tr>';
+            }
+            $output .= '<tr><td>'.'#'.'</td>';
+            //$output .= '<td><input size="20" type="text" name="_sharing_title"></td>';
+            $output .= '<td>'.'<select name="_badge_id">'.self::select_options().'</select>'.'</td>';
+            $output .= '<input type="hidden" name="_student_id" value="'.$_id.'">';
+            $output .= '</tr>';
+            $output .= '</tbody></table></figure>';
+            
+            /** 
+             * user_badges footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
         function profit_sharing( $_id=null ) {
 
             if ($_id==null){
@@ -127,7 +242,7 @@ if (!class_exists('badges')) {
         function view_mode( $_id=null ) {
 
             if ($_id==null){
-                return '<div>course ID is required</div>';
+                return '<div>ID is required</div>';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -242,7 +357,7 @@ if (!class_exists('badges')) {
         function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
-                if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
+                if ($_GET['view_mode']=='user_badges') return self::user_badges($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
 /*            
