@@ -248,11 +248,12 @@ if (!class_exists('courses')) {
                 
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Title</td><td>Price</td></tr>';
+            $output .= '<tr><td></td><td>Title</td><td>Price</td></tr>';
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
+                $output .= '<tr><a href="?view_mode=true&_id='.$product->get_id().'">#</a><td>';
                 $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
                 $output .= '</tr>';
