@@ -16,148 +16,140 @@ if (!class_exists('calendars')) {
             add_shortcode('calendar_view', __CLASS__ . '::view_mode');
             self::create_tables();
             wp_insert_term( 'Reservation', 'product_cat', array(
-                'description' => 'Description for category', // optional
-                'parent' => 0, // optional
-                'slug' => 'reservation' // optional
+                'description' => 'Description for category',
+                'parent' => 0,
+                'slug' => 'reservation'
             ) );
         }
 
-        function edit_mode( $_id=null, $_mode ) {
+        function edit_mode( $_mode=null, $_id=null ) {
 
+            if ($_mode==null){
+                $_mode='Create';
+            }
             if ($_id==null){
-                return 'event_id is required';
+                if (!($_mode=='Create')) return 'event_id is required';
             }
-/*
-            if( isset($_POST['create_action']) ) {
+
+            if( isset($_POST['submit_action']) ) {
+
+                if( $_POST['submit_action']=='Create' ) {
         
-                global $wpdb;
-                $table = $wpdb->prefix.'courses';
-                $data = array(
-                    'created_date' => current_time('timestamp'), 
-                    'course_title' => $_POST['_course_title'],
-                    'list_price' => $_POST['_list_price'],
-                    'sale_price' => $_POST['_sale_price'],
-                );
-                $format = array('%d', '%s', '%f', '%f');
-                $insert_id = $wpdb->insert($table, $data, $format);
-
-                $CreateCourseAction = new CreateCourseAction();                
-                //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
-                $CreateCourseAction->setCourseId(intval($insert_id));
-                $CreateCourseAction->setCourseTitle($_POST['_course_title']);
-                $CreateCourseAction->setCreatedDate(intval(current_time('timestamp')));
-                //$CreateCourseAction->setListPrice(floatval($_POST['_list_price']));
-                //$CreateCourseAction->setSalePrice(floadval($_POST['_sale_price']));
-                $CreateCourseAction->setPublicKey($_POST['_public_key']);
-                $send_data = $CreateCourseAction->serializeToString();
-
-                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-            
-                if (isset($op_result['error'])) {
-
-                    $result_output = 'Error: '.$op_result['error']."\n";
-                    return $result_output;
-                } else {
-
-                    $table = $wpdb->prefix.'courses';
-                    $data = array(
-                        'txid' => $op_result['txid'], 
-                    );
-                    $where = array('course_id' => $insert_id);
-                    $wpdb->update( $table, $data, $where );
-                }
-
-                ?><script>window.location='/courses'</script><?php
-            }
-*/        
-            if( isset($_POST['update_action']) ) {
-/*        
-                $UpdateCourseAction = new UpdateCourseAction();                
-                $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
-                $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
-                $UpdateCourseAction->setCreatedDate(intval(strtotime($_POST['_created_date'])));
-                //$UpdateCourseAction->setListPrice(floatval($_POST['_list_price']));
-                //$UpdateCourseAction->setSalePrice(floatval($_POST['_sale_price']));
-                $UpdateCourseAction->setPublicKey($_POST['_public_key']);
-                $send_data = $UpdateCourseAction->serializeToString();
-
-                $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-*/            
-                if (isset($op_result['error'])) {
-                    $result_output = 'Error: '.$op_result['error']."\n";
-                    return $result_output;
-                } else {
-
                     global $wpdb;
-                    $table = $wpdb->prefix.'calendars';
+                    $table = $wpdb->prefix.'events';
                     $data = array(
+                        //'created_date' => current_time('timestamp'), 
                         'event_title' => $_POST['_event_title'],
                         'event_begin' => $_POST['_event_begin'],
                         'event_end' => $_POST['_event_end'],
-                        //'txid' => $op_result['txid'], 
+                        'event_host' => $_POST['_event_host'],
                     );
+                    $format = array('%s', '%d', '%d', '%d');
+                    $insert_id = $wpdb->insert($table, $data, $format);
+/*    
+                    $CreateCourseAction = new CreateCourseAction();                
+                    //$CreateCourseAction->setCourseId(intval($_POST['_course_id']));
+                    $CreateCourseAction->setCourseId(intval($insert_id));
+                    $CreateCourseAction->setCourseTitle($_POST['_course_title']);
+                    $CreateCourseAction->setCreatedDate(intval(current_time('timestamp')));
+                    //$CreateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                    //$CreateCourseAction->setSalePrice(floadval($_POST['_sale_price']));
+                    $CreateCourseAction->setPublicKey($_POST['_public_key']);
+                    $send_data = $CreateCourseAction->serializeToString();
+    
+                    $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+                
+                    if (isset($op_result['error'])) {
+    
+                        $result_output = 'Error: '.$op_result['error']."\n";
+                        return $result_output;
+                    } else {
+    
+                        $table = $wpdb->prefix.'courses';
+                        $data = array(
+                            'txid' => $op_result['txid'], 
+                        );
+                        $where = array('course_id' => $insert_id);
+                        $wpdb->update( $table, $data, $where );
+                    }
+*/                    
+                }
+    
+                if( $_POST['submit_action']=='Update' ) {
+    /*        
+                    $UpdateCourseAction = new UpdateCourseAction();                
+                    $UpdateCourseAction->setCourseId(intval($_POST['_course_id']));
+                    $UpdateCourseAction->setCourseTitle($_POST['_course_title']);
+                    $UpdateCourseAction->setCreatedDate(intval(strtotime($_POST['_created_date'])));
+                    //$UpdateCourseAction->setListPrice(floatval($_POST['_list_price']));
+                    //$UpdateCourseAction->setSalePrice(floatval($_POST['_sale_price']));
+                    $UpdateCourseAction->setPublicKey($_POST['_public_key']);
+                    $send_data = $UpdateCourseAction->serializeToString();
+    
+                    $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
+    */            
+                    if (isset($op_result['error'])) {
+                        $result_output = 'Error: '.$op_result['error']."\n";
+                        return $result_output;
+                    } else {
+    
+                        global $wpdb;
+                        $table = $wpdb->prefix.'events';
+                        $data = array(
+                            'event_title' => $_POST['_event_title'],
+                            'event_begin' => $_POST['_event_begin'],
+                            'event_end' => $_POST['_event_end'],
+                            'event_host' => $_POST['_event_host'],
+                            //'txid' => $op_result['txid'], 
+                        );
+                        $where = array('event_id' => $_POST['_event_id']);
+                        $wpdb->update( $table, $data, $where );
+                    }
+                }
+            
+                if( $_POST['submit_action']=='Delete' ) {
+            
+                    global $wpdb;
+                    $table = $wpdb->prefix.'events';
                     $where = array('event_id' => $_POST['_event_id']);
-                    $wpdb->update( $table, $data, $where );
+                    $deleted = $wpdb->delete( $table, $where );
                 }
 
-                ?><script>window.location='/calendars'</script><?php
-            }
-        
-            if( isset($_POST['delete_action']) ) {
-        
-                global $wpdb;
-                $table = $wpdb->prefix.'calendars';
-                $where = array('event_id' => $_POST['_event_id']);
-                $deleted = $wpdb->delete( $table, $where );
-                ?><script>window.location='/calendars'</script><?php
+                ?><script>window.location=window.location.path</script><?php
             }
 
             /** 
              * edit_mode
              */
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}calendars WHERE event_id = {$_id}", OBJECT );
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}events WHERE event_id = {$_id}", OBJECT );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_event_title" value="'.$row->event_title.'"></td></tr>';
             $output .= '<tr><td>'.'Begin:'.'</td><td><input style="width: 100%" type="text" name="_event_begin" value="'.$row->event_begin.'"></td></tr>';
             $output .= '<tr><td>'.'End:'.'</td><td><input style="width: 100%" type="text" name="_event_end" value="'.$row->event_end.'"></td></tr>';
-/*
-            if( $_mode=='Update' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_orderdata($_id)->display_name.'"></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value="'.get_orderdata($_id)->order_email.'"></td></tr>';
-            } else if( $_mode=='Delete' ) {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value="'.get_orderdata($_id)->display_name.'" disabled></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value="'.get_orderdata($_id)->order_email.'" disabled></td></tr>';
-            } else {
-                $output .= '<tr><td>'.'Name:'.'</td><td><input style="width: 100%" type="text" name="_display_name" value=""></td></tr>';
-                $output .= '<tr><td>'.'Email:'.'</td><td><input style="width: 100%" type="text" name="_order_email" value=""></td></tr>';
-            }
-*/            
+            $output .= '<tr><td>'.'Host:'.'</td><td><input style="width: 100%" type="text" name="_event_host" value="'.$row->event_host.'"></td></tr>';
             $output .= '</tbody></table></figure>';
     
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
-/*            
-            if( $_mode=='Update' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Update" name="update_action">';
-            } else if( $_mode=='Delete' ) {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="delete_action">';
+            if( $_mode=='Create' ) {
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="submit_action">';
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+                $output .= '</div>';
+                $output .= '</div>';
             } else {
-                //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="create_action">';
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Update" name="submit_action">';
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Delete" name="submit_action">';
+                $output .= '</div>';
+                $output .= '</div>';
             }
-*/            
-            $output .= '</div>';
-/*            
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-*/            
-            $output .= '</div>';
             $output .= '</form>';
         
             return $output;
@@ -171,11 +163,7 @@ if (!class_exists('calendars')) {
             }
 
             if( isset($_GET['edit_mode']) ) {
-                if ($_GET['edit_mode']=='Create') {
-                    add_product_to_cart();
-                    ?><script>window.location='/checkout'</script><?php
-                }
-                return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
+                return self::edit_mode( $_POST['edit_mode'], $_POST['_id'] );
             }            
 
             /**
@@ -183,28 +171,23 @@ if (!class_exists('calendars')) {
              */
             global $wpdb;
             $user_id = get_current_user_id();
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}calendars WHERE event_host = {$user_id}", OBJECT );
-            $output  = '<h2>My Calendars</h2>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}events WHERE event_host = {$user_id}", OBJECT );
+            $output  = '<h2>Events</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Events</td><td>Begin</td><td>End</td></tr>';
             foreach ( $results as $index=>$result ) {
-                //$output .= '<form method="post">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?edit_mode=true&_id='.$result->event_id.'">'.$result->event_title.'</a></td>';
                 $output .= '<td>'.$result->event_begin.'</td>';
                 $output .= '<td>'.$result->event_end.'</td>';
-                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                 $output .= '</tr>';
-                //$output .= '</form>';
-
             }
             $output .= '</tbody></table></figure>';
 
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
-            //$output .= '<a class="wp-block-button__link" href="/checkout">Create</a>';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
@@ -266,7 +249,7 @@ if (!class_exists('calendars')) {
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-            $sql = "CREATE TABLE `{$wpdb->prefix}calendars` (
+            $sql = "CREATE TABLE `{$wpdb->prefix}events` (
                 event_id int NOT NULL AUTO_INCREMENT,
                 event_begin int NOT NULL,
                 event_end int,
@@ -282,7 +265,6 @@ if (!class_exists('calendars')) {
         }
         
     }
-    //if ( is_admin() )
     new calendars();
 }
 
