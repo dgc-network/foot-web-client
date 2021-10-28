@@ -35,7 +35,7 @@ if (!class_exists('badges')) {
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_badges WHERE u_b_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
-                    if (( $_POST['_badge_id_'.$index]=='select_delete' )){
+                    if (( $_POST['_badge_id_'.$index]=='delete_select' )){
                         $table = $wpdb->prefix.'user_badges';
                         $where = array(
                             'u_b_id' => $results[$index]->u_b_id

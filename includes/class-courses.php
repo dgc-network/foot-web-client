@@ -38,7 +38,7 @@ if (!class_exists('courses')) {
                 $current_user_id = get_current_user_id();
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
-                    if (( $_POST['_sharing_id_'.$index]=='select_delete' )){
+                    if (( $_POST['_sharing_id_'.$index]=='delete_select' )){
                         $table = $wpdb->prefix.'learning_profit_sharing';
                         $where = array(
                             'l_p_s_id' => $results[$index]->l_p_s_id

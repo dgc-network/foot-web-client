@@ -29,7 +29,7 @@ if (!class_exists('orders')) {
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
-                    if (( $_POST['_learning_id_'.$index]=='select_delete' ) || ( $_POST['_lecturer_witness_id_'.$index]=='select_delete' ) ){
+                    if (( $_POST['_learning_id_'.$index]=='delete_select' ) || ( $_POST['_lecturer_witness_id_'.$index]=='delete_select' ) ){
                         $table = $wpdb->prefix.'user_course_learnings';
                         $where = array(
                             'u_c_l_id' => $results[$index]->u_c_l_id
