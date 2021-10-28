@@ -1,7 +1,8 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit;
 }
+
 if (!class_exists('orders')) {
 
     class orders {
@@ -22,9 +23,6 @@ if (!class_exists('orders')) {
             }
 
             if( isset($_POST['submit_action']) ) {        
-                /** 
-                 * submit
-                 */
                 $current_user_id = get_current_user_id();
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
@@ -77,7 +75,6 @@ if (!class_exists('orders')) {
             $output .= '<tr><td>'.'Email:'.'</td><td>'.get_userdata($current_user_id)->user_email.'</td></tr>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '</tbody></table></figure>';
-            //return $output;
 
             /** 
              * user course relationship with learning
@@ -128,121 +125,13 @@ if (!class_exists('orders')) {
             return $output;
         }
 
-        function view_mode($_id=null) {
-
-            if ($_id==null){
-                $_id=get_current_order_id();
-            }
-
-            if( isset($_POST['submit_action']) ) {
-        
-                global $wpdb;
-                /** 
-                 * submit the order relationship with course learning
-                 */
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-
-                    $op_result = OP_RETURN_send(OP_RETURN_SEND_ADDRESS, OP_RETURN_SEND_AMOUNT, $send_data);
-                    //return var_dump($op_result);
-                
-                    if (isset($op_result['error'])) {
-
-                        $result_output = 'Error: '.$op_result['error']."\n";
-                        return $result_output;
-                    }
-                    else {
-                        //$result_output = 'TxID: '.$op_result['txid']."\nWait a few seconds then check on: http://coinsecrets.org/\n";
-
-                        global $wpdb;
-                        $table = $wpdb->prefix.'order_course_learnings';
-                        $data = array(
-                            'learning_date' => strtotime($_POST['_learning_date_'.$index]), 
-                            'txid' => $op_result['txid'], 
-                        );
-                        $where = array(
-                            'u_c_l_id' => $results[$index]->u_c_l_id
-                        );
-                        $wpdb->update( $table, $data, $where );
-    
-                    }
-                }
-            }
-            
-            /** 
-             * view_mode header
-             */
-            $output  = '<h2>個人學習歷程</h2>';
-            $output .= '<form method="post">';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Name:'.'</td><td>'.get_orderdata($_id)->display_name.'</td></tr>';
-            $output .= '<tr><td>'.'Email:'.'</td><td>'.get_orderdata($_id)->order_email.'</td></tr>';
-            $output .= '</tbody></table></figure>';
-            //return $output;
-
-            /** 
-             * order relationship with course learnings
-             */
-            $course_header = true;
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}order_course_learnings WHERE student_id = {$_id} ORDER BY course_id", OBJECT );
-            foreach ($results as $index => $result) {
-                if ($course_id == $results[$index]->course_id){$course_header=false;}
-                if ($course_header) {
-                    $course_id = $results[$index]->course_id;
-                    $product = wc_get_product( $results[$index]->course_id );
-                    $output .= '<tr><td colspan="4">'.$product->get_name().'</td></td>';
-                    $output .= '<tr><td>#</td><td>Learnings</td><td>Lecturer</td><td>Date</td><td>Witness</td><td>Date</td></tr>';
-                }
-
-                $lectureDate = wp_date( get_option( 'date_format' ), $results[$index]->lecture_date );
-                $certifidDate = wp_date( get_option( 'date_format' ), $results[$index]->certifid_date );
-                $output .= '<tr><td>'.$index.'</td>';
-                $learning_id = $results[$index]->learning_id;
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$learning_id}", OBJECT );
-                $output .= '<td>'.$row->learning_title.'</td>';
-                $output .= '<td>'.get_orderdata($results[$index]->lecturer_id)->display_name.'</td>';
-                $output .= '<td><input type="text" name="_lecture_date_'.$index.'" value="'.$lectureDate.'">'.'</td>';
-                $output .= '<td>'.get_orderdata($results[$index]->witness_id)->display_name.'</td>';
-                $output .= '<td><input type="text" name="_certifid_date_'.$index.'" value="'.$certifidDate.'">'.'</td>';
-                $output .= '</tr>';
-
-            }
-            $output .= '</tbody></table></figure>';
-
-            /** 
-             * view_mode footer
-             */
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
-            $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
-
-            return $output;
-        }
-
         function list_mode() {
 
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
-                return self::view_mode($_GET['_id']);
+                //return self::view_mode($_GET['_id']);
             }
-/*
-            if( isset($_POST['edit_mode']) ) {
-                return self::edit_mode($_POST['_id'], $_POST['edit_mode']);
-            }            
-*/
-            /**
-             * List Mode
-             */
+
             $user_id = get_current_user_id();
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
@@ -257,24 +146,20 @@ if (!class_exists('orders')) {
             $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Courses</td><td>Date</td><td>Status</td></tr>';
-            $total = 0;
+            //$total = 0;
             foreach ( $customer_orders as $order ) {
-                $total += $order->get_total();
+                //$total += $order->get_total();
 
-                // your code is here
                 $items = $order->get_items();
 
                 foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
                     if (strpos($product->get_categories(),'Courses')!==false) {
-                        //$output .= '<form method="post">';
                         $output .= '<tr>';
                         $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                         $output .= '<td>'.$order->get_date_created().'</td>';
                         $output .= '<td>'.$order->get_status().'</td>';
-                        //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                         $output .= '</tr>';
-                        //$output .= '</form>';
                     }
                 }
             }
@@ -321,7 +206,6 @@ if (!class_exists('orders')) {
         }
         
     }
-    //if ( is_admin() )
     new orders();
 }
 ?>

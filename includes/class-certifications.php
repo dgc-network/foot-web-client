@@ -1,6 +1,6 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit;
 }
 if (!class_exists('certifications')) {
 
@@ -12,14 +12,12 @@ if (!class_exists('certifications')) {
         public function __construct() {
             add_shortcode('certification_list', __CLASS__ . '::list_mode');
             add_shortcode('certification-list', __CLASS__ . '::list_mode');
-            //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
-            //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
-            // Creates woocommerce product category
+
             wp_insert_term( 'Certification', 'product_cat', array(
-                'description' => 'Description for category', // optional
-                'parent' => 0, // optional
-                'slug' => 'certification' // optional
+                'description' => 'Description for category',
+                'parent' => 0,
+                'slug' => 'certification'
             ) );
         }
 
@@ -293,6 +291,7 @@ if (!class_exists('certifications')) {
             $args = array(
                 'post_type'      => 'product',
                 'product_cat'    => 'Certification',
+                'posts_per_page' => 100,
             );
         
             $loop = new WP_Query( $args );
@@ -416,7 +415,6 @@ if (!class_exists('certifications')) {
 */
         }        
     }
-    //if ( is_admin() )
     new certifications();
 }
 ?>

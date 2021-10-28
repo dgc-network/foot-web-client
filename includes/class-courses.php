@@ -16,9 +16,9 @@ if (!class_exists('courses')) {
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
             wp_insert_term( 'Courses', 'product_cat', array(
-                'description' => 'Description for category', // optional
-                'parent' => 0, // optional
-                'slug' => 'courses' // optional
+                'description' => 'Description for category',
+                'parent' => 0,
+                'slug' => 'courses'
             ) );
             
         }
@@ -32,9 +32,6 @@ if (!class_exists('courses')) {
             if( isset($_POST['submit_action']) ) {
         
                 global $wpdb;
-                /** 
-                 * submit
-                 */
                 $current_user_id = get_current_user_id();
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
@@ -83,7 +80,6 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'Course:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Learning:'.'</td><td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td></tr>';
             $output .= '</tbody></table></figure>';
-            //return $output;
 
             /** 
              * profit sharing relationship with learning
@@ -115,8 +111,6 @@ if (!class_exists('courses')) {
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            //$output .= '<button class="wp-block-button__link" onclick="location.href=`javascript:history.go(-1)`">Back</button>';
-            //$output .= '<a href="javascript:history.go(-1)">Back</a>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -132,9 +126,6 @@ if (!class_exists('courses')) {
 
             if( isset($_POST['submit_action']) ) {
         
-                /** 
-                 * submit
-                 */
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
@@ -186,7 +177,6 @@ if (!class_exists('courses')) {
             $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
             $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
-            //return $output;
 
             /** 
              * course relationship with learnings
@@ -245,17 +235,15 @@ if (!class_exists('courses')) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-/*            
-            if( isset($_GET['edit_mode']) ) {
-                return self::edit_mode($_GET['_id'], $_GET['edit_mode']);
-            }            
-*/
+
             /**
              * List Mode
              */
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Courses'
+                'product_cat'    => 'Courses',
+                'posts_per_page' => 100,
+                'order'          => 'ASC'
             );
                 
             $output  = '<h2>課程列表</h2>';
@@ -264,13 +252,10 @@ if (!class_exists('courses')) {
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
-                //$output .= '<form method="get">';
                 $output .= '<tr>';
                 $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
-                //$output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                 $output .= '</tr>';
-                //$output .= '</form>';
             endwhile;
             wp_reset_query();
             $output .= '</tbody></table></figure>';
@@ -278,7 +263,6 @@ if (!class_exists('courses')) {
             $output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
             $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
@@ -293,8 +277,9 @@ if (!class_exists('courses')) {
 
             $args = array(
                 'post_type'      => 'product',
-                //'posts_per_page' => 10,
-                'product_cat'    => 'Courses'
+                'product_cat'    => 'Courses',
+                'posts_per_page' => 100,
+                'order'         => 'ASC'
             );       
             $loop = new WP_Query( $args );
         
@@ -430,20 +415,7 @@ if (!class_exists('courses')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-/*        
-            $sql = "CREATE TABLE `{$wpdb->prefix}courses` (
-                course_id int NOT NULL AUTO_INCREMENT,
-                course_title varchar(255) NOT NULL,
-                created_date int NOT NULL,
-                list_price float,
-                sale_price float,
-                public_key varchar(255),
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (course_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-*/
+
             $sql = "CREATE TABLE `{$wpdb->prefix}course_learnings` (
                 learning_id int NOT NULL AUTO_INCREMENT,
                 course_id int NOT NULL,
@@ -488,7 +460,6 @@ if (!class_exists('courses')) {
 
         }        
     }
-    //if ( is_admin() )
     new courses();
 }
 ?>
