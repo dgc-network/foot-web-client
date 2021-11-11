@@ -31,7 +31,8 @@ if (!class_exists('certifications')) {
             $output .= '<div id="datepicker"></div>';
             $output .= '<div style="display:flex">';
             $output .= '<div>';
-            $output .= '上午';
+            $output .= '<div>上午</div>';
+            $output .= '<div style="border-style:solid; border-width:thin;">10:00</div>';
             $output .= '</div>';
             $output .= '<div>';
             $output .= '下午';
