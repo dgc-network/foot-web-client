@@ -55,7 +55,16 @@ if (!class_exists('certifications')) {
             ?>
             <script>
                 jQuery(document).ready(function($) {
-                    $("#datepicker").datepicker();
+                    //$("#datepicker").datepicker();
+                    $("#datepicker").datepicker({
+                        onSelect: function(dateText) {
+                            console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                            $(this).change();
+                        }
+                    })
+                    .on("change", function() {
+                        console.log("Got change event from field");
+                    });
                 });
             </script>
             <?php
