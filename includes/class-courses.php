@@ -320,7 +320,7 @@ if (!class_exists('courses')) {
                 foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
                     if ($product->get_id()==$_id){
-                        $order_items += $item;
+                        array_push($order_items, $item);
                     }
                 }
             }
