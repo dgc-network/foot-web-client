@@ -435,8 +435,8 @@ if (!class_exists('certifications')) {
                 $output .= '<div>';
                 $output .= '<spam>';
                 $output .= '<div><img src="'.get_avatar_url($order->get_customer_id()).'"></div>';
-                $output .= '</spam>';
-                $output .= '<spam>';
+                //$output .= '</spam>';
+                //$output .= '<spam>';
                 $output .= '<div>';
                 $output .= '<div>'.$user->display_name.'</div>';
                 $output .= '<div>'.$item->get_name().'</div>';
