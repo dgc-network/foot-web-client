@@ -31,7 +31,7 @@ if (!class_exists('certifications')) {
             }
 
             $user = new WP_User($_id);
-            $output  = '<h2>'.$user->display_name.'線上預約</h2>';
+            $output  = '<h2>'.$user->display_name.'的服務預約</h2>';
             $output .= '<div id="datepicker"></div>';
             $output .= '<div style="display:flex">';
             $output .= '<div style="text-align:center; width:100px">';
