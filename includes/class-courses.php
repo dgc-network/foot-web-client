@@ -23,9 +23,9 @@ if (!class_exists('courses')) {
             
         }
 
-        function profit_sharing( $_id=null ) {
+        function profit_sharing( $_id=0 ) {
 
-            if ($_id==null){
+            if ($_id==0){
                 return '<div>learning ID is required</div>';
             }
 
@@ -118,14 +118,20 @@ if (!class_exists('courses')) {
             return $output;
         }
 
-        function view_mode( $_id=null ) {
+        function course_learnings( $_id=0 ) {
 
-            if ($_id==null){
+            if ($_id==0){
                 return '<div>course ID is required</div>';
             }
 
             if( isset($_POST['submit_action']) ) {
         
+                if( $_POST['submit_action']=='Cancel' ) {
+                    $_GET['edit_mode']='';
+                    $_POST['edit_mode']='';
+                    return self::list_mode();
+                }
+
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
                 foreach ($results as $index => $result) {
@@ -218,10 +224,11 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -233,7 +240,8 @@ if (!class_exists('courses')) {
             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
-                return self::view_mode($_GET['_id']);
+                if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
+                if ($_GET['view_mode']=='order_items') return self::order_items($_GET['_id']);
             }
 
             /**
@@ -253,8 +261,8 @@ if (!class_exists('courses')) {
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
-                $output .= '<tr><a href="?view_mode=true&_id='.$product->get_id().'">#</a><td>';
-                $output .= '<td><a href="?view_mode=true&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
+                $output .= '<td><a href="?view_mode=order_items&_id='.$product->get_id().'">#</a></td>';
+                $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
                 $output .= '</tr>';
             endwhile;
