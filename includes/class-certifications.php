@@ -424,17 +424,27 @@ if (!class_exists('certifications')) {
             wp_reset_query();
 
             $output  = '<h2>認證列表</h2>';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
+            //$output .= '<figure class="wp-block-table"><table><tbody>';
+            //$output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
+            $output .= '<div>';
             foreach ( $order_items as $item ) {
                 $order = $item->get_order();
                 $user = $order->get_user();
-                $output .= '<tr>';
-                $output .= '<td>'.$user->display_name.'</td>';
-                $output .= '<td>'.$user->user_email.'</td>';
-                $output .= '</tr>';
+                //$output .= '<tr>';
+                //$output .= '<td>'.$user->display_name.'</td>';
+                //$output .= '<td>'.$user->user_email.'</td>';
+                //$output .= '</tr>';
+
+                $output .= '<div>';
+                $output .= '<div><img src="'.get_avatar_url($order->get_customer_id()).'"></div>';
+                $output .= '<div>';
+                $output .= '<div>'.$user->display_name.'</div>';
+                $output .= '<div>'.$user->user_email.'</div>';
+                $output .= '</div>';
+                $output .= '</div>';
             }
-            $output .= '</tbody></table></figure>';            
+            //$output .= '</tbody></table></figure>';            
+            $output .= '</div>';
             return $output;
 
                 
