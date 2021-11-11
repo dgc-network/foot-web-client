@@ -238,7 +238,7 @@ if (!class_exists('courses')) {
             return $output;
         }
 
-        function list_mode() {
+        static function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
