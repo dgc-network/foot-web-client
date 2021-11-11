@@ -156,7 +156,7 @@ if (!class_exists('orders')) {
                     $product = $item->get_product();
                     if (strpos($product->get_categories(),'Courses')!==false) {
                         $output .= '<tr>';
-                        $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
+                        $output .= '<td><a href="'.basename($_SERVER['REQUEST_URI']).'&view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                         $output .= '<td>'.$order->get_date_created().'</td>';
                         $output .= '<td>'.$order->get_status().'</td>';
                         $output .= '</tr>';
