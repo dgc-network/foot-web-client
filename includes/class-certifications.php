@@ -440,7 +440,20 @@ if (!class_exists('certifications')) {
                 //$output .= '<div>';
                 $output .= '<div>'.$user->display_name.'</div>';
                 $output .= '<div>'.$item->get_name().'</div>';
-                //$output .= '</div>';
+                //$output .= '<div><button type="button">預約</button></div>';
+                $output .= '<form method="get">';
+                $output .= '<div class="wp-block-buttons">';
+                $output .= '<div class="wp-block-button">';
+                //$output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
+                $output .= '<input class="wp-block-button__link" type="submit" value="預約" name="submit_action">';
+                $output .= '</div>';
+                $output .= '<div class="wp-block-button">';
+                //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+                $output .= '<input class="wp-block-button__link" type="submit" value="More.." name="submit_action">';
+                $output .= '</div>';
+                $output .= '</div>';
+                $output .= '</form>';
+                    //$output .= '</div>';
                 $output .= '</spam>';
                 $output .= '</div>';
             }
