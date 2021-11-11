@@ -433,14 +433,14 @@ if (!class_exists('certifications')) {
                 $user = $order->get_user();
 
                 $output .= '<div>';
-                $output .= '<spam>';
-                $output .= '<div><img src="'.get_avatar_url($order->get_customer_id()).'"></div>';
-                //$output .= '</spam>';
                 //$output .= '<spam>';
-                $output .= '<div>';
+                $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
+                //$output .= '</spam>';
+                $output .= '<spam>';
+                //$output .= '<div>';
                 $output .= '<div>'.$user->display_name.'</div>';
                 $output .= '<div>'.$item->get_name().'</div>';
-                $output .= '</div>';
+                //$output .= '</div>';
                 $output .= '</spam>';
                 $output .= '</div>';
             }
