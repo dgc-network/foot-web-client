@@ -33,4 +33,17 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateCourseLearingAct
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateCourseLearingAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateUserCourseLearingAction.php';
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearingAction.php';
+
+wp_insert_term( 'Courses', 'product_cat', array(
+    'description' => 'Description for category',
+    'parent' => 0,
+    'slug' => 'courses'
+) );
+
+wp_insert_term( 'Certification', 'product_cat', array(
+    'description' => 'Description for category',
+    'parent' => 0,
+    'slug' => 'certification'
+) );
+
 ?>

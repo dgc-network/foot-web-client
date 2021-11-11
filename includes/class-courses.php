@@ -15,12 +15,7 @@ if (!class_exists('courses')) {
             //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
-            wp_insert_term( 'Courses', 'product_cat', array(
-                'description' => 'Description for category',
-                'parent' => 0,
-                'slug' => 'courses'
-            ) );
-            
+
         }
 
         function profit_sharing( $_id=0 ) {
@@ -294,12 +289,12 @@ if (!class_exists('courses')) {
              */
             $product = wc_get_product( $_id );
             $output  = '<h2>課程註冊列表</h2>';
-            $output .= '<form method="post">';
+            //$output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
-            $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
-            $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
-            $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
+            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
+            //$output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
+            //$output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -325,7 +320,7 @@ if (!class_exists('courses')) {
             }
 
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td></tr>';
+            $output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
             foreach ( $order_items as $item ) {
                 $order = $item->get_order();
                 $user = $order->get_user();
@@ -334,10 +329,7 @@ if (!class_exists('courses')) {
                 $output .= '<td>'.$user->user_email.'</td>';
                 $output .= '</tr>';
             }
-            $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
-            $output .= '<td></td><td></td>';
-            $output .= '</tr></tbody></table></figure>';            
-            //return var_dump($order_items);
+            $output .= '</tbody></table></figure>';            
             return $output;
 
             $TotalHours=0;
