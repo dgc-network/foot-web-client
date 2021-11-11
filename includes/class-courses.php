@@ -127,8 +127,6 @@ if (!class_exists('courses')) {
             if( isset($_POST['submit_action']) ) {
         
                 if( $_POST['submit_action']=='Cancel' ) {
-                    //$_GET['edit_mode']='';
-                    //$_POST['edit_mode']='';
                     unset($_GET['edit_mode']);
                     unset($_POST['edit_mode']);
                     return self::list_mode();
@@ -226,11 +224,150 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            //$output .= '</form>';
-            //$output .= '<form method="get">';
+            $output .= '</form>';
+            $output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
+        function item_orders( $_id=0 ) {
+
+            if ($_id==0){
+                return '<div>course ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+        
+                if( $_POST['submit_action']=='Cancel' ) {
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
+                    return self::list_mode();
+                }
+
+                global $wpdb;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if (( $_POST['_learning_title_'.$index]=='delete' ) || ( $_POST['_learning_link_'.$index]=='delete' ) ){
+                        $table = $wpdb->prefix.'course_learnings';
+                        $where = array(
+                            'learning_id' => $results[$index]->learning_id
+                        );
+                        $wpdb->delete( $table, $where );    
+                    } else {
+                        $table = $wpdb->prefix.'course_learnings';
+                        $data = array(
+                            'learning_title' => $_POST['_learning_title_'.$index],
+                            'learning_hours' => $_POST['_learning_hours_'.$index],
+                            'learning_link' => $_POST['_learning_link_'.$index],
+                            'teaching_id' => $_POST['_teaching_id_'.$index],
+                            'is_witness' => rest_sanitize_boolean($_POST['_is_witness_'.$index]),
+                        );
+                        $where = array(
+                            'learning_id' => $results[$index]->learning_id
+                        );
+                        $wpdb->update( $table, $data, $where );    
+                    }
+                }
+                if ( !($_POST['_learning_title']=='') ){
+                    $table = $wpdb->prefix.'course_learnings';
+                    $data = array(
+                        'course_id' => intval($_GET['_id']),
+                        'learning_title' => sanitize_text_field($_POST['_learning_title']),
+                        'learning_hours' => floatval($_POST['_learning_hours']),
+                        'learning_link' => sanitize_text_field($_POST['_learning_link']),
+                        'teaching_id' => intval($_POST['_teaching_id']),
+                        'is_witness' => rest_sanitize_boolean($_POST['_is_witness']),
+                    );
+                    $format = array('%d', '%s', '%f', '%s', '%d', '%d');
+                    $wpdb->insert($table, $data, $format);
+                }
+            }
+
+            /** 
+             * view_mode header
+             */
+            $product = wc_get_product( $_id );
+            $output  = '<h2>課程註冊列表</h2>';
+            $output .= '<form method="post">';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
+            $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
+            $output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
+            $output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
+            $output .= '</tbody></table></figure>';
+
+            /** 
+             * course relationship with orders
+             */
+            $customer_orders = [];
+            foreach ( wc_get_is_paid_statuses() as $paid_status ) {
+                $customer_orders += wc_get_orders( [
+                    'type'        => 'shop_order',
+                    'limit'       => - 1,
+                    //'customer_id' => $user_id,
+                    'status'      => $paid_status,
+                ] );
+            }
+            $order_items = [];
+            foreach ( $customer_orders as $order ) {
+                $items = $order->get_items();
+                foreach ( $order->get_items() as $item ) {
+                    $product = $item->get_product();
+                    if ($product->get_id()==$_id){
+                        $order_items += $item;
+                    }
+                }
+            }
+            return var_dump($order_items);
+
+            $TotalHours=0;
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td></tr>';
+            foreach ($results as $index => $result) {
+                
+                $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
+                $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
+                $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
+                $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
+                $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
+                if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
+                $output .= '></td>';
+                $output .= '</tr>';
+                $TotalHours += floatval($results[$index]->learning_hours);
+                
+            }
+            $output .= '<tr><td>'.'#'.'</td>';
+            $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
+            $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
+            $output .= '<td><input size="50" type="text" name="_learning_link"></td>';
+            $output .= '<td><select name="_teaching_id" style="max-width:80px;">'.self::select_teachings().'</select>'.'</td>';
+            $output .= '<td><input type="checkbox" name="_is_witness"></td>';
+            $output .= '</tr>';
+            $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
+            $output .= '<td>'.$TotalHours.'</td><td></td>';
+            $output .= '</tr></tbody></table></figure>';            
+
+            /** 
+             * view_mode footer
+             */
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</form>';
+            $output .= '<form method="get">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -243,7 +380,7 @@ if (!class_exists('courses')) {
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
-                if ($_GET['view_mode']=='order_items') return self::order_items($_GET['_id']);
+                if ($_GET['view_mode']=='item_orders') return self::item_orders($_GET['_id']);
             }
 
             /**
@@ -263,7 +400,7 @@ if (!class_exists('courses')) {
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=order_items&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
+                $output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
                 $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
                 $output .= '</tr>';
