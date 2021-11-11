@@ -32,7 +32,10 @@ if (!class_exists('certifications')) {
             $output .= '<div style="display:flex">';
             $output .= '<div>';
             $output .= '<div>上午</div>';
-            $output .= '<div style="border-style:solid; border-width:thin;">10:00</div>';
+            $output .= '<div style="margin: 5px; border-style:solid; border-width:thin;">08:00</div>';
+            $output .= '<div style="margin: 5px; border-style:solid; border-width:thin;">09:00</div>';
+            $output .= '<div style="margin: 5px; border-style:solid; border-width:thin;">10:00</div>';
+            $output .= '<div style="margin: 5px; border-style:solid; border-width:thin;">11:00</div>';
             $output .= '</div>';
             $output .= '<div>';
             $output .= '下午';
