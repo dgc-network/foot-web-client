@@ -29,10 +29,13 @@ if (!class_exists('certifications')) {
 
             ?>
             <script>
-                $( "#datepicker" ).datepicker();
+                jQuery(document).ready(function($) {
+                    $("#datepicker").datepicker();
+                });
             </script>
             <?php
-            $output = '<div id="datepicker"></div>';            
+            $output = '<div id="datepicker"></div>';
+            //$output .= 'I am here';
  
             return $output;
         }
