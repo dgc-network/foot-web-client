@@ -394,7 +394,7 @@ if (!class_exists('certifications')) {
              */
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Certifications',
+                'product_cat'    => 'Certification',
                 'posts_per_page' => 100,
                 'order'          => 'ASC'
             );
