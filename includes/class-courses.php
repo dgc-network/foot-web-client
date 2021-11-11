@@ -316,7 +316,6 @@ if (!class_exists('courses')) {
             }
             $order_items = [];
             foreach ( $customer_orders as $order ) {
-                $items = $order->get_items();
                 foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
                     if ($product->get_id()==$_id){
@@ -324,7 +323,22 @@ if (!class_exists('courses')) {
                     }
                 }
             }
-            return var_dump($order_items);
+
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td></tr>';
+            foreach ( $order_items as $item ) {
+                $order = $item->get_order();
+                $user = $order->get_user();
+                $output .= '<tr>';
+                $output .= '<td>'.$user->display_name.'</td>';
+                $output .= '<td>'.$user->user_email.'</td>';
+                $output .= '</tr>';
+            }
+            $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
+            $output .= '<td></td><td></td>';
+            $output .= '</tr></tbody></table></figure>';            
+            //return var_dump($order_items);
+            return $output;
 
             $TotalHours=0;
             global $wpdb;
