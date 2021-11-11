@@ -26,11 +26,12 @@ if (!class_exists('certifications')) {
                     unset($_POST['edit_mode']);
                     return self::list_mode();
                 }
-                
+
                 // Proceed the WC_Order_Item to pickup the Reservation product
             }
 
-            $output  = '<h2>線上排程</h2>';
+            $user = new WP_User($_id);
+            $output  = '<h2>'.$user->display_name.'線上預約</h2>';
             $output .= '<div id="datepicker"></div>';
             $output .= '<div style="display:flex">';
             $output .= '<div style="text-align:center; width:100px">';
