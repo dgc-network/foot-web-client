@@ -18,6 +18,25 @@ if (!class_exists('certifications')) {
 
         }
 
+        function booking( $_id=0 ) {
+
+            if ($_id==0){
+                return '<div>ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+            }
+
+            ?>
+            <script>
+                $( "#datepicker" ).datepicker();
+            </script>
+            <?php
+            $output = '<div id="datepicker"></div>';            
+ 
+            return $output;
+        }
+
         function profit_sharing( $_id=0 ) {
 
             if ($_id==0){
@@ -383,10 +402,13 @@ if (!class_exists('certifications')) {
 
         static function list_mode() {
             
+            if( isset($_POST['view_mode']) ) {
+                if ($_POST['view_mode']=='Booking') return self::booking($_POST['_id']);
+            }
+
             if( isset($_GET['view_mode']) ) {
-                if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
-                if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
-                if ($_GET['view_mode']=='item_orders') return self::item_orders($_GET['_id']);
+                if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
+                if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
             }
 
             /**
@@ -424,61 +446,34 @@ if (!class_exists('certifications')) {
             wp_reset_query();
 
             $output  = '<h2>認證列表</h2>';
-            $output .= '<div>';
+            $output .= '<div style="display:flex">';
             foreach ( $order_items as $item ) {
                 $order = $item->get_order();
                 $product = $item->get_product();
                 $user = $order->get_user();
 
                 $output .= '<div style="display:flex">';
-                $output .= '<div>';
+                $output .= '<div style="">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
                 $output .= '<div>';
-                $output .= '<div>'.$user->display_name.'</div>';
+                $output .= '<div><h1>'.$user->display_name.'</h1></div>';
                 $output .= '<div>'.$item->get_name().'</div>';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="預約" name="submit_action">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="Booking" name="view_mode">';
                 $output .= '</div>';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="More.." name="submit_action">';
+                $output .= '<input class="wp-block-button__link" type="submit" value="More..." name="view_mode">';
                 $output .= '</div>';
                 $output .= '</div>';
+                $output .= '<input type="hidden" value="'.$order->get_user_id().'" name="_id">';
                 $output .= '</form>';
                 $output .= '</div>';
                 $output .= '</div>';
             }
             $output .= '</div>';
-            return $output;
-
-                
-            $output  = '<h2>認證列表</h2>';
-            $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Title</td><td>Price</td></tr>';
-            $loop = new WP_Query( $args );
-            while ( $loop->have_posts() ) : $loop->the_post();
-                global $product;
-                $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
-                $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                $output .= '<td>'.$product->get_price().'</td>';
-                $output .= '</tr>';
-            endwhile;
-            wp_reset_query();
-            $output .= '</tbody></table></figure>';
-
-            $output .= '<form method="get">';
-            $output .= '<div class="wp-block-buttons">';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
-            $output .= '</div>';
-            $output .= '<div class="wp-block-button">';
-            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
-            $output .= '</div>';
-            $output .= '</div>';
-            $output .= '</form>';
             return $output;
         }
         
