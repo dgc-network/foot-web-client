@@ -398,6 +398,45 @@ if (!class_exists('certifications')) {
                 'posts_per_page' => 100,
                 'order'          => 'ASC'
             );
+            
+            $customer_orders = [];
+            foreach ( wc_get_is_paid_statuses() as $paid_status ) {
+                $customer_orders += wc_get_orders( [
+                    'type'        => 'shop_order',
+                    'limit'       => - 1,
+                    //'customer_id' => $user_id,
+                    'status'      => $paid_status,
+                ] );
+            }
+            $order_items = [];
+            $loop = new WP_Query( $args );
+            while ( $loop->have_posts() ) : $loop->the_post();
+                global $product;
+                foreach ( $customer_orders as $order ) {
+                    foreach ( $order->get_items() as $item ) {
+                        $item_product = $item->get_product();
+                        if ($item_product->get_id()==$product->get_id()){
+                            array_push($order_items, $item);
+                        }
+                    }
+                }
+            endwhile;
+            wp_reset_query();
+
+            $output  = '<h2>認證列表</h2>';
+            $output .= '<figure class="wp-block-table"><table><tbody>';
+            $output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
+            foreach ( $order_items as $item ) {
+                $order = $item->get_order();
+                $user = $order->get_user();
+                $output .= '<tr>';
+                $output .= '<td>'.$user->display_name.'</td>';
+                $output .= '<td>'.$user->user_email.'</td>';
+                $output .= '</tr>';
+            }
+            $output .= '</tbody></table></figure>';            
+            return $output;
+
                 
             $output  = '<h2>認證列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
