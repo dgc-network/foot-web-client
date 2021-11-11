@@ -10,7 +10,7 @@ if (!class_exists('courses')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('course_list', __CLASS__ . '::list_mode');
+            //add_shortcode('course_list', __CLASS__ . '::list_mode');
             add_shortcode('course-list', __CLASS__ . '::list_mode');
             //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
             //add_shortcode('course_view', __CLASS__ . '::view_mode');
@@ -127,8 +127,10 @@ if (!class_exists('courses')) {
             if( isset($_POST['submit_action']) ) {
         
                 if( $_POST['submit_action']=='Cancel' ) {
-                    $_GET['edit_mode']='';
-                    $_POST['edit_mode']='';
+                    //$_GET['edit_mode']='';
+                    //$_POST['edit_mode']='';
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
                     return self::list_mode();
                 }
 
@@ -256,12 +258,12 @@ if (!class_exists('courses')) {
                 
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td></td><td>Title</td><td>Price</td></tr>';
+            $output .= '<tr><td>#</td><td>Title</td><td>Price</td></tr>';
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
-                $output .= '<td><a href="?view_mode=order_items&_id='.$product->get_id().'">#</a></td>';
+                $output .= '<td><a href="?view_mode=order_items&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
                 $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
                 $output .= '</tr>';
