@@ -424,40 +424,32 @@ if (!class_exists('certifications')) {
             wp_reset_query();
 
             $output  = '<h2>認證列表</h2>';
-            //$output .= '<figure class="wp-block-table"><table><tbody>';
-            //$output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
             $output .= '<div>';
             foreach ( $order_items as $item ) {
                 $order = $item->get_order();
                 $product = $item->get_product();
                 $user = $order->get_user();
 
+                $output .= '<div style="display:flex">';
                 $output .= '<div>';
-                //$output .= '<spam>';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
-                //$output .= '</spam>';
-                $output .= '<spam>';
-                //$output .= '<div>';
+                $output .= '</div>';
+                $output .= '<div>';
                 $output .= '<div>'.$user->display_name.'</div>';
                 $output .= '<div>'.$item->get_name().'</div>';
-                //$output .= '<div><button type="button">預約</button></div>';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
-                //$output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
                 $output .= '<input class="wp-block-button__link" type="submit" value="預約" name="submit_action">';
                 $output .= '</div>';
                 $output .= '<div class="wp-block-button">';
-                //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
                 $output .= '<input class="wp-block-button__link" type="submit" value="More.." name="submit_action">';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</form>';
-                    //$output .= '</div>';
-                $output .= '</spam>';
+                $output .= '</div>';
                 $output .= '</div>';
             }
-            //$output .= '</tbody></table></figure>';            
             $output .= '</div>';
             return $output;
 
