@@ -27,6 +27,19 @@ if (!class_exists('certifications')) {
             if( isset($_POST['submit_action']) ) {
             }
 
+            $output  = '<h2>線上排程</h2>';
+            $output .= '<div id="datepicker"></div>';
+            $output .= '<div style="display:flex">';
+            $output .= '<div>';
+            $output .= '上午';
+            $output .= '</div>';
+            $output .= '<div>';
+            $output .= '下午';
+            $output .= '</div>';
+            $output .= '<div>';
+            $output .= '晚上';
+            $output .= '</div>';
+            $output .= '</div>';
             ?>
             <script>
                 jQuery(document).ready(function($) {
@@ -34,7 +47,6 @@ if (!class_exists('certifications')) {
                 });
             </script>
             <?php
-            $output = '<div id="datepicker"></div>';
             //$output .= 'I am here';
  
             return $output;
