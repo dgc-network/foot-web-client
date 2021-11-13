@@ -6,22 +6,18 @@ if (!class_exists('timeslots')) {
 
     class timeslots {
 
-        private $edit_mode_enabled;
         /**
          * Class constructor
          */
         public function __construct() {
             add_shortcode('timeslot-list', __CLASS__ . '::list_mode');
             self::create_tables();
-            $edit_mode_enabled=true;
         }
 
-        function edit_mode( $_id=0, $_mode  ) {
+        function edit_mode( $_id=0, $_mode='' ) {
 
             if ($_id==0){
                 $_mode='Create';
-            } else {
-                //return 'id is required';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -151,15 +147,14 @@ if (!class_exists('timeslots')) {
 
         function list_mode() {
 
-            if( isset($_GET['view_mode']) && $view_mode_enabled ) {
+            if( isset($_GET['view_mode']) ) {
                 //if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
 
-            if( isset($_GET['edit_mode']) && $edit_mode_enabled ) {
-                return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
+            if( isset($_GET['edit_mode']) ) {
+                if ($_GET['edit_mode']=='true') return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
             }            
-            $edit_mode_enabled=true;
 
             /**
              * List Mode
@@ -173,7 +168,11 @@ if (!class_exists('timeslots')) {
                 $output .= '<tr>';
                 $output .= '<td><a href="?edit_mode=true&_id='.$result->timeslot_id.'">'.$result->timeslot_begin.'</a></td>';
                 $output .= '<td>'.$result->timeslot_end.'</td>';
-                $output .= '<td>'.$result->timeslot_session.'</td>';
+                if ($result->timeslot_session==0) $session_display='midnight';
+                if ($result->timeslot_session==1) $session_display='morning';
+                if ($result->timeslot_session==2) $session_display='afternoon';
+                if ($result->timeslot_session==3) $session_display='night';
+                $output .= '<td>'.$session_display.'</td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';
