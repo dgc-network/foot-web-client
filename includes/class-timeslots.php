@@ -100,9 +100,8 @@ if (!class_exists('timeslots')) {
                     $deleted = $wpdb->delete( $table, $where );
                 }
 
-                //unset($_GET['edit_mode']);
-                //unset($_POST['edit_mode']);
-                $edit_mode_enabled=false;
+                unset($_GET['edit_mode']);
+                unset($_POST['edit_mode']);
                 return list_mode();
 /*
                 ?><script>window.location=window.location.path</script><?php
