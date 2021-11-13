@@ -164,7 +164,7 @@ if (!class_exists('timeslots')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
             $output  = '<h2>Timeslots</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Session</td><td>Begin</td><td>End</td></tr>';
+            $output .= '<tr><td>Begin</td><td>End</td><td>Session</td></tr>';
             foreach ( $results as $index=>$result ) {
                 $output .= '<tr>';
                 $output .= '<td><a href="?edit_mode=true&_id='.$result->timeslot_id.'">'.$result->timeslot_begin.'</a></td>';
