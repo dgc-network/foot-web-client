@@ -101,6 +101,10 @@ if (!class_exists('timeslots')) {
                     $where = array('timeslot_id' => $_POST['_timeslot_id']);
                     $deleted = $wpdb->delete( $table, $where );
                 }
+
+                unset($_GET['edit_mode']);
+                unset($_POST['edit_mode']);
+                return list_mode();
 /*
                 ?><script>window.location=window.location.path</script><?php
 */                
