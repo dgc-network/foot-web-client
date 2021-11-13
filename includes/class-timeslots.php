@@ -153,9 +153,9 @@ if (!class_exists('timeslots')) {
             }
 
             if( isset($_GET['edit_mode']) ) {
-                return $_GET['edit_mode'];
                 if ($_GET['edit_mode']=='Create') return self::edit_mode();
                 if ($_GET['edit_mode']=='true') return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
+                return '$_GET:'.$_GET['edit_mode'];
             }            
 
             /**
