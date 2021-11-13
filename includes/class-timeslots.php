@@ -154,8 +154,7 @@ if (!class_exists('timeslots')) {
 */
             if( isset($_GET['edit_mode']) ) {
                 if ($_GET['edit_mode']=='Create') return self::edit_mode();
-                if ($_GET['edit_mode']=='true') return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
-                //return '$_GET:'.$_GET['edit_mode'];
+                if ($_GET['edit_mode']=='Edit') return self::edit_mode( $_GET['_id'] );
             }            
 
             /**
@@ -168,7 +167,7 @@ if (!class_exists('timeslots')) {
             $output .= '<tr><td>Begin</td><td>End</td><td>Session</td></tr>';
             foreach ( $results as $index=>$result ) {
                 $output .= '<tr>';
-                $output .= '<td><a href="?edit_mode=true&_id='.$result->timeslot_id.'">'.$result->timeslot_begin.'</a></td>';
+                $output .= '<td><a href="?edit_mode=Edit&_id='.$result->timeslot_id.'">'.$result->timeslot_begin.'</a></td>';
                 $output .= '<td>'.$result->timeslot_end.'</td>';
                 if ($result->timeslot_session==0) $session_display='midnight';
                 if ($result->timeslot_session==1) $session_display='morning';
