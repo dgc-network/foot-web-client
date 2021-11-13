@@ -85,7 +85,7 @@ if (!class_exists('timeslots')) {
                         $data = array(
                             'timeslot_begin' => $_POST['_timeslot_begin'],
                             'timeslot_end' => $_POST['_timeslot_end'],
-                            'timeslot_session' => $_POST['_timeslot_session'],
+                            'timeslot_session' => intvar($_POST['_timeslot_session']),
                         );
                         $where = array('timeslot_id' => $_POST['_id']);
                         $wpdb->update( $table, $data, $where );
