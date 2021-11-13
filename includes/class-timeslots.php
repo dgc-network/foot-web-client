@@ -87,7 +87,7 @@ if (!class_exists('timeslots')) {
                             'timeslot_end' => $_POST['_timeslot_end'],
                             'timeslot_session' => intval($_POST['_timeslot_session']),
                         );
-                        $where = array('timeslot_id' => $_POST['_id']);
+                        $where = array('timeslot_id' => $_id);
                         $wpdb->update( $table, $data, $where );
                     }
                 }
@@ -96,7 +96,7 @@ if (!class_exists('timeslots')) {
             
                     global $wpdb;
                     $table = $wpdb->prefix.'timeslots';
-                    $where = array('timeslot_id' => $_POST['_id']);
+                    $where = array('timeslot_id' => $_id);
                     $deleted = $wpdb->delete( $table, $where );
                 }
 /*
