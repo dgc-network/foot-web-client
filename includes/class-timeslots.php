@@ -155,6 +155,7 @@ if (!class_exists('timeslots')) {
 
             if( isset($_GET['edit_mode']) ) {
                 return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
+                return $_GET['edit_mode'];
             }            
 
             /**
