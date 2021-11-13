@@ -2,28 +2,24 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
-if (!class_exists('calendars')) {
+if (!class_exists('timeslots')) {
 
-    class calendars {
+    class timeslots {
 
         /**
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('calendar_list', __CLASS__ . '::list_mode');
-            add_shortcode('calendar-list', __CLASS__ . '::list_mode');
-            add_shortcode('calendar_edit', __CLASS__ . '::edit_mode');
-            add_shortcode('calendar_view', __CLASS__ . '::view_mode');
+            add_shortcode('timeslot-list', __CLASS__ . '::list_mode');
             self::create_tables();
         }
 
-        function edit_mode( $_mode=null, $_id=null ) {
+        function edit_mode( $_id=0, $_mode  ) {
 
-            if ($_mode==null){
+            if ($_id==0){
                 $_mode='Create';
-            }
-            if ($_id==null){
-                if (!($_mode=='Create')) return 'event_id is required';
+            } else {
+                //return 'id is required';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -31,15 +27,13 @@ if (!class_exists('calendars')) {
                 if( $_POST['submit_action']=='Create' ) {
         
                     global $wpdb;
-                    $table = $wpdb->prefix.'events';
+                    $table = $wpdb->prefix.'timeslots';
                     $data = array(
-                        //'created_date' => current_time('timestamp'), 
-                        'event_title' => $_POST['_event_title'],
-                        'event_begin' => $_POST['_event_begin'],
-                        'event_end' => $_POST['_event_end'],
-                        'event_host' => $_POST['_event_host'],
+                        'timeslot_begin' => $_POST['_timeslot_begin'],
+                        'timeslot_end' => $_POST['_timeslot_end'],
+                        'timeslot_session' => $_POST['_timeslot_session'],
                     );
-                    $format = array('%s', '%d', '%d', '%d');
+                    $format = array('%s', '%s', '%d');
                     $insert_id = $wpdb->insert($table, $data, $format);
 /*    
                     $CreateCourseAction = new CreateCourseAction();                
@@ -89,15 +83,13 @@ if (!class_exists('calendars')) {
                     } else {
     
                         global $wpdb;
-                        $table = $wpdb->prefix.'events';
+                        $table = $wpdb->prefix.'timeslots';
                         $data = array(
-                            'event_title' => $_POST['_event_title'],
-                            'event_begin' => $_POST['_event_begin'],
-                            'event_end' => $_POST['_event_end'],
-                            'event_host' => $_POST['_event_host'],
-                            //'txid' => $op_result['txid'], 
+                            'timeslot_begin' => $_POST['_timeslot_begin'],
+                            'timeslot_end' => $_POST['_timeslot_end'],
+                            'timeslot_session' => $_POST['_timeslot_session'],
                         );
-                        $where = array('event_id' => $_POST['_event_id']);
+                        $where = array('timeslot_id' => $_POST['_timeslot_id']);
                         $wpdb->update( $table, $data, $where );
                     }
                 }
@@ -105,25 +97,25 @@ if (!class_exists('calendars')) {
                 if( $_POST['submit_action']=='Delete' ) {
             
                     global $wpdb;
-                    $table = $wpdb->prefix.'events';
-                    $where = array('event_id' => $_POST['_event_id']);
+                    $table = $wpdb->prefix.'timeslots';
+                    $where = array('timeslot_id' => $_POST['_timeslot_id']);
                     $deleted = $wpdb->delete( $table, $where );
                 }
-
+/*
                 ?><script>window.location=window.location.path</script><?php
+*/                
             }
 
             /** 
              * edit_mode
              */
             global $wpdb;
-            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}events WHERE event_id = {$_id}", OBJECT );
+            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_id = {$_id}", OBJECT );
             $output  = '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Title:'.'</td><td><input style="width: 100%" type="text" name="_event_title" value="'.$row->event_title.'"></td></tr>';
-            $output .= '<tr><td>'.'Begin:'.'</td><td><input style="width: 100%" type="text" name="_event_begin" value="'.$row->event_begin.'"></td></tr>';
-            $output .= '<tr><td>'.'End:'.'</td><td><input style="width: 100%" type="text" name="_event_end" value="'.$row->event_end.'"></td></tr>';
-            $output .= '<tr><td>'.'Host:'.'</td><td><input style="width: 100%" type="text" name="_event_host" value="'.$row->event_host.'"></td></tr>';
+            $output .= '<tr><td>'.'Begin:'.'</td><td><input style="width: 100%" type="text" name="_timeslot_begin" value="'.$row->timeslot_begin.'"></td></tr>';
+            $output .= '<tr><td>'.'End:'.'</td><td><input style="width: 100%" type="text" name="_timeslot_end" value="'.$row->timeslot_end.'"></td></tr>';
+            $output .= '<tr><td>'.'Session:'.'</td><td><input style="width: 100%" type="text" name="_timeslot_session" value="'.$row->timeslot_session.'"></td></tr>';
             $output .= '</tbody></table></figure>';
     
             if( $_mode=='Create' ) {
@@ -158,23 +150,22 @@ if (!class_exists('calendars')) {
             }
 
             if( isset($_GET['edit_mode']) ) {
-                return self::edit_mode( $_POST['edit_mode'], $_POST['_id'] );
+                return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
             }            
 
             /**
              * List Mode
              */
             global $wpdb;
-            $user_id = get_current_user_id();
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}events WHERE event_host = {$user_id}", OBJECT );
-            $output  = '<h2>Events</h2>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
+            $output  = '<h2>Timeslots</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>Events</td><td>Begin</td><td>End</td></tr>';
+            $output .= '<tr><td>Session</td><td>Begin</td><td>End</td></tr>';
             foreach ( $results as $index=>$result ) {
                 $output .= '<tr>';
-                $output .= '<td><a href="?edit_mode=true&_id='.$result->event_id.'">'.$result->event_title.'</a></td>';
-                $output .= '<td>'.$result->event_begin.'</td>';
-                $output .= '<td>'.$result->event_end.'</td>';
+                $output .= '<td><a href="?edit_mode=true&_id='.$result->timeslot_id.'">'.$result->timeslot_begin.'</a></td>';
+                $output .= '<td>'.$result->timeslot_end.'</td>';
+                $output .= '<td>'.$result->timeslot_session.'</td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';
@@ -244,22 +235,18 @@ if (!class_exists('calendars')) {
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-            $sql = "CREATE TABLE `{$wpdb->prefix}events` (
-                event_id int NOT NULL AUTO_INCREMENT,
-                event_begin int NOT NULL,
-                event_end int,
-                event_title varchar(255),
-                event_auther int,
-                event_host int,
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (event_id)
+            $sql = "CREATE TABLE `{$wpdb->prefix}timeslots` (
+                timeslot_id int NOT NULL AUTO_INCREMENT,
+                timeslot_begin varchar(10) NOT NULL,
+                timeslot_end varchar(10),
+                timeslot_session int(1),
+                PRIMARY KEY  (timeslot_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
         }
         
     }
-    new calendars();
+    new timeslots();
 }
 ?>
