@@ -103,7 +103,7 @@ if (!class_exists('timeslots')) {
                 //unset($_GET['edit_mode']);
                 //unset($_POST['edit_mode']);
                 $_GET['edit_mode']='';
-                return list_mode();
+                return self::list_mode();
 /*
                 ?><script>window.location=window.location.path</script><?php
 */
@@ -155,7 +155,7 @@ if (!class_exists('timeslots')) {
             if( isset($_GET['edit_mode']) ) {
                 if ($_GET['edit_mode']=='Create') return self::edit_mode();
                 if ($_GET['edit_mode']=='Edit') return self::edit_mode( $_GET['_id'] );
-                return 'I am here';
+                //return 'I am here';
             }            
 
             /**
