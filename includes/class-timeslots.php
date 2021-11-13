@@ -6,12 +6,14 @@ if (!class_exists('timeslots')) {
 
     class timeslots {
 
+        private $edit_mode_enabled;
         /**
          * Class constructor
          */
         public function __construct() {
             add_shortcode('timeslot-list', __CLASS__ . '::list_mode');
             self::create_tables();
+            $edit_mode_enabled=true;
         }
 
         function edit_mode( $_id=0, $_mode  ) {
@@ -102,8 +104,9 @@ if (!class_exists('timeslots')) {
                     $deleted = $wpdb->delete( $table, $where );
                 }
 
-                unset($_GET['edit_mode']);
-                unset($_POST['edit_mode']);
+                //unset($_GET['edit_mode']);
+                //unset($_POST['edit_mode']);
+                $edit_mode_enabled=false;
                 return list_mode();
 /*
                 ?><script>window.location=window.location.path</script><?php
@@ -148,15 +151,15 @@ if (!class_exists('timeslots')) {
 
         function list_mode() {
 
-            if( isset($_GET['view_mode']) ) {
+            if( isset($_GET['view_mode']) && $view_mode_enabled ) {
                 //if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
 
-            if( isset($_GET['edit_mode']) ) {
+            if( isset($_GET['edit_mode']) && $edit_mode_enabled ) {
                 return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
-                return $_GET['edit_mode'];
             }            
+            $edit_mode_enabled=true;
 
             /**
              * List Mode
