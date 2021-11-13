@@ -99,14 +99,14 @@ if (!class_exists('timeslots')) {
                     $where = array('timeslot_id' => $_id);
                     $deleted = $wpdb->delete( $table, $where );
                 }
-/*
+
                 //unset($_GET['edit_mode']);
                 //unset($_POST['edit_mode']);
                 $_GET['edit_mode']='';
                 return list_mode();
-*/
+/*
                 ?><script>window.location=window.location.path</script><?php
-
+*/
             }
 
             /** 
@@ -146,12 +146,12 @@ if (!class_exists('timeslots')) {
         }
 
         function list_mode() {
-
+/*
             if( isset($_GET['view_mode']) ) {
                 //if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-
+*/
             if( isset($_GET['edit_mode']) ) {
                 if ($_GET['edit_mode']=='Create') return self::edit_mode();
                 if ($_GET['edit_mode']=='true') return self::edit_mode( $_GET['_id'], $_GET['edit_mode'] );
