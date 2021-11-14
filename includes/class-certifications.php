@@ -72,14 +72,25 @@ if (!class_exists('certifications')) {
                     //$(".timepicker").on('hover', function() {
                     //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
                     //});
-                    $('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
-                        function(){
+                    //$('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
+                    //    function(){
+                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                    //    },
+                    //    function(){
+                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                    //    }
+                    //);
+                    $('.timepicker').on({
+                        mouseenter: function(){
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         },
-                        function(){
+                        mouseleave: function(){
                             $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                        },
+                        click: function(){
+                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         }
-                    );
+                    });
                 });
             </script>
             <?php
