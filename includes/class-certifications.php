@@ -72,12 +72,12 @@ if (!class_exists('certifications')) {
                     //$(".timepicker").on('hover', function() {
                     //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
                     //});
-                    $('.timepicker').css({"border-color":"red";"color":"blue"}).hover(
+                    $('.timepicker').css({"border-color":"red","color":"blue"}).hover(
                         function(){
-                            $(this).css({"border-color":"red";"color":"red"});
+                            $(this).css({"border-color":"red","color":"red"});
                         },
                         function(){
-                            $(this).css({"border-color":"red";"color":"blue"});
+                            $(this).css({"border-color":"red","color":"blue"});
                         }
                     );
                 });
