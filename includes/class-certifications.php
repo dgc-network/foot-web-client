@@ -39,28 +39,27 @@ if (!class_exists('certifications')) {
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>上午</div>';
             foreach ( $results as $index=>$result ) {
-                $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 2", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>下午</div>';
             foreach ( $results as $index=>$result ) {
-                $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 3", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>晚上</div>';
             foreach ( $results as $index=>$result ) {
-                $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
             $output .= '</div>';
             ?>
             <script>
                 jQuery(document).ready(function($) {
-                    //$("#datepicker").datepicker();
                     $("#datepicker").datepicker({
                         onSelect: function(dateText) {
                             console.log("Selected date: " + dateText + "; input's current value: " + this.value);
@@ -70,6 +69,17 @@ if (!class_exists('certifications')) {
                     .on("change", function() {
                         console.log("Got change event from field");
                     });
+                    //$(".timepicker").on('hover', function() {
+                    //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
+                    //});
+                    $('.timepicker').css('background-color','red').hover(
+                        function(){
+                            $(this).css('background-color','blue');
+                        },
+                        function(){
+                            $(this).css('background-color','red');
+                        }
+                    );
                 });
             </script>
             <?php
@@ -77,6 +87,7 @@ if (!class_exists('certifications')) {
             /** 
              * footer
              */
+            $output .= '<form>';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
