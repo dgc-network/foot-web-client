@@ -74,10 +74,10 @@ if (!class_exists('certifications')) {
                     //});
                     $('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
                         function(){
-                            $(this).css({"border-color":"red","color":"red"});
+                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         },
                         function(){
-                            $(this).css({"border-color":"gray","color":"gray"});
+                            $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
                         }
                     );
                 });
