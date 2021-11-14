@@ -35,11 +35,16 @@ if (!class_exists('certifications')) {
             $output .= '<div id="datepicker"></div>';
             $output .= '<div style="display:flex">';
             $output .= '<div style="text-align:center; width:100px">';
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
             $output .= '<div>上午</div>';
-            $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">08:00</div>';
-            $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">09:00</div>';
-            $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">10:00</div>';
-            $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">11:00</div>';
+            foreach ( $results as $index=>$result ) {
+                $output .= '<div style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+            }
+            //$output .= '<div style="margin:5px; border-style:solid; border-width:thin;">08:00</div>';
+            //$output .= '<div style="margin:5px; border-style:solid; border-width:thin;">09:00</div>';
+            //$output .= '<div style="margin:5px; border-style:solid; border-width:thin;">10:00</div>';
+            //$output .= '<div style="margin:5px; border-style:solid; border-width:thin;">11:00</div>';
             $output .= '</div>';
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>下午</div>';

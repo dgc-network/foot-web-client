@@ -10,20 +10,14 @@ if (!class_exists('calendars')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('calendar_list', __CLASS__ . '::list_mode');
             add_shortcode('calendar-list', __CLASS__ . '::list_mode');
-            add_shortcode('calendar_edit', __CLASS__ . '::edit_mode');
-            add_shortcode('calendar_view', __CLASS__ . '::view_mode');
             self::create_tables();
         }
 
-        function edit_mode( $_mode=null, $_id=null ) {
+        function edit_mode( $_id=0, $_mode='' ) {
 
-            if ($_mode==null){
+            if ($_id==0){
                 $_mode='Create';
-            }
-            if ($_id==null){
-                if (!($_mode=='Create')) return 'event_id is required';
             }
 
             if( isset($_POST['submit_action']) ) {
@@ -97,7 +91,7 @@ if (!class_exists('calendars')) {
                             'event_host' => $_POST['_event_host'],
                             //'txid' => $op_result['txid'], 
                         );
-                        $where = array('event_id' => $_POST['_event_id']);
+                        $where = array('event_id' => $_id);
                         $wpdb->update( $table, $data, $where );
                     }
                 }
@@ -106,11 +100,15 @@ if (!class_exists('calendars')) {
             
                     global $wpdb;
                     $table = $wpdb->prefix.'events';
-                    $where = array('event_id' => $_POST['_event_id']);
+                    $where = array('event_id' => $_id);
                     $deleted = $wpdb->delete( $table, $where );
                 }
 
+                $_GET['edit_mode']='';
+                return self::list_mode();
+/*
                 ?><script>window.location=window.location.path</script><?php
+*/                
             }
 
             /** 
@@ -151,14 +149,15 @@ if (!class_exists('calendars')) {
         }
 
         function list_mode() {
-
+/*
             if( isset($_GET['view_mode']) ) {
                 //if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 return self::view_mode($_GET['_id']);
             }
-
+*/
             if( isset($_GET['edit_mode']) ) {
-                return self::edit_mode( $_POST['edit_mode'], $_POST['_id'] );
+                if ($_GET['edit_mode']=='Create') return self::edit_mode();
+                if ($_GET['edit_mode']=='Edit') return self::edit_mode( $_GET['_id'] );
             }            
 
             /**
@@ -172,7 +171,7 @@ if (!class_exists('calendars')) {
             $output .= '<tr><td>Events</td><td>Begin</td><td>End</td></tr>';
             foreach ( $results as $index=>$result ) {
                 $output .= '<tr>';
-                $output .= '<td><a href="?edit_mode=true&_id='.$result->event_id.'">'.$result->event_title.'</a></td>';
+                $output .= '<td><a href="?edit_mode=Edit&_id='.$result->event_id.'">'.$result->event_title.'</a></td>';
                 $output .= '<td>'.$result->event_begin.'</td>';
                 $output .= '<td>'.$result->event_end.'</td>';
                 $output .= '</tr>';
@@ -185,7 +184,8 @@ if (!class_exists('calendars')) {
             $output .= '<input class="wp-block-button__link" type="submit" value="Create" name="edit_mode">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
-            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+            //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="edit_mode">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
