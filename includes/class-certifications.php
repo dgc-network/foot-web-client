@@ -128,30 +128,16 @@ if (!class_exists('certifications')) {
             $user = new WP_User($_id);
             $output  = '<h2>'.$user->display_name.' setting</h2>';
             $output .= '<div id="datepicker"></div>';
-            $output .= '<div style="display:flex">';
+            //$output .= '<div style="display:flex">';
             global $wpdb;
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
-            $output .= '<div>上午</div>';
             foreach ( $results as $index=>$result ) {
-                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+                $output .= '<input type="checkbox" name=""> '.$result->timeslot_begin.' ~ '.$result->timeslot_end;
+                //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 2", OBJECT );
-            $output .= '<div style="text-align:center; width:100px">';
-            $output .= '<div>下午</div>';
-            foreach ( $results as $index=>$result ) {
-                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
-            }
-            $output .= '</div>';
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 3", OBJECT );
-            $output .= '<div style="text-align:center; width:100px">';
-            $output .= '<div>晚上</div>';
-            foreach ( $results as $index=>$result ) {
-                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
-            }
-            $output .= '</div>';
-            $output .= '</div>';
+            //$output .= '</div>';
             ?>
             <script>
                 jQuery(document).ready(function($) {
@@ -257,7 +243,7 @@ if (!class_exists('certifications')) {
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
                 $output .= '<div>';
-                $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</h2></div>';
+                $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
                 $output .= '<div>'.$item->get_name().'</div>';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
@@ -331,49 +317,15 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-/*
-            $sql = "CREATE TABLE `{$wpdb->prefix}course_learnings` (
-                learning_id int NOT NULL AUTO_INCREMENT,
-                course_id int NOT NULL,
-                learning_hours float DEFAULT 1.0,
-                learning_title varchar(255),
-                learning_link varchar(255),
-                teaching_id int DEFAULT 0,
-                is_witness boolean,
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (learning_id)
+
+            $sql = "CREATE TABLE `{$wpdb->prefix}available_timeslots` (
+                available_time_id int NOT NULL AUTO_INCREMENT,
+                available_date varchar(10) NOT NULL,
+                available_time_begin varchar(10) NOT NULL,
+                PRIMARY KEY  (available_time_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
-            $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
-                u_c_l_id int NOT NULL AUTO_INCREMENT,
-                student_id int NOT NULL,
-                learning_id int NOT NULL,
-                course_id int NOT NULL,
-                lecturer_id int,
-                lecture_date int,
-                witness_id int,
-                certified_date int,
-                txid varchar(255),
-                is_deleted boolean,
-                teaching_id int,
-                PRIMARY KEY  (u_c_l_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-
-            $sql = "CREATE TABLE `{$wpdb->prefix}learning_profit_sharing` (
-                l_p_s_id int NOT NULL AUTO_INCREMENT,
-                learning_id int NOT NULL,
-                sharing_title varchar(255),
-                sharing_id int,
-                sharing_profit float,
-                txid varchar(255),
-                is_deleted boolean,
-                PRIMARY KEY  (l_p_s_id)
-            ) $charset_collate;";        
-            dbDelta($sql);
-*/
         }        
     }
     new certifications();
