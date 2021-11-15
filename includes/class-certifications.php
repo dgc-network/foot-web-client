@@ -136,7 +136,7 @@ if (!class_exists('certifications')) {
             $output .= '<div><input id="datepicker" type="text" name="_available_date"></div>';
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id}", OBJECT );
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
                 $output .= '<input type="checkbox" name="" ';
                 if (!empty($row)) {$output .= ' value="true" checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
@@ -149,7 +149,7 @@ if (!class_exists('certifications')) {
                 jQuery(document).ready(function($) {
                     $("#datepicker").datepicker({
                         onSelect: function(dateText) {
-                            $("input[name*='_available_date']").val() = this.value;
+                            $("input[name='_available_date']").val() = this.value;
                             console.log("Selected date: " + dateText + "; input's current value: " + this.value);
                             $(this).change();
                         }
