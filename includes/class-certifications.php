@@ -132,8 +132,8 @@ if (!class_exists('certifications')) {
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
             //$output .= '<div style="text-align:center; width:100px">';
-            $output .= '<div><input type="text" name="_available_date"></div>';
-            $output .= '<div style="text-align:center;">';
+            $output .= '<div><input id="datepicker" type="text" name="_available_date"></div>';
+            $output .= '<div>';
             foreach ( $results as $index=>$result ) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id}", OBJECT );
                 $output .= '<input type="checkbox" name="" ';
