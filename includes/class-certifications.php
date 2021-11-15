@@ -95,9 +95,101 @@ if (!class_exists('certifications')) {
             </script>
             <?php
 
-            /** 
-             * footer
-             */
+            $output .= '<form>';
+            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            $output .= '</div>';
+            $output .= '<div class="wp-block-button">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</form>';
+
+            return $output;
+        }
+
+        function available_setting( $_id=0 ) {
+
+            if ($_id==0){
+                return '<div>ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+                if( $_POST['submit_action']=='Cancel' ) {
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
+                    return self::list_mode();
+                }
+
+                // Proceed to the WC_Order_Item to pickup the Reservation product
+            }
+
+            $user = new WP_User($_id);
+            $output  = '<h2>'.$user->display_name.' setting</h2>';
+            $output .= '<div id="datepicker"></div>';
+            $output .= '<div style="display:flex">';
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
+            $output .= '<div style="text-align:center; width:100px">';
+            $output .= '<div>上午</div>';
+            foreach ( $results as $index=>$result ) {
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+            }
+            $output .= '</div>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 2", OBJECT );
+            $output .= '<div style="text-align:center; width:100px">';
+            $output .= '<div>下午</div>';
+            foreach ( $results as $index=>$result ) {
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+            }
+            $output .= '</div>';
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 3", OBJECT );
+            $output .= '<div style="text-align:center; width:100px">';
+            $output .= '<div>晚上</div>';
+            foreach ( $results as $index=>$result ) {
+                $output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
+            }
+            $output .= '</div>';
+            $output .= '</div>';
+            ?>
+            <script>
+                jQuery(document).ready(function($) {
+                    $("#datepicker").datepicker({
+                        onSelect: function(dateText) {
+                            console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                            $(this).change();
+                        }
+                    })
+                    .on("change", function() {
+                        console.log("Got change event from field");
+                    });
+                    //$(".timepicker").on('hover', function() {
+                    //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
+                    //});
+                    //$('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
+                    //    function(){
+                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                    //    },
+                    //    function(){
+                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                    //    }
+                    //);
+                    $('.timepicker').on({
+                        mouseenter: function(){
+                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                        },
+                        mouseleave: function(){
+                            $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                        },
+                        click: function(){
+                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                        }
+                    });
+                });
+            </script>
+            <?php
+
             $output .= '<form>';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
@@ -115,6 +207,7 @@ if (!class_exists('certifications')) {
         static function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
+                if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
                 if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
                 if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
             }
@@ -164,7 +257,7 @@ if (!class_exists('certifications')) {
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
                 $output .= '<div>';
-                $output .= '<div><h1>'.$user->display_name.'</h1></div>';
+                $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</h2></div>';
                 $output .= '<div>'.$item->get_name().'</div>';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
