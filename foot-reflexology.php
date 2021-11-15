@@ -55,7 +55,7 @@ wp_insert_term( 'Reservation', 'product_cat', array(
     'parent' => 0,
     'slug' => 'reservation'
 ) );
-
+/*
 // Register main datepicker jQuery plugin script
 add_action( 'wp_enqueue_scripts', 'enabling_date_picker' );
 function enabling_date_picker() {
@@ -66,7 +66,7 @@ function enabling_date_picker() {
     // Load the datepicker jQuery-ui plugin script
     wp_enqueue_script( 'jquery-ui-datepicker' );
 }
-
+*/
 /**
  * Load jQuery datepicker.
  *
