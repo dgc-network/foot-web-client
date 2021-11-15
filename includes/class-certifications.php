@@ -116,6 +116,36 @@ if (!class_exists('certifications')) {
             }
 
             if( isset($_POST['submit_action']) ) {
+                if( $_POST['submit_action']=='Submit' ) {
+                    global $wpdb;
+                    $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
+                    foreach ( $results as $index=>$result ) {
+                        if ($_POST['_available_selected_'.$index]=='true') {
+                            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND available_time_begin={$result->timeslot_begin}", OBJECT );
+                            if (empty($row)) {
+                                $table = $wpdb->prefix.'available_timeslots';
+                                $data = array(
+                                    'available_host' => $_id,
+                                    'available_date' => $_POST['_available_date'],
+                                    'available_time_begin' => $result->timeslot_begin,
+                                );
+                                $format = array('%d', '%s', '%s');
+                                $insert_id = $wpdb->insert($table, $data, $format);
+                            }
+                        } else {
+                            $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND available_time_begin={$result->timeslot_begin}", OBJECT );
+                            if (!empty($row)) {
+                                $table = $wpdb->prefix.'available_timeslots';
+                                $where = array(
+                                    'available_host' => $_id, 
+                                    'available_date' => $_POST['_available_date'], 
+                                    'available_time_begin' => $result->timeslot_begin, 
+                                );
+                                $deleted = $wpdb->delete( $table, $where );
+                            }
+                        }
+                    }        
+                }
                 if( $_POST['submit_action']=='Cancel' ) {
                     unset($_GET['edit_mode']);
                     unset($_POST['edit_mode']);
@@ -137,7 +167,7 @@ if (!class_exists('certifications')) {
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
-                $output .= '<input type="checkbox" name="" ';
+                $output .= '<input type="checkbox" name="_available_selected_"'.$index.' ';
                 if (!empty($row)) {$output .= ' value="true" checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
                 //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
