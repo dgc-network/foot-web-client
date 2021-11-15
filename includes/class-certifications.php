@@ -126,8 +126,9 @@ if (!class_exists('certifications')) {
             }
 
             $user = new WP_User($_id);
-            $output  = '<h2>'.$user->display_name.' setting</h2>';
-            $output .= '<div id="datepicker"></div>';
+            $output  = '<h2>Available time setting</h2>';
+            //$output  = '<h2>'.$user->display_name.' setting</h2>';
+            //$output .= '<div id="datepicker"></div>';
             //$output .= '<div style="display:flex">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
