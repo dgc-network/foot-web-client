@@ -133,7 +133,8 @@ if (!class_exists('certifications')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
             foreach ( $results as $index=>$result ) {
-                $output .= '<input type="checkbox" name=""> '.$result->timeslot_begin.' ~ '.$result->timeslot_end;
+                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id}", OBJECT );
+                $output .= '<input type="checkbox" name=""> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
                 //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
@@ -320,6 +321,7 @@ if (!class_exists('certifications')) {
 
             $sql = "CREATE TABLE `{$wpdb->prefix}available_timeslots` (
                 available_time_id int NOT NULL AUTO_INCREMENT,
+                available_host int NOT NULL,
                 available_date varchar(10) NOT NULL,
                 available_time_begin varchar(10) NOT NULL,
                 PRIMARY KEY  (available_time_id)
