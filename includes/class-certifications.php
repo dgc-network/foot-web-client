@@ -147,10 +147,10 @@ if (!class_exists('certifications')) {
                     }        
                 }
                 if( $_POST['submit_action']=='Cancel' ) {
-                    unset($_GET['edit_mode']);
-                    unset($_POST['edit_mode']);
-                    return self::list_mode();
                 }
+                unset($_GET['edit_mode']);
+                unset($_POST['edit_mode']);
+                return self::list_mode();
 
                 // Proceed to the WC_Order_Item to pickup the Reservation product
             }
@@ -169,8 +169,8 @@ if (!class_exists('certifications')) {
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
-                $output .= '<input type="checkbox" name="_available_selected_"'.$index.' ';
-                if (!empty($row)) {$output .= ' value="true" checked';}
+                $output .= '<input type="checkbox" value="true" name="_available_selected_"'.$index;
+                if (!empty($row)) {$output .= ' checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
                 //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
