@@ -161,6 +161,8 @@ if (!class_exists('certifications')) {
             //$output .= '<div id="datepicker"></div>';
             //$output .= '<div style="display:flex">';
             global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
+            return var_dump($results);
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
             //$output .= '<div style="text-align:center; width:100px">';
             $output .= '<div><input id="datepicker" type="text" name="_available_date"></div>';
