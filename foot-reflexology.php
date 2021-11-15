@@ -148,12 +148,11 @@ if(!function_exists('wdm_get_cart_items_from_session'))
     }
 }
 */
+/*
 add_filter('woocommerce_checkout_cart_item_quantity','wdm_add_user_custom_option_from_session_into_cart',1,3);  
 add_filter('woocommerce_cart_item_price','wdm_add_user_custom_option_from_session_into_cart',1,3);
-if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
-{
- function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key )
-    {
+if(!function_exists('wdm_add_user_custom_option_from_session_into_cart')) {
+    function wdm_add_user_custom_option_from_session_into_cart($product_name, $values, $cart_item_key ) {
         echo '
         <script>
             jQuery(function($){
@@ -181,7 +180,7 @@ if(!function_exists('wdm_add_user_custom_option_from_session_into_cart'))
         }
     }
 }
-
+*/
 /*
 // Call datepicker functionality in your custom text field
 add_action('woocommerce_after_order_notes', 'my_custom_checkout_field', 10, 1);
