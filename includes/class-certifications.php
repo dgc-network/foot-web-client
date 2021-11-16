@@ -238,10 +238,10 @@ if (!class_exists('certifications')) {
                 $user = $order->get_user();
 
                 $output .= '<div style="display:flex">';
-                $output .= '<div style="display:table">';
-                $output .= '<div style="display:table-cell;vertical-align=middle">';
+                $output .= '<div style="display:flex">';
+                //$output .= '<div style="display:inline-block;vertical-align:middle">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
-                $output .= '</div>';
+                //$output .= '</div>';
                 $output .= '</div>';
                 $output .= '<div>';
                 $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
