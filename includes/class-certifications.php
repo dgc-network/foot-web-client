@@ -171,7 +171,7 @@ if (!class_exists('certifications')) {
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
-                $output .= '<input type="checkbox" value="true" name="_available_selected_"'.$index;
+                $output .= '<input type="checkbox" value="true" name="_available_selected_'.$index.'"';
                 if (!empty($row)) {$output .= ' checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
                 //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
