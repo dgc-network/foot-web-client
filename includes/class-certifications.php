@@ -14,7 +14,7 @@ if (!class_exists('certifications')) {
             self::create_tables();
         }
 
-        function available_timeslots( $_id=0 ) {
+        function available_timeslots( $dateText='' ) {
             $output = '<div style="display:flex">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
@@ -62,7 +62,7 @@ if (!class_exists('certifications')) {
             $user = new WP_User($_id);
             $output  = '<h2>'.$user->display_name.'的服務預約</h2>';
             $output .= '<div id="datepicker"></div>';
-            $output .= self::available_timeslots();
+            $output .= self::available_timeslots($dateText);
             ?>
             <script>
                 jQuery(document).ready(function($) {
@@ -75,23 +75,12 @@ if (!class_exists('certifications')) {
                     .on("change", function() {
                         console.log("Got change event from field");
                     });
-                    //$(".timepicker").on('hover', function() {
-                    //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
-                    //});
-                    //$('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
-                    //    function(){
-                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                    //    },
-                    //    function(){
-                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
-                    //    }
-                    //);
                     $('.timepicker').on({
                         mouseenter: function(){
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         },
                         mouseleave: function(){
-                            $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                            $(this).css({"border-color":"gray","color":"dark-gray","cursor":"default"});
                         },
                         click: function(){
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
@@ -153,9 +142,9 @@ if (!class_exists('certifications')) {
                         }
                     }        
                 }
-                if( $_POST['submit_action']=='Cancel' ) {
-                }
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
+                //if( $_POST['submit_action']=='Cancel' ) {
+                //}
+                //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
                 //return var_dump($results);
                 unset($_GET['edit_mode']);
                 unset($_POST['edit_mode']);
@@ -166,7 +155,7 @@ if (!class_exists('certifications')) {
 
             $user = new WP_User($_id);
             $output  = '<h2>Available time setting</h2>';
-            $output  = '<br>'.$user->display_name;
+            $output  = '<div>'.$user->display_name.'</div>';
             $output .= '<form method="post">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
@@ -183,38 +172,6 @@ if (!class_exists('certifications')) {
             <script>
                 jQuery(document).ready(function($) {
                     $("#datepicker").datepicker()
-                    //$("#datepicker").datepicker({
-                        //onSelect: function(dateText) {
-                        //    $("input[name='_available_date']").val() = this.value;
-                        //    console.log("Selected date: " + dateText + "; input's current value: " + this.value);
-                        //    $(this).change();
-                        //}
-                    //})
-                    //.on("change", function() {
-                    //    console.log("Got change event from field");
-                    //});
-                    //$(".timepicker").on('hover', function() {
-                    //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
-                    //});
-                    //$('.timepicker').css({"border-color":"gray","color":"gray"}).hover(
-                    //    function(){
-                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                    //    },
-                    //    function(){
-                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
-                    //    }
-                    //);
-                    //$('.timepicker').on({
-                    //    mouseenter: function(){
-                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                    //    },
-                    //    mouseleave: function(){
-                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
-                    //    },
-                    //    click: function(){
-                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                    //    }
-                    //});
                 });
             </script>
             <?php
