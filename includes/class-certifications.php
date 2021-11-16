@@ -51,8 +51,8 @@ if (!class_exists('certifications')) {
 
             if( isset($_POST['submit_action']) ) {
                 if( $_POST['submit_action']=='Cancel' ) {
-                    unset($_GET['edit_mode']);
-                    unset($_POST['edit_mode']);
+                    unset($_GET['view_mode']);
+                    unset($_POST['view_mode']);
                     return self::list_mode();
                 }
 
@@ -146,8 +146,8 @@ if (!class_exists('certifications')) {
                 //}
                 //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
                 //return var_dump($results);
-                unset($_GET['edit_mode']);
-                unset($_POST['edit_mode']);
+                unset($_GET['view_mode']);
+                unset($_POST['view_mode']);
                 return self::list_mode();
 
                 // Proceed to the WC_Order_Item to pickup the Reservation product
