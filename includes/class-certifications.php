@@ -150,7 +150,7 @@ if (!class_exists('certifications')) {
                 if( $_POST['submit_action']=='Cancel' ) {
                 }
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
-                return var_dump($results);
+                //return var_dump($results);
                 unset($_GET['edit_mode']);
                 unset($_POST['edit_mode']);
                 return self::list_mode();
@@ -160,37 +160,33 @@ if (!class_exists('certifications')) {
 
             $user = new WP_User($_id);
             $output  = '<h2>Available time setting</h2>';
+            $output  = '<br>'.$user->display_name;
             $output .= '<form method="post">';
-            //$output  = '<h2>'.$user->display_name.' setting</h2>';
-            //$output .= '<div id="datepicker"></div>';
-            //$output .= '<div style="display:flex">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
-            //$output .= '<div style="text-align:center; width:100px">';
             $output .= '<div><input id="datepicker" type="text" name="_available_date"></div>';
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
-                $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
+                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
                 $output .= '<input type="checkbox" value="true" name="_available_selected_'.$index.'"';
-                if (!empty($row)) {$output .= ' checked';}
+                //if (!empty($row)) {$output .= ' checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
-                //$output .= '<div class="timepicker" style="margin:5px; border-style:solid; border-width:thin;">'.$result->timeslot_begin.'</div>';
             }
             $output .= '</div>';
-            //$output .= '</div>';
             ?>
             <script>
                 jQuery(document).ready(function($) {
-                    $("#datepicker").datepicker({
-                        onSelect: function(dateText) {
-                            $("input[name='_available_date']").val() = this.value;
-                            console.log("Selected date: " + dateText + "; input's current value: " + this.value);
-                            $(this).change();
-                        }
-                    })
-                    .on("change", function() {
-                        console.log("Got change event from field");
-                    });
+                    $("#datepicker").datepicker()
+                    //$("#datepicker").datepicker({
+                        //onSelect: function(dateText) {
+                        //    $("input[name='_available_date']").val() = this.value;
+                        //    console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                        //    $(this).change();
+                        //}
+                    //})
+                    //.on("change", function() {
+                    //    console.log("Got change event from field");
+                    //});
                     //$(".timepicker").on('hover', function() {
                     //    $(".showlist-artwork,.showlist-info",this).toggle().off("hover");
                     //});
@@ -202,17 +198,17 @@ if (!class_exists('certifications')) {
                     //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
                     //    }
                     //);
-                    $('.timepicker').on({
-                        mouseenter: function(){
-                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                        },
-                        mouseleave: function(){
-                            $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
-                        },
-                        click: function(){
-                            $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
-                        }
-                    });
+                    //$('.timepicker').on({
+                    //    mouseenter: function(){
+                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                    //    },
+                    //    mouseleave: function(){
+                    //        $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+                    //    },
+                    //    click: function(){
+                    //        $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+                    //    }
+                    //});
                 });
             </script>
             <?php
