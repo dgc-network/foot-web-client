@@ -117,13 +117,13 @@ if (!class_exists('certifications')) {
 
             if( isset($_POST['submit_action']) ) {
                 if( $_POST['submit_action']=='Submit' ) {
-                    return $_POST['_available_date'];
                     global $wpdb;
                     $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
                     foreach ( $results as $index=>$result ) {
                         if ($_POST['_available_selected_'.$index]=='true') {
                             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND available_time_begin={$result->timeslot_begin}", OBJECT );
                             if (empty($row)) {
+                                return $_POST['_available_date'];
                                 $table = $wpdb->prefix.'available_timeslots';
                                 $data = array(
                                     'available_host' => $_id,
@@ -149,6 +149,8 @@ if (!class_exists('certifications')) {
                 }
                 if( $_POST['submit_action']=='Cancel' ) {
                 }
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
+                return var_dump($results);
                 unset($_GET['edit_mode']);
                 unset($_POST['edit_mode']);
                 return self::list_mode();
@@ -225,8 +227,6 @@ if (!class_exists('certifications')) {
             $output .= '</div>';
             $output .= '</form>';
 
-            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
-            $output .=  var_dump($results);
             return $output;
         }
 
@@ -279,8 +279,10 @@ if (!class_exists('certifications')) {
                 $user = $order->get_user();
 
                 $output .= '<div style="display:flex">';
-                $output .= '<div style="">';
+                $output .= '<div style="display:table">';
+                $output .= '<div style="display:table-cell;vertical-align=middle">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
+                $output .= '</div>';
                 $output .= '</div>';
                 $output .= '<div>';
                 $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
