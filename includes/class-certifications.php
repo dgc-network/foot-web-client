@@ -14,28 +14,11 @@ if (!class_exists('certifications')) {
             self::create_tables();
         }
 
-        function booking( $_id=0 ) {
-
-            if ($_id==0){
-                return '<div>ID is required</div>';
-            }
-
-            if( isset($_POST['submit_action']) ) {
-                if( $_POST['submit_action']=='Cancel' ) {
-                    unset($_GET['edit_mode']);
-                    unset($_POST['edit_mode']);
-                    return self::list_mode();
-                }
-
-                // Proceed to the WC_Order_Item to pickup the Reservation product
-            }
-
-            $user = new WP_User($_id);
-            $output  = '<h2>'.$user->display_name.'的服務預約</h2>';
-            $output .= '<div id="datepicker"></div>';
-            $output .= '<div style="display:flex">';
+        function available_timeslots( $_id=0 ) {
+            $output = '<div style="display:flex">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
+            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND timeslot_session = 1", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>上午</div>';
             foreach ( $results as $index=>$result ) {
@@ -57,6 +40,29 @@ if (!class_exists('certifications')) {
             }
             $output .= '</div>';
             $output .= '</div>';
+            return $output;
+        }
+
+        function booking( $_id=0 ) {
+
+            if ($_id==0){
+                return '<div>ID is required</div>';
+            }
+
+            if( isset($_POST['submit_action']) ) {
+                if( $_POST['submit_action']=='Cancel' ) {
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
+                    return self::list_mode();
+                }
+
+                // Proceed to the WC_Order_Item to pickup the Reservation product
+            }
+
+            $user = new WP_User($_id);
+            $output  = '<h2>'.$user->display_name.'的服務預約</h2>';
+            $output .= '<div id="datepicker"></div>';
+            $output .= self::available_timeslots();
             ?>
             <script>
                 jQuery(document).ready(function($) {
