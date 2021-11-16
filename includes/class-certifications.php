@@ -123,7 +123,7 @@ if (!class_exists('certifications')) {
                         if ($_POST['_available_selected_'.$index]=='true') {
                             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND available_time_begin={$result->timeslot_begin}", OBJECT );
                             if (empty($row)) {
-                                return $_POST['_available_date'];
+                                //return $_POST['_available_date'];
                                 $table = $wpdb->prefix.'available_timeslots';
                                 $data = array(
                                     'available_host' => $_id,
