@@ -157,6 +157,7 @@ if (!class_exists('certifications')) {
 
             $user = new WP_User($_id);
             $output  = '<h2>Available time setting</h2>';
+            $output .= '<form>';
             //$output  = '<h2>'.$user->display_name.' setting</h2>';
             //$output .= '<div id="datepicker"></div>';
             //$output .= '<div style="display:flex">';
@@ -213,7 +214,6 @@ if (!class_exists('certifications')) {
             </script>
             <?php
 
-            $output .= '<form>';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
