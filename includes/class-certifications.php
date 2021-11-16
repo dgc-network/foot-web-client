@@ -117,6 +117,7 @@ if (!class_exists('certifications')) {
 
             if( isset($_POST['submit_action']) ) {
                 if( $_POST['submit_action']=='Submit' ) {
+                    return $_POST['_available_date'];
                     global $wpdb;
                     $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots ORDER BY timeslot_begin", OBJECT );
                     foreach ( $results as $index=>$result ) {
@@ -157,7 +158,7 @@ if (!class_exists('certifications')) {
 
             $user = new WP_User($_id);
             $output  = '<h2>Available time setting</h2>';
-            $output .= '<form>';
+            $output .= '<form method="post">';
             //$output  = '<h2>'.$user->display_name.' setting</h2>';
             //$output .= '<div id="datepicker"></div>';
             //$output .= '<div style="display:flex">';
@@ -358,11 +359,11 @@ if (!class_exists('certifications')) {
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
             $sql = "CREATE TABLE `{$wpdb->prefix}available_timeslots` (
-                available_time_id int NOT NULL AUTO_INCREMENT,
+                available_id int NOT NULL AUTO_INCREMENT,
                 available_host int NOT NULL,
                 available_date varchar(10) NOT NULL,
                 available_time_begin varchar(10) NOT NULL,
-                PRIMARY KEY  (available_time_id)
+                PRIMARY KEY  (available_id)
             ) $charset_collate;";        
             dbDelta($sql);
 
