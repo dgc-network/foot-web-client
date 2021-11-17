@@ -65,6 +65,7 @@ if (!class_exists('certifications')) {
             $output .= self::available_timeslots($dateText);
             ?>
             <script>
+/*
                 jQuery(document).ready(function($) {
                     $("#datepicker").datepicker({
                         onSelect: function(dateText) {
@@ -80,13 +81,14 @@ if (!class_exists('certifications')) {
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         },
                         mouseleave: function(){
-                            $(this).css({"border-color":"gray","color":"dark-gray","cursor":"default"});
+                            $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
                         },
                         click: function(){
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
                         }
                     });
                 });
+*/
             </script>
             <?php
 
@@ -244,7 +246,7 @@ if (!class_exists('certifications')) {
                 $output .= '<div>';
                 //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
                 //$output .= '<div>'.$item->get_name().'</div>';
-                $output .= '<h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2>';
+                $output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
                 $output .= ''.$item->get_name().'';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
@@ -331,5 +333,58 @@ if (!class_exists('certifications')) {
         }        
     }
     new certifications();
+}
+
+add_action( 'admin_footer', 'my_action_javascript' ); // Write our JS below here
+function my_action_javascript() { ?>
+	<script type="text/javascript" >
+	jQuery(document).ready(function($) {
+
+        $("#datepicker").datepicker({
+            onSelect: function(dateText) {
+                //console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                $(this).change();
+            }
+        }).on("change", function() {
+            //console.log("Got change event from field");
+            var data = {
+			    'action': 'my_action',
+			    'whatever': 1234
+            }
+	    	// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+            jQuery.post(ajaxurl, data, function(response) {
+	    		alert('Got this from the server: ' + response);
+    		});
+        };
+
+        });
+        $('.timepicker').on({
+            mouseenter: function(){
+                $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+            },
+            mouseleave: function(){
+                $(this).css({"border-color":"gray","color":"gray","cursor":"default"});
+            },
+            click: function(){
+                $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
+            }
+        });
+
+	});
+	</script> <?php
+}
+
+add_action( 'wp_ajax_my_action', 'my_action' );
+add_action( 'wp_ajax_nopriv_my_action', 'my_action' );
+function my_action() {
+	global $wpdb; // this is how you get access to the database
+
+	$whatever = intval( $_POST['whatever'] );
+
+	$whatever += 10;
+
+    echo $whatever;
+
+	wp_die(); // this is required to terminate immediately and return a proper response
 }
 ?>
