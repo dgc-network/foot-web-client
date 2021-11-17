@@ -238,14 +238,14 @@ if (!class_exists('certifications')) {
                 $user = $order->get_user();
 
                 $output .= '<div style="display:flex">';
-                $output .= '<div style="display:flex">';
-                //$output .= '<div style="display:inline-block;vertical-align:middle">';
+                $output .= '<div style="display:flex;align-items:center;margin:20px">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
-                //$output .= '</div>';
                 $output .= '</div>';
                 $output .= '<div>';
-                $output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
-                $output .= '<div>'.$item->get_name().'</div>';
+                //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
+                //$output .= '<div>'.$item->get_name().'</div>';
+                $output .= '<h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2>';
+                $output .= ''.$item->get_name().'';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
