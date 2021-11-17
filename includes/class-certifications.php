@@ -65,17 +65,25 @@ if (!class_exists('certifications')) {
             $output .= self::available_timeslots($dateText);
             ?>
             <script>
-/*
+
                 jQuery(document).ready(function($) {
                     $("#datepicker").datepicker({
                         onSelect: function(dateText) {
-                            console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                            //console.log("Selected date: " + dateText + "; input's current value: " + this.value);
                             $(this).change();
                         }
-                    })
-                    .on("change", function() {
-                        console.log("Got change event from field");
+                    }).on("change", function() {
+                        //console.log("Got change event from field");
+                        var data = {
+			                'action': 'my_action',
+			                'whatever': 1234
+                        }
+	    	            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+                        jQuery.post(ajaxurl, data, function(response) {
+	    		            alert('Got this from the server: ' + response);
+    		            });
                     });
+                    
                     $('.timepicker').on({
                         mouseenter: function(){
                             $(this).css({"border-color":"red","color":"red","cursor":"pointer"});
@@ -88,7 +96,7 @@ if (!class_exists('certifications')) {
                         }
                     });
                 });
-*/
+
             </script>
             <?php
 
