@@ -36,6 +36,23 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/CreateUserCourseLearin
 include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearingAction.php';
 
 /**
+ * Register a custom menu page.
+ */
+function wpdocs_register_my_custom_menu_page() {
+    $menu_slug = 'wpdocs-orders-slug';
+    add_menu_page(
+        __( 'Custom Menu Title', 'textdomain' ),
+        'custom menu',
+        'manage_options',
+        'blockchain/php-OP_RETURN/op_return_setting.php',
+        '',
+        plugins_url( 'myplugin/images/icon.png' ),
+        6
+    );
+}
+add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
+
+/**
  * Add product categories.
  */
 wp_insert_term( 'Courses', 'product_cat', array(
