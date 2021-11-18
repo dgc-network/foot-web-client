@@ -75,14 +75,31 @@ if (!class_exists('certifications')) {
                     }).on("change", function() {
                         //console.log("Got change event from field");
                         var data = {
-			                'action': 'my_action',
-			                'whatever': 1234
+			                //'action': 'my_action',
+			                //'whatever': 1234
+			                action: 'my_action',
+			                whatever: 1234
                         }
 	    	            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                         //jQuery.post(ajaxurl, data, function(response) {
                         jQuery.post('admin-ajax.php', data, function(response) {                            
 	    		            alert('Got this from the server: ' + response);
     		            });
+/*
+                        jQuery.ajax({
+                            type : "post",
+                            dataType : "json",
+                            url : myAjax.ajaxurl,
+                            data : {action: "my_user_like", post_id : post_id, nonce: nonce},
+                            success: function(response) {
+                                if(response.type == "success") {
+                                    jQuery("#like_counter").html(response.like_count);
+                                } else {
+                                    alert("Your like could not be added");
+                                }
+                            }
+                        });
+*/                        
                     });
 
                     $('.timepicker').on({
@@ -343,7 +360,7 @@ if (!class_exists('certifications')) {
     }
     new certifications();
 }
-
+/*
 add_action( 'admin_footer', 'my_action_javascript' ); // Write our JS below here
 function my_action_javascript() { ?>
 	<script type="text/javascript" >
@@ -382,7 +399,7 @@ function my_action_javascript() { ?>
 	});
 	</script> <?php
 }
-
+*/
 add_action( 'wp_ajax_my_action', 'my_action' );
 add_action( 'wp_ajax_nopriv_my_action', 'my_action' );
 function my_action() {
