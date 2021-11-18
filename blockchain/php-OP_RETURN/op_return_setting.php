@@ -56,6 +56,23 @@
 */    
 //}
 //
+/**
+ * Register a custom menu page.
+ */
+function wpdocs_register_my_custom_menu_page() {
+    $menu_slug = 'wpdocs-orders-slug';
+    add_menu_page(
+        __( 'Custom Menu Title', 'textdomain' ),
+        'op_return Setting',
+        'manage_options',
+        $menu_slug,
+        'op_return_render_settings_page',
+        plugins_url( 'myplugin/images/icon.png' ),
+        6
+    );
+}
+add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
+
 function op_return_add_settings_page() {
     add_options_page(
       'OP_RETURN Settings',
