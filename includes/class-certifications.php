@@ -387,6 +387,7 @@ add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
 function my_custom_menu_page(){
     //certifications::list_mode();
     esc_html_e( 'Admin Page Test', 'textdomain' );  
+    echo do_shortcode('[certification-list]');
 }
 
 /*
