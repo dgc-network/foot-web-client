@@ -220,7 +220,7 @@ if (!class_exists('certifications')) {
             return $output;
         }
 
-        static function list_mode() {
+        function list_mode() {
             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
@@ -385,8 +385,8 @@ add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
  * Display a custom menu page
  */
 function my_custom_menu_page(){
-    certifications::list_mode();
-    //esc_html_e( 'Admin Page Test', 'textdomain' );  
+    //certifications::list_mode();
+    esc_html_e( 'Admin Page Test', 'textdomain' );  
 }
 
 /*
