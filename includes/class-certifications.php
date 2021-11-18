@@ -374,13 +374,20 @@ function wpdocs_register_my_menu_page() {
         'Certification',
         'manage_options',
         $menu_slug,
-        array('certifications','list_mode'),
+        'my_custom_menu_page',
         plugins_url( 'myplugin/images/icon.png' ),
         6
     );
 }
 add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
 
+/**
+ * Display a custom menu page
+ */
+function my_custom_menu_page(){
+    certifications::list_mode();
+    //esc_html_e( 'Admin Page Test', 'textdomain' );  
+}
 
 /*
 add_action( 'admin_footer', 'my_action_javascript' ); // Write our JS below here
