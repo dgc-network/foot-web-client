@@ -91,7 +91,7 @@ if (!class_exists('certifications')) {
                             type : "post",
                             dataType : "json",
                             //url : myAjax.ajaxurl,
-                            url : myAjax.ajaxurl,
+                            url : 'admin-ajax.php',
                             data : {action: "my_action", post_id : post_id, nonce: nonce},
                             success: function(response) {
                                 if(response.type == "success") {
