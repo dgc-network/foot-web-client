@@ -82,24 +82,27 @@ if (!class_exists('certifications')) {
                         }
 	    	            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                         //jQuery.post(ajaxurl, data, function(response) {
+/*                            
                         jQuery.post('admin-ajax.php', data, function(response) {                            
 	    		            alert('Got this from the server: ' + response);
     		            });
-/*
+*/
                         jQuery.ajax({
                             type : "post",
                             dataType : "json",
+                            //url : myAjax.ajaxurl,
                             url : myAjax.ajaxurl,
-                            data : {action: "my_user_like", post_id : post_id, nonce: nonce},
+                            data : {action: "my_action", post_id : post_id, nonce: nonce},
                             success: function(response) {
                                 if(response.type == "success") {
-                                    jQuery("#like_counter").html(response.like_count);
+                                    //jQuery("#like_counter").html(response.like_count);
+                                    alert("Your like could be added");
                                 } else {
                                     alert("Your like could not be added");
                                 }
                             }
                         });
-*/                        
+                 
                     });
 
                     $('.timepicker').on({
