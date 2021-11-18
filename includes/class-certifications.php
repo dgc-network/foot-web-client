@@ -363,6 +363,25 @@ if (!class_exists('certifications')) {
     }
     new certifications();
 }
+
+/**
+ * Register a custom menu page.
+ */
+function wpdocs_register_my_menu_page() {
+    $menu_slug = 'wpdocs-slug';
+    add_menu_page(
+        __( 'Custom Menu Title', 'textdomain' ),
+        'Certification',
+        'manage_options',
+        $menu_slug,
+        array('certifications','list_mode'),
+        plugins_url( 'myplugin/images/icon.png' ),
+        6
+    );
+}
+add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
+
+
 /*
 add_action( 'admin_footer', 'my_action_javascript' ); // Write our JS below here
 function my_action_javascript() { ?>

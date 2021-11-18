@@ -63,7 +63,7 @@ function wpdocs_register_my_custom_menu_page() {
     $menu_slug = 'wpdocs-orders-slug';
     add_menu_page(
         __( 'Custom Menu Title', 'textdomain' ),
-        'op_return Setting',
+        'OP_RETURN',
         'manage_options',
         $menu_slug,
         'op_return_render_settings_page',
