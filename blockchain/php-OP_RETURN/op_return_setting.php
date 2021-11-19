@@ -71,7 +71,7 @@ function wpdocs_register_my_custom_menu_page() {
         6
     );
 }
-add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
+//add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
 
 function op_return_add_settings_page() {
     add_options_page(
