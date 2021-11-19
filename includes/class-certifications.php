@@ -226,7 +226,8 @@ if (!class_exists('certifications')) {
 
         function list_mode() {
 
-            return $this->current_uri;
+            $parts = parse_url( home_url() );
+            return home_url();
                             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
