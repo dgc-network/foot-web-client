@@ -272,7 +272,7 @@ if (!class_exists('certifications')) {
                 $product = $item->get_product();
                 $user = $order->get_user();
 
-                $output .= '<div style="display:flex">';
+                $output .= '<div style="display:flex;border:1px solid">';
                 $output .= '<div style="display:flex;align-items:center;margin:20px">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
