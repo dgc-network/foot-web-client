@@ -226,7 +226,8 @@ if (!class_exists('certifications')) {
 
         function list_mode() {
                             
-            return var_dump($this->permalink);
+            //return var_dump($this->permalink);
+            return get_permalink();
 
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
