@@ -282,15 +282,15 @@ if (!class_exists('certifications')) {
                 //return self::$permalink;
                 //return $this->permalink;
                 $output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-/*                
+/*
                 $output .= '<h3><a href="';
                 if (strpos($this->permalink, '?') !== false) {
                     $output .= '?';
                 } else {
                     $output .= '&';
                 }
-*/                
                 $output .= 'view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
+*/
                 $output .= ''.$item->get_name().'';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
