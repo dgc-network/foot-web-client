@@ -6,7 +6,7 @@ if (!class_exists('certifications')) {
 
     class certifications {
 
-        private $current_uri;
+        public $current_uri;
 
         /**
          * Class constructor
