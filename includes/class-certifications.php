@@ -14,7 +14,8 @@ if (!class_exists('certifications')) {
         public function __construct() {
             add_shortcode('certification-list', __CLASS__ . '::list_mode');
             self::create_tables();
-            self::$permalink = get_permalink();
+            //self::$permalink = get_permalink();
+            $this->permalink = get_permalink();
         }
 
         function available_timeslots( $dateText='' ) {
@@ -278,7 +279,8 @@ if (!class_exists('certifications')) {
                 $output .= '<div>';
                 //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
                 //$output .= '<div>'.$item->get_name().'</div>';
-                return self::$permalink;
+                //return self::$permalink;
+                return $this->permalink;
                 if (strpos(self::$permalink, '?') !== false) {
                     echo 'true';
                 }
