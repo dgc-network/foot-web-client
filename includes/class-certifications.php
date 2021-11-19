@@ -6,7 +6,7 @@ if (!class_exists('certifications')) {
 
     class certifications {
 
-        public $current_uri;
+        private $current_uri;
 
         /**
          * Class constructor
@@ -225,10 +225,10 @@ if (!class_exists('certifications')) {
             return $output;
         }
 
-        function list_mode() {
+        public function list_mode() {
 
             $parts = parse_url( home_url() );
-            return self::$current_uri;
+            return $this->current_uri;
                             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
