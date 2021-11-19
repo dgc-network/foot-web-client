@@ -225,7 +225,9 @@ if (!class_exists('certifications')) {
         }
 
         function list_mode() {
-            
+                            
+            return $this->permalink;
+
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
                 if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
@@ -280,7 +282,6 @@ if (!class_exists('certifications')) {
                 //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
                 //$output .= '<div>'.$item->get_name().'</div>';
                 //return self::$permalink;
-                //return $this->permalink;
                 $output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
 /*
                 $output .= '<h3><a href="';
