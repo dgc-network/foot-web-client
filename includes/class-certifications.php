@@ -15,7 +15,8 @@ if (!class_exists('certifications')) {
             add_shortcode('certification-list', __CLASS__ . '::list_mode');
             self::create_tables();
             $parts = parse_url( home_url() );
-            $this->current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
+            //$this->current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
+            self::$current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
         }
 
         function available_timeslots( $dateText='' ) {
@@ -227,7 +228,7 @@ if (!class_exists('certifications')) {
         function list_mode() {
 
             $parts = parse_url( home_url() );
-            return $parts;
+            return $current_uri;
                             
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
