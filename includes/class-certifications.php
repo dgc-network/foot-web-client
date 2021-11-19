@@ -6,7 +6,7 @@ if (!class_exists('certifications')) {
 
     class certifications {
 
-        private $permalink;
+        private $current_uri;
 
         /**
          * Class constructor
@@ -14,8 +14,8 @@ if (!class_exists('certifications')) {
         public function __construct() {
             add_shortcode('certification-list', __CLASS__ . '::list_mode');
             self::create_tables();
-            //self::$permalink = get_permalink();
-            $this->permalink = get_permalink();
+            $parts = parse_url( home_url() );
+            $this->current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
         }
 
         function available_timeslots( $dateText='' ) {
@@ -226,15 +226,6 @@ if (!class_exists('certifications')) {
 
         function list_mode() {
                             
-            //return var_dump($this->permalink);
-            //global $wp;
-            //return home_url( $wp->request );
-            //return get_permalink();
-            // absolute URI in multisite aware environment
-            $parts = parse_url( home_url() );
-            $current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
-            return $current_uri;
-
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
                 if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
@@ -289,16 +280,16 @@ if (!class_exists('certifications')) {
                 //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
                 //$output .= '<div>'.$item->get_name().'</div>';
                 //return self::$permalink;
-                $output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-/*
+                //$output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
+
                 $output .= '<h3><a href="';
-                if (strpos($this->permalink, '?') !== false) {
+                if (strpos($this->current_uri, '?') !== false) {
                     $output .= '?';
                 } else {
                     $output .= '&';
                 }
                 $output .= 'view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-*/
+
                 $output .= ''.$item->get_name().'';
                 $output .= '<form method="get">';
                 $output .= '<div class="wp-block-buttons">';
