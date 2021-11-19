@@ -272,7 +272,7 @@ if (!class_exists('certifications')) {
                 $product = $item->get_product();
                 $user = $order->get_user();
 
-                $output .= '<div style="display:flex;border:1px solid">';
+                $output .= '<div style="display:flex;border:1px solid;padding:10px">';
                 $output .= '<div style="display:flex;align-items:center;margin:20px">';
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
@@ -298,7 +298,7 @@ if (!class_exists('certifications')) {
                 $output .= '<input class="wp-block-button__link" type="submit" value="Booking" name="view_mode">';
                 $output .= '</div>';
                 $output .= '<div class="wp-block-button">';
-                $output .= '<input class="wp-block-button__link" type="submit" value="More..." name="view_mode">';
+                //$output .= '<input class="wp-block-button__link" type="submit" value="More..." name="view_mode">';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '<input type="hidden" value="'.$order->get_user_id().'" name="_id">';
