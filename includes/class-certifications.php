@@ -227,6 +227,8 @@ if (!class_exists('certifications')) {
         function list_mode() {
                             
             //return var_dump($this->permalink);
+            global $wp;
+            return home_url( $wp->request );
             return get_permalink();
 
             if( isset($_GET['view_mode']) ) {
