@@ -10,10 +10,7 @@ if (!class_exists('courses')) {
          * Class constructor
          */
         public function __construct() {
-            //add_shortcode('course_list', __CLASS__ . '::list_mode');
             add_shortcode('course-list', __CLASS__ . '::list_mode');
-            //add_shortcode('course_edit', __CLASS__ . '::edit_mode');
-            //add_shortcode('course_view', __CLASS__ . '::view_mode');
             self::create_tables();
 
         }
@@ -26,6 +23,12 @@ if (!class_exists('courses')) {
 
             if( isset($_POST['submit_action']) ) {
         
+                if( $_POST['submit_action']=='Cancel' ) {
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
+                    return self::list_mode();
+                }
+
                 global $wpdb;
                 $current_user_id = get_current_user_id();
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}learning_profit_sharing WHERE learning_id = {$_id}", OBJECT );
@@ -102,10 +105,11 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -219,11 +223,11 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -285,20 +289,17 @@ if (!class_exists('courses')) {
             }
 
             /** 
-             * view_mode header
+             * product_item_orders header
              */
             $product = wc_get_product( $_id );
             $output  = '<h2>課程註冊列表</h2>';
-            //$output .= '<form method="post">';
+            $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
-            //$output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
-            //$output .= '<tr><td>'.'List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
-            //$output .= '<tr><td>'.'Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
-             * course relationship with orders
+             * product_item_orders detail
              */
             $customer_orders = [];
             foreach ( wc_get_is_paid_statuses() as $paid_status ) {
@@ -363,17 +364,17 @@ if (!class_exists('courses')) {
             $output .= '</tr></tbody></table></figure>';            
 
             /** 
-             * view_mode footer
+             * product_item_orders footer
              */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -389,9 +390,6 @@ if (!class_exists('courses')) {
                 if ($_GET['view_mode']=='item_orders') return self::item_orders($_GET['_id']);
             }
 
-            /**
-             * List Mode
-             */
             $args = array(
                 'post_type'      => 'product',
                 'product_cat'    => 'Courses',

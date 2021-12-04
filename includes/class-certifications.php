@@ -236,9 +236,6 @@ if (!class_exists('certifications')) {
                 if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
             }
 
-            /**
-             * List Mode
-             */
             $args = array(
                 'post_type'      => 'product',
                 'product_cat'    => 'Certification',

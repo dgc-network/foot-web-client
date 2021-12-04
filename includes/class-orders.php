@@ -11,18 +11,24 @@ if (!class_exists('orders')) {
          * Class constructor
          */
         public function __construct() {
-            add_shortcode('order_list', __CLASS__ . '::list_mode');
             add_shortcode('order-list', __CLASS__ . '::list_mode');
             self::create_tables();
         }
 
-        function course_learnings( $_id=null ) {
+        function course_learnings( $_id=0 ) {
 
-            if ($_id==null){
+            if ($_id==0){
                 return '<div>course ID is required</div>';
             }
 
-            if( isset($_POST['submit_action']) ) {        
+            if( isset($_POST['submit_action']) ) {
+                
+                if( $_POST['submit_action']=='Cancel' ) {
+                    unset($_GET['edit_mode']);
+                    unset($_POST['edit_mode']);
+                    return self::list_mode();
+                }
+
                 $current_user_id = get_current_user_id();
                 global $wpdb;
                 $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
@@ -77,7 +83,7 @@ if (!class_exists('orders')) {
             $output .= '</tbody></table></figure>';
 
             /** 
-             * user course relationship with learning
+             * course learning vs. user detail
              */
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
@@ -114,10 +120,11 @@ if (!class_exists('orders')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            $output .= '</form>';
-            $output .= '<form method="get">';
+            //$output .= '</form>';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -129,7 +136,6 @@ if (!class_exists('orders')) {
 
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
-                //return self::view_mode($_GET['_id']);
             }
 
             $user_id = get_current_user_id();
@@ -146,12 +152,9 @@ if (!class_exists('orders')) {
             $output  = '<h2>註冊課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Courses</td><td>Date</td><td>Status</td></tr>';
-            //$total = 0;
             foreach ( $customer_orders as $order ) {
-                //$total += $order->get_total();
 
                 $items = $order->get_items();
-
                 foreach ( $order->get_items() as $item ) {
                     $product = $item->get_product();
                     if (strpos($product->get_categories(),'Courses')!==false) {
