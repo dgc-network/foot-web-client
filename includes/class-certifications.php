@@ -226,10 +226,10 @@ if (!class_exists('certifications')) {
         }
 
         public function list_mode() {
-
+/*
             $parts = parse_url( home_url() );
             return $this->current_uri;
-                            
+*/                            
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
                 if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
