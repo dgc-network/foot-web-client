@@ -282,7 +282,7 @@ if (!class_exists('certifications')) {
                 //$output .= '<div>'.$item->get_name().'</div>';
                 //return self::$permalink;
                 //$output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-
+/*
                 $output .= '<h3><a href="';
                 if (strpos($this->current_uri, '?') !== false) {
                     $output .= '?';
@@ -290,6 +290,8 @@ if (!class_exists('certifications')) {
                     $output .= '&';
                 }
                 $output .= 'view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
+*/
+                $output .= '<h3>'.$user->display_name.'</h3>';
 
                 $output .= ''.$item->get_name().'';
                 $output .= '<form method="get">';
