@@ -126,7 +126,8 @@ if (!class_exists('certifications')) {
             </script>
             <?php
 
-            $output .= '<form>';
+            $output .= '<form method="post">';
+            $output .= '<input type="hidden" value="'.$_id.'" name="_id">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
@@ -236,6 +237,12 @@ if (!class_exists('certifications')) {
                 if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
             }
 
+            if( isset($_POST['view_mode']) ) {
+                if ($_POST['view_mode']=='Available') return self::available_setting($_POST['_id']);
+                if ($_POST['view_mode']=='Booking') return self::booking($_POST['_id']);
+                if ($_POST['view_mode']=='More...') return self::see_more($_POST['_id']);
+            }
+
             $args = array(
                 'post_type'      => 'product',
                 'product_cat'    => 'Certification',
@@ -294,7 +301,8 @@ if (!class_exists('certifications')) {
                 $output .= '<h3>'.$user->display_name.'</h3>';
 
                 $output .= ''.$item->get_name().'';
-                $output .= '<form method="get">';
+                //$output .= '<form method="get">';
+                $output .= '<form method="post">';
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
                 $output .= '<input class="wp-block-button__link" type="submit" value="Booking" name="view_mode">';
