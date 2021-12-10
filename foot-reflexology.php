@@ -50,12 +50,34 @@ function wpdocs_register_my_menu_page() {
         plugins_url( 'myplugin/images/icon.png' ),
         6
     );
-*/    
+    
     add_menu_page(
         __( 'Reflexology Setting', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
         'manage_options',
         $menu_slug
+    );
+*/    
+    add_menu_page(
+        'My Custom Page', 
+        'My Custom Page', 
+        'manage_options', 
+        'my-top-level-slug'
+    );
+    add_submenu_page( 
+        'my-top-level-slug', 
+        'My Custom Page', 
+        'My Custom Page',
+        'manage_options', 
+        'my-top-level-slug'
+    );
+    add_submenu_page( 
+        'my-top-level-slug', 
+        'My Custom Submenu Page', 
+        'My Custom Submenu Page',
+        'manage_options', 
+        'my-secondary-slug',
+        'my_custom_menu_page',
     );
 }
 add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
