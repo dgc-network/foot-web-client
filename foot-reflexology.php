@@ -40,6 +40,7 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearin
  */
 function wpdocs_register_my_menu_page() {
     $menu_slug = 'wpdocs-slug';
+/*    
     add_menu_page(
         __( 'Custom Menu Title', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
@@ -48,6 +49,13 @@ function wpdocs_register_my_menu_page() {
         'my_custom_menu_page',
         plugins_url( 'myplugin/images/icon.png' ),
         6
+    );
+*/    
+    add_menu_page(
+        __( 'Reflexology Setting', 'textdomain' ),
+        __( 'Reflexology', 'textdomain' ),
+        'manage_options',
+        $menu_slug
     );
 }
 add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
