@@ -78,7 +78,8 @@ function wpdocs_register_my_custom_submenu_page() {
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
         'manage_options',
-        'op-return-page',
+        $menu_slug,
+        //'op-return-page',
         'op_return_render_settings_page'
     );
 }
