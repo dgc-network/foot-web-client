@@ -59,8 +59,9 @@
 /**
  * Register a custom menu page.
  */
-function wpdocs_register_my_custom_menu_page() {
-    $menu_slug = 'wpdocs-orders-slug';
+function wpdocs_register_my_custom_submenu_page() {
+    $menu_slug = 'wpdocs-slug';
+/*    
     add_menu_page(
         __( 'Custom Menu Title', 'textdomain' ),
         'OP_RETURN',
@@ -70,8 +71,18 @@ function wpdocs_register_my_custom_menu_page() {
         plugins_url( 'myplugin/images/icon.png' ),
         6
     );
+*/    
+    add_submenu_page(
+        //'edit.php?post_type=book',
+        $menu_slug,
+        __( 'OP_RETURN Settings', 'textdomain' ),
+        __( 'OP_RETURN', 'textdomain' ),
+        'manage_options',
+        'op-return-page',
+        'op_return_render_settings_page'
+    );
 }
-//add_action( 'admin_menu', 'wpdocs_register_my_custom_menu_page' );
+add_action( 'admin_menu', 'wpdocs_register_my_custom_submenu_page' );
 
 function op_return_add_settings_page() {
     add_options_page(
