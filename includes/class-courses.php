@@ -390,6 +390,12 @@ if (!class_exists('courses')) {
                 if ($_GET['view_mode']=='item_orders') return self::item_orders($_GET['_id']);
             }
 
+            if( isset($_POST['view_mode']) ) {
+                if ($_POST['view_mode']=='profit_sharing') return self::profit_sharing($_POST['_id']);
+                if ($_POST['view_mode']=='course_learnings') return self::course_learnings($_POST['_id']);
+                if ($_POST['view_mode']=='item_orders') return self::item_orders($_POST['_id']);
+            }
+
             $args = array(
                 'post_type'      => 'product',
                 'product_cat'    => 'Courses',
@@ -404,24 +410,27 @@ if (!class_exists('courses')) {
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
+                $output .= '<form method="post">';
                 $output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
                 $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 $output .= '<td>'.$product->get_price().'</td>';
+                $output .= '</form>';
                 $output .= '</tr>';
             endwhile;
             wp_reset_query();
             $output .= '</tbody></table></figure>';
 
-            $output .= '<form method="get">';
+            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Create" name="view_mode">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
-            $output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
+            //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
             $output .= '</div>';
             $output .= '</div>';
-            $output .= '</form>';
+            //$output .= '</form>';
             return $output;
         }
         

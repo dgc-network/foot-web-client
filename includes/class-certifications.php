@@ -228,15 +228,12 @@ if (!class_exists('certifications')) {
 
         public function list_mode() {
 /*
-            $parts = parse_url( home_url() );
-            return $this->current_uri;
-*/                            
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
                 if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
                 if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
             }
-
+*/
             if( isset($_POST['view_mode']) ) {
                 if ($_POST['view_mode']=='Available') return self::available_setting($_POST['_id']);
                 if ($_POST['view_mode']=='Booking') return self::booking($_POST['_id']);
@@ -245,7 +242,9 @@ if (!class_exists('certifications')) {
 
             $args = array(
                 'post_type'      => 'product',
-                'product_cat'    => 'Certification',
+                //'product_cat'    => 'Courses',
+                //'product_cat'    => 'Certification',
+                'product_cat'    => 'Reservation',
                 'posts_per_page' => 100,
                 'order'          => 'ASC'
             );
@@ -387,32 +386,6 @@ if (!class_exists('certifications')) {
         }        
     }
     new certifications();
-}
-
-/**
- * Register a custom menu page.
- */
-function wpdocs_register_my_menu_page() {
-    $menu_slug = 'wpdocs-slug';
-    add_menu_page(
-        __( 'Custom Menu Title', 'textdomain' ),
-        'Certification',
-        'manage_options',
-        $menu_slug,
-        'my_custom_menu_page',
-        plugins_url( 'myplugin/images/icon.png' ),
-        6
-    );
-}
-add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
-
-/**
- * Display a custom menu page
- */
-function my_custom_menu_page(){
-    //certifications::list_mode();
-    esc_html_e( 'Admin Page Test', 'textdomain' );  
-    echo do_shortcode('[certification-list]');
 }
 
 /*
