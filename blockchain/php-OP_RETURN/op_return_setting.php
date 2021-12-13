@@ -21,13 +21,13 @@ define('OP_RETURN_NET_TIMEOUT_RECEIVE', $options['receive_timeout_field']); // h
 
 function op_return_submenu_settings() {
     add_submenu_page( 
-        'op-return-page',
-        //'my-top-level-slug', 
+        //'op-return-page',
+        'my-top-level-slug', 
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
         'manage_options', 
-        'op-return-page',
-        //'my-top-level-slug',
+        //'op-return-page',
+        'my-top-level-slug',
         'op_return_render_settings_page'
     );
     add_options_page(
