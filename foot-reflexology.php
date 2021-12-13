@@ -54,8 +54,8 @@ function my_register_menu_page() {
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
         'manage_options', 
-        //'op-return-page',
-        'my-top-level-slug',
+        'op-return-page',
+        //'my-top-level-slug',
         'op_return_render_settings_page'
     );
 
