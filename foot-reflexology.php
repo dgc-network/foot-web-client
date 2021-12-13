@@ -17,9 +17,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-include_once dirname( __FILE__ ) . '/includes/class-timeslots.php';
+//include_once dirname( __FILE__ ) . '/includes/class-timeslots.php';
+//include_once dirname( __FILE__ ) . '/includes/class-calendars.php';
 //include_once dirname( __FILE__ ) . '/includes/class-badges.php';
-include_once dirname( __FILE__ ) . '/includes/class-calendars.php';
 include_once dirname( __FILE__ ) . '/includes/class-orders.php';
 include_once dirname( __FILE__ ) . '/includes/class-courses.php';
 include_once dirname( __FILE__ ) . '/includes/class-certifications.php';
@@ -56,7 +56,7 @@ function my_register_menu_page() {
         'manage_options', 
         'op-return-page',
         //'my-top-level-slug',
-        'op_return_render_settings_page'
+        'op_return_settings_page_callback'
     );
 
     add_submenu_page(
@@ -67,7 +67,7 @@ function my_register_menu_page() {
         'manage_options', 
         //'my-secondary-slug',
         'course-settings-page',
-        'course_settings_page',
+        'course_settings_page_callback',
     );
 }
 add_action( 'admin_menu', 'my_register_menu_page' );
@@ -92,18 +92,7 @@ wp_insert_term( 'Reservation', 'product_cat', array(
     'parent' => 0,
     'slug' => 'reservation'
 ) );
-/*
-// Register main datepicker jQuery plugin script
-add_action( 'wp_enqueue_scripts', 'enabling_date_picker' );
-function enabling_date_picker() {
 
-    // Only on front-end and checkout page
-    if( is_admin() || ! is_checkout() ) return;
-
-    // Load the datepicker jQuery-ui plugin script
-    wp_enqueue_script( 'jquery-ui-datepicker' );
-}
-*/
 /**
  * Load jQuery datepicker.
  *
@@ -254,37 +243,6 @@ function my_custom_checkout_field( $checkout ) {
     );
 
     echo '</div>';
-}
-
-function technician_options( $learning_id=null ) {
-
-    $technician_options = array('' => __('Select Technician', 'woocommerce' ));
-    if ($learning_id==null){
-        return $technician_options;
-    }
-    global $wpdb;
-    $c_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id = {$learning_id}", OBJECT );
-    foreach ($c_results as $c_index => $result) {
-        $u_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id = {$c_results[$c_index]->learning_id} ORDER BY student_id", OBJECT );
-        $first_line=true;
-        foreach ($u_results as $u_index => $result) {
-            if ($student_id==$u_results[$u_index]->student_id) $first_line=false;
-            if ($first_line) {
-                //$output .= '<tr><td><li><a href="?view_mode=true&_id='.$u_results[$u_index]->student_id.'">'.get_userdata($u_results[$u_index]->student_id)->display_name.'</a></td></tr>';
-                //if ( $product->get_id() == $default_id ) {
-                //    $output .= '<option value="'.$u_results[$u_index]->student_id.'" selected>';
-                //} else {
-                //    $output .= '<option value="'.$u_results[$u_index]->student_id.'">';
-                //}
-                //$output .= get_userdata($u_results[$u_index]->student_id)->display_name;
-                //$output .= '</option>';
-                //array_push($technician_options,($u_results[$u_index]->student_id=>(get_userdata($u_results[$u_index]->student_id)->display_name)));
-                $$technician_options[$u_results[$u_index]->student_id] = get_userdata($u_results[$u_index]->student_id)->display_name;
-                $student_id=$u_results[$u_index]->student_id;
-            }
-        }
-    }
-    return $technician_options;
 }
 */
 ?>

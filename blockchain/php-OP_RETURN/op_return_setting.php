@@ -30,7 +30,7 @@ function op_return_submenu_settings() {
 }
 add_action( 'admin_menu', 'op_return_submenu_settings' );
 
-function op_return_render_settings_page() {
+function op_return_settings_page_callback() {
 ?>
     <h2>OP_RETURN Settings</h2>
     <form action="options.php" method="post">

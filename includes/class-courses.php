@@ -618,7 +618,6 @@ if (!class_exists('courses')) {
                 PRIMARY KEY  (l_p_s_id)
             ) $charset_collate;";        
             dbDelta($sql);
-
         }        
     }
     new courses();
@@ -627,9 +626,8 @@ if (!class_exists('courses')) {
 /**
  * Display a custom menu page
  */
-function course_settings_page(){
-    esc_html_e( 'Admin Page Test', 'textdomain' );  
+function course_settings_page_callback(){
+    //esc_html_e( 'Admin Page Test', 'textdomain' );  
     echo do_shortcode('[course-list]');
 }
-
 ?>
