@@ -1,102 +1,45 @@
 <?php
 
-//if( isset($_POST['submit']) ) {
-    $options = get_option( 'op_return_settings' );
-	define('OP_RETURN_IN_PRODUCTION', $options['in_production_field']); // development mode or production mode
-	define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
-    define('OP_RETURN_BITCOIN_PORT', $options['port_number_field']); // leave empty to use default port for mainnet/testnet
-    define('OP_RETURN_BITCOIN_USER', $options['rpc_user_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-    define('OP_RETURN_BITCOIN_PASSWORD', $options['rpc_password_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-	define('OP_RETURN_SEND_AMOUNT', $options['send_amount_field']); // BTC send amount per transaction
-	define('OP_RETURN_SEND_ADDRESS', $options['send_address_field']); // BTC send address per transaction
+$options = get_option( 'op_return_settings' );
+define('OP_RETURN_IN_PRODUCTION', $options['in_production_field']); // development mode or production mode
+define('OP_RETURN_BITCOIN_IP', $options['ip_address_field']); // IP address of your bitcoin node
+define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
+define('OP_RETURN_BITCOIN_PORT', $options['port_number_field']); // leave empty to use default port for mainnet/testnet
+define('OP_RETURN_BITCOIN_USER', $options['rpc_user_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
+define('OP_RETURN_BITCOIN_PASSWORD', $options['rpc_password_field']); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
+define('OP_RETURN_SEND_AMOUNT', $options['send_amount_field']); // BTC send amount per transaction
+define('OP_RETURN_SEND_ADDRESS', $options['send_address_field']); // BTC send address per transaction
 
-	define('OP_RETURN_BTC_FEE', $options['transaction_fee_field']); // BTC fee to pay per transaction
-	define('OP_RETURN_BTC_DUST', $options['dust_amount_field']); // omit BTC outputs smaller than this
+define('OP_RETURN_BTC_FEE', $options['transaction_fee_field']); // BTC fee to pay per transaction
+define('OP_RETURN_BTC_DUST', $options['dust_amount_field']); // omit BTC outputs smaller than this
 
-	define('OP_RETURN_MAX_BYTES', $options['max_bytes_field']); // maximum bytes in an OP_RETURN (80 as of Bitcoin 0.11)
-	define('OP_RETURN_MAX_BLOCKS', $options['max_blocks_field']); // maximum number of blocks to try when retrieving data
+define('OP_RETURN_MAX_BYTES', $options['max_bytes_field']); // maximum bytes in an OP_RETURN (80 as of Bitcoin 0.11)
+define('OP_RETURN_MAX_BLOCKS', $options['max_blocks_field']); // maximum number of blocks to try when retrieving data
 
-	define('OP_RETURN_NET_TIMEOUT_CONNECT', $options['connect_timeout_field']); // how long to time out when connecting to bitcoin node
-	define('OP_RETURN_NET_TIMEOUT_RECEIVE', $options['receive_timeout_field']); // how long to time out retrieving data from bitcoin node
-/*
-    //define('OP_RETURN_BITCOIN_IP', '127.0.0.1'); // IP address of your bitcoin node
-	//define('OP_RETURN_BITCOIN_IP', '192.192.155.52'); // IP address of your bitcoin node
-	//define('OP_RETURN_BITCOIN_IP', '114.32.252.82'); // IP address of your bitcoin node
-	//define('OP_RETURN_BITCOIN_IP', '218.161.56.168'); // IP address of your bitcoin node
-	define('OP_RETURN_BITCOIN_USE_CMD', false); // use command-line instead of JSON-RPC?
-	
-	if (OP_RETURN_BITCOIN_USE_CMD) {
-		define('OP_RETURN_BITCOIN_PATH', '/usr/bin/bitcoin-cli'); // path to bitcoin-cli executable on this server
+define('OP_RETURN_NET_TIMEOUT_CONNECT', $options['connect_timeout_field']); // how long to time out when connecting to bitcoin node
+define('OP_RETURN_NET_TIMEOUT_RECEIVE', $options['receive_timeout_field']); // how long to time out retrieving data from bitcoin node
 
-	} else {
-		//define('OP_RETURN_BITCOIN_PORT', ''); // leave empty to use default port for mainnet/testnet
-		//define('OP_RETURN_BITCOIN_USER', ''); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-		//define('OP_RETURN_BITCOIN_PASSWORD', ''); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-		define('OP_RETURN_BITCOIN_PORT', '7998'); // leave empty to use default port for mainnet/testnet
-		define('OP_RETURN_BITCOIN_USER', 'digitalcoinrpc'); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-		define('OP_RETURN_BITCOIN_PASSWORD', '56c735f3910a53eeda0357670bc6a02f'); // leave empty to read from ~/.bitcoin/bitcoin.conf (Unix only)
-
-	}
-	
-	//define('OP_RETURN_BTC_FEE', 0.0001); // BTC fee to pay per transaction
-	//define('OP_RETURN_BTC_DUST', 0.00001); // omit BTC outputs smaller than this
-
-	define('OP_RETURN_SEND_AMOUNT', 0.00000002); // BTC send amount per transaction
-	define('OP_RETURN_SEND_ADDRESS', 'DTZfSbVQnBs2YnsHpyuuZ1Mv3cJBhgav66'); // BTC send address per transaction
-
-	define('OP_RETURN_BTC_FEE', 0.00000004); // BTC fee to pay per transaction
-	define('OP_RETURN_BTC_DUST', 0); // omit BTC outputs smaller than this
-
-	define('OP_RETURN_MAX_BYTES', 80); // maximum bytes in an OP_RETURN (80 as of Bitcoin 0.11)
-	define('OP_RETURN_MAX_BLOCKS', 10); // maximum number of blocks to try when retrieving data
-
-	define('OP_RETURN_NET_TIMEOUT_CONNECT', 5); // how long to time out when connecting to bitcoin node
-	define('OP_RETURN_NET_TIMEOUT_RECEIVE', 10); // how long to time out retrieving data from bitcoin node
-*/    
-//}
-//
-/**
- * Register a custom menu page.
- */
-function wpdocs_register_my_custom_submenu_page() {
-    $menu_slug = 'wpdocs-slug';
-/*    
-    add_menu_page(
-        __( 'Custom Menu Title', 'textdomain' ),
-        'OP_RETURN',
-        'manage_options',
-        $menu_slug,
-        'op_return_render_settings_page',
-        plugins_url( 'myplugin/images/icon.png' ),
-        6
-    );
-*/    
-    add_submenu_page(
-        //'edit.php?post_type=book',
-        $menu_slug,
+function op_return_submenu_settings() {
+    add_submenu_page( 
+        'op-return-page',
+        //'dgc-top-level-slug', 
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
-        'manage_options',
-        $menu_slug,
-        //'op-return-page',
+        'manage_options', 
+        'op-return-page',
+        //'dgc-top-level-slug',
         'op_return_render_settings_page'
     );
-}
-add_action( 'admin_menu', 'wpdocs_register_my_custom_submenu_page' );
-
-function op_return_add_settings_page() {
     add_options_page(
-      'OP_RETURN Settings',
-      'OP_RETURN',
+        __( 'OP_RETURN Settings', 'textdomain' ),
+        __( 'OP_RETURN', 'textdomain' ),
       'manage_options',
       'op-return-page',
       'op_return_render_settings_page'
     );
 }
-add_action( 'admin_menu', 'op_return_add_settings_page' );
+add_action( 'admin_menu', 'op_return_submenu_settings' );
 
-//
 function op_return_render_settings_page() {
 ?>
     <h2>OP_RETURN Settings</h2>

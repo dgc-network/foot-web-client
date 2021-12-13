@@ -38,7 +38,7 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearin
 /**
  * Register a custom menu page.
  */
-function wpdocs_register_my_menu_page() {
+function dgc_register_menu_page() {
     $menu_slug = 'wpdocs-slug';
 /*    
     add_menu_page(
@@ -62,15 +62,8 @@ function wpdocs_register_my_menu_page() {
         __( 'Reflexology', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
         'manage_options', 
-        'my-top-level-slug'
-    );
-    add_submenu_page( 
-        'my-top-level-slug', 
-        __( 'OP_RETURN Settings', 'textdomain' ),
-        __( 'OP_RETURN', 'textdomain' ),
-        'manage_options', 
-        'my-top-level-slug',
-        'op_return_render_settings_page'
+        'op-return-page',
+        //'dgc-top-level-slug'
     );
 /*
     add_options_page(
@@ -82,15 +75,17 @@ function wpdocs_register_my_menu_page() {
     );
 */    
     add_submenu_page(
-        'my-top-level-slug', 
+        'op-return-page',
+        //'dgc-top-level-slug', 
         __( 'Course Setting', 'textdomain' ),
         __( 'Course Setting', 'textdomain' ),
         'manage_options', 
-        'my-secondary-slug',
+        //'dgc-secondary-slug',
+        'course-setting-page',
         'course_setting_page',
     );
 }
-add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
+add_action( 'admin_menu', 'dgc_register_menu_page' );
 
 /**
  * Display a custom menu page
