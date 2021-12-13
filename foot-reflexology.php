@@ -66,13 +66,22 @@ function wpdocs_register_my_menu_page() {
     );
     add_submenu_page( 
         'my-top-level-slug', 
-        'My Custom Page', 
-        'My Custom Page',
+        __( 'OP_RETURN Settings', 'textdomain' ),
+        __( 'OP_RETURN', 'textdomain' ),
         'manage_options', 
         'my-top-level-slug',
-        'my_custom_menu_page',
+        'op_return_render_settings_page'
     );
-    add_submenu_page( 
+/*
+    add_options_page(
+        'OP_RETURN Settings',
+        'OP_RETURN',
+        'manage_options',
+        'op-return-page',
+        'op_return_render_settings_page'
+    );
+*/    
+    add_submenu_page(
         'my-top-level-slug', 
         __( 'Course Setting', 'textdomain' ),
         __( 'Course Setting', 'textdomain' ),
