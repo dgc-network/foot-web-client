@@ -41,16 +41,16 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearin
 function my_register_menu_page() {
 
     add_menu_page(
-        __( 'Reflexology Setting', 'textdomain' ),
+        __( 'Reflexology Settings', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
         'manage_options', 
-        //'op-return-page'
-        'my-top-level-slug'
+        'op-return-page',
+        //'my-top-level-slug',
     );
 
     add_submenu_page(
-        //'op-return-page',
-        'my-top-level-slug', 
+        'op-return-page',
+        //'my-top-level-slug', 
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
         'manage_options', 
@@ -60,14 +60,14 @@ function my_register_menu_page() {
     );
 
     add_submenu_page(
-        //'op-return-page',
-        'my-top-level-slug', 
-        __( 'Course Setting', 'textdomain' ),
-        __( 'Course Setting', 'textdomain' ),
+        'op-return-page',
+        //'my-top-level-slug', 
+        __( 'Course Settings', 'textdomain' ),
+        __( 'Course Settings', 'textdomain' ),
         'manage_options', 
         //'my-secondary-slug',
-        'course-setting-page',
-        'course_setting_page',
+        'course-settings-page',
+        'course_settings_page',
     );
 }
 add_action( 'admin_menu', 'my_register_menu_page' );

@@ -627,7 +627,7 @@ if (!class_exists('courses')) {
 /**
  * Display a custom menu page
  */
-function course_setting_page(){
+function course_settings_page(){
     esc_html_e( 'Admin Page Test', 'textdomain' );  
     echo do_shortcode('[course-list]');
 }
