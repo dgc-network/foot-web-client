@@ -59,8 +59,8 @@ function wpdocs_register_my_menu_page() {
     );
 */    
     add_menu_page(
-        'My Custom Page', 
-        'My Custom Page', 
+        __( 'Reflexology', 'textdomain' ),
+        __( 'Reflexology', 'textdomain' ),
         'manage_options', 
         'my-top-level-slug'
     );
@@ -69,15 +69,16 @@ function wpdocs_register_my_menu_page() {
         'My Custom Page', 
         'My Custom Page',
         'manage_options', 
-        'my-top-level-slug'
+        'my-top-level-slug',
+        'my_custom_menu_page',
     );
     add_submenu_page( 
         'my-top-level-slug', 
-        'My Custom Submenu Page', 
-        'My Custom Submenu Page',
+        __( 'Course Setting', 'textdomain' ),
+        __( 'Course Setting', 'textdomain' ),
         'manage_options', 
         'my-secondary-slug',
-        'my_custom_menu_page',
+        'course_setting_page',
     );
 }
 add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
@@ -85,7 +86,7 @@ add_action( 'admin_menu', 'wpdocs_register_my_menu_page' );
 /**
  * Display a custom menu page
  */
-function my_custom_menu_page(){
+function course_setting_page(){
     //certifications::list_mode();
     esc_html_e( 'Admin Page Test', 'textdomain' );  
     //echo do_shortcode('[certification-list]');
