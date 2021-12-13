@@ -62,8 +62,8 @@ function dgc_register_menu_page() {
         __( 'Reflexology', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
         'manage_options', 
-        'op-return-page',
-        //'dgc-top-level-slug'
+        'op-return-page'
+        //'my-top-level-slug'
     );
 /*
     add_options_page(
@@ -76,11 +76,11 @@ function dgc_register_menu_page() {
 */    
     add_submenu_page(
         'op-return-page',
-        //'dgc-top-level-slug', 
+        //'my-top-level-slug', 
         __( 'Course Setting', 'textdomain' ),
         __( 'Course Setting', 'textdomain' ),
         'manage_options', 
-        //'dgc-secondary-slug',
+        //'my-secondary-slug',
         'course-setting-page',
         'course_setting_page',
     );
