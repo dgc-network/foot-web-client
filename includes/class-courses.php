@@ -623,4 +623,13 @@ if (!class_exists('courses')) {
     }
     new courses();
 }
+
+/**
+ * Display a custom menu page
+ */
+function course_setting_page(){
+    esc_html_e( 'Admin Page Test', 'textdomain' );  
+    echo do_shortcode('[course-list]');
+}
+
 ?>

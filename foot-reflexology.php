@@ -38,42 +38,16 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearin
 /**
  * Register a custom menu page.
  */
-function dgc_register_menu_page() {
-    $menu_slug = 'wpdocs-slug';
-/*    
-    add_menu_page(
-        __( 'Custom Menu Title', 'textdomain' ),
-        __( 'Reflexology', 'textdomain' ),
-        'manage_options',
-        $menu_slug,
-        'my_custom_menu_page',
-        plugins_url( 'myplugin/images/icon.png' ),
-        6
-    );
-    
+function my_register_menu_page() {
+
     add_menu_page(
         __( 'Reflexology Setting', 'textdomain' ),
-        __( 'Reflexology', 'textdomain' ),
-        'manage_options',
-        $menu_slug
-    );
-*/    
-    add_menu_page(
-        __( 'Reflexology', 'textdomain' ),
         __( 'Reflexology', 'textdomain' ),
         'manage_options', 
         //'op-return-page'
         'my-top-level-slug'
     );
-/*
-    add_options_page(
-        'OP_RETURN Settings',
-        'OP_RETURN',
-        'manage_options',
-        'op-return-page',
-        'op_return_render_settings_page'
-    );
-*/    
+
     add_submenu_page(
         //'op-return-page',
         'my-top-level-slug', 
@@ -85,17 +59,7 @@ function dgc_register_menu_page() {
         'course_setting_page',
     );
 }
-add_action( 'admin_menu', 'dgc_register_menu_page' );
-
-/**
- * Display a custom menu page
- */
-function course_setting_page(){
-    //certifications::list_mode();
-    esc_html_e( 'Admin Page Test', 'textdomain' );  
-    //echo do_shortcode('[certification-list]');
-    echo do_shortcode('[course-list]');
-}
+add_action( 'admin_menu', 'my_register_menu_page' );
 
 /**
  * Add product categories.
