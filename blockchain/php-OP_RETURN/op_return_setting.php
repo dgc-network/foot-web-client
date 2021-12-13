@@ -20,16 +20,6 @@ define('OP_RETURN_NET_TIMEOUT_CONNECT', $options['connect_timeout_field']); // h
 define('OP_RETURN_NET_TIMEOUT_RECEIVE', $options['receive_timeout_field']); // how long to time out retrieving data from bitcoin node
 
 function op_return_submenu_settings() {
-    add_submenu_page( 
-        //'op-return-page',
-        'my-top-level-slug', 
-        __( 'OP_RETURN Settings', 'textdomain' ),
-        __( 'OP_RETURN', 'textdomain' ),
-        'manage_options', 
-        //'op-return-page',
-        'my-top-level-slug',
-        'op_return_render_settings_page'
-    );
     add_options_page(
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),

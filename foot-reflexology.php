@@ -51,6 +51,17 @@ function my_register_menu_page() {
     add_submenu_page(
         //'op-return-page',
         'my-top-level-slug', 
+        __( 'OP_RETURN Settings', 'textdomain' ),
+        __( 'OP_RETURN', 'textdomain' ),
+        'manage_options', 
+        //'op-return-page',
+        'my-top-level-slug',
+        'op_return_render_settings_page'
+    );
+
+    add_submenu_page(
+        //'op-return-page',
+        'my-top-level-slug', 
         __( 'Course Setting', 'textdomain' ),
         __( 'Course Setting', 'textdomain' ),
         'manage_options', 
