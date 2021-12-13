@@ -47,30 +47,25 @@ function my_register_menu_page() {
         __( 'Reflexology', 'textdomain' ),
         'manage_options', 
         'op-return-page',
-        //'my-top-level-slug',
     );
 
     add_submenu_page(
         'op-return-page',
-        //'my-top-level-slug', 
         __( 'OP_RETURN Settings', 'textdomain' ),
         __( 'OP_RETURN', 'textdomain' ),
         'manage_options', 
         'op-return-page',
-        //'my-top-level-slug',
         'op_return_settings_page_callback'
     );
 
     add_submenu_page(
         'op-return-page',
-        //'my-top-level-slug', 
         __( 'Course Settings', 'textdomain' ),
         __( 'Course Settings', 'textdomain' ),
         'manage_options', 
-        //'my-secondary-slug',
         'course-settings-page',
-        //'course_settings_page_callback',
-        array( $course_page, 'course_settings_page_callback' ),
+        'course_settings_page_callback',
+        //array( $course_page, 'course_settings_page_callback' ),
     );
 }
 add_action( 'admin_menu', 'my_register_menu_page' );
