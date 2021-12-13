@@ -38,6 +38,8 @@ include_once dirname( __FILE__ ) . '/blockchain/build/gen/UpdateUserCourseLearin
 /**
  * Register a custom menu page.
  */
+$course_page = new courses();
+
 function my_register_menu_page() {
 
     add_menu_page(
@@ -67,7 +69,8 @@ function my_register_menu_page() {
         'manage_options', 
         //'my-secondary-slug',
         'course-settings-page',
-        'course_settings_page_callback',
+        //'course_settings_page_callback',
+        array( $course_page, 'course_settings_page_callback' ),
     );
 }
 add_action( 'admin_menu', 'my_register_menu_page' );

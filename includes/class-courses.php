@@ -619,6 +619,11 @@ if (!class_exists('courses')) {
             ) $charset_collate;";        
             dbDelta($sql);
         }        
+
+        function course_settings_page_callback(){
+            //esc_html_e( 'Admin Page Test', 'textdomain' );  
+            echo do_shortcode('[course-list]');
+        }
     }
     new courses();
 }
