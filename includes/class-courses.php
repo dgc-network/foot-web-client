@@ -1,7 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
+if (!defined('ABSPATH')) exit; // Exit if accessed directly.
+
 if (!class_exists('courses')) {
 
     class courses {
@@ -12,14 +11,15 @@ if (!class_exists('courses')) {
         public function __construct() {
             add_shortcode('course-list', __CLASS__ . '::list_mode');
             self::create_tables();
+        }
 
+        function course_settings_page_callback(){
+            echo do_shortcode('[course-list]');
         }
 
         function profit_sharing( $_id=0 ) {
 
-            if ($_id==0){
-                return '<div>learning ID is required</div>';
-            }
+            if ($_id==0) return '<div>learning ID is required</div>';
 
             if( isset($_POST['submit_action']) ) {
         
@@ -119,9 +119,7 @@ if (!class_exists('courses')) {
 
         function course_learnings( $_id=0 ) {
 
-            if ($_id==0){
-                return '<div>course ID is required</div>';
-            }
+            if ($_id==0) return '<div>course ID is required</div>';
 
             if( isset($_POST['submit_action']) ) {
         
@@ -155,6 +153,7 @@ if (!class_exists('courses')) {
                         $wpdb->update( $table, $data, $where );    
                     }
                 }
+
                 if ( !($_POST['_learning_title']=='') ){
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
@@ -223,10 +222,7 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            //$output .= '</form>';
-            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
@@ -237,9 +233,7 @@ if (!class_exists('courses')) {
 
         function item_orders( $_id=0 ) {
 
-            if ($_id==0){
-                return '<div>course ID is required</div>';
-            }
+            if ($_id==0) return '<div>course ID is required</div>';
 
             if( isset($_POST['submit_action']) ) {
         
@@ -273,6 +267,7 @@ if (!class_exists('courses')) {
                         $wpdb->update( $table, $data, $where );    
                     }
                 }
+
                 if ( !($_POST['_learning_title']=='') ){
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
@@ -370,10 +365,7 @@ if (!class_exists('courses')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            //$output .= '</form>';
-            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
@@ -383,17 +375,19 @@ if (!class_exists('courses')) {
         }
 
         static function list_mode() {
-            
+/*            
             if( isset($_GET['view_mode']) ) {
                 if ($_GET['view_mode']=='profit_sharing') return self::profit_sharing($_GET['_id']);
                 if ($_GET['view_mode']=='course_learnings') return self::course_learnings($_GET['_id']);
                 if ($_GET['view_mode']=='item_orders') return self::item_orders($_GET['_id']);
             }
-
+*/
             if( isset($_POST['view_mode']) ) {
                 if ($_POST['view_mode']=='profit_sharing') return self::profit_sharing($_POST['_id']);
                 if ($_POST['view_mode']=='course_learnings') return self::course_learnings($_POST['_id']);
+                if ($_POST['view_mode']=='Setting') return self::course_learnings($_POST['_id']);
                 if ($_POST['view_mode']=='item_orders') return self::item_orders($_POST['_id']);
+                if ($_POST['view_mode']=='Orders') return self::item_orders($_POST['_id']);
             }
 
             $args = array(
@@ -405,22 +399,25 @@ if (!class_exists('courses')) {
                 
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Title</td><td>Price</td></tr>';
+            $output .= '<tr><td>#</td><td>Title</td>';
+            $output .= '<td>Learnings</td><td>Orders</td></tr>';
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
                 $output .= '<form method="post">';
+                $output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
                 $output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
                 $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
-                $output .= '<td>'.$product->get_price().'</td>';
+                //$output .= '<td>'.$product->get_price().'</td>';
+                $output .= '<td><input class="wp-block-button__link" type="submit" value="Setting" name="view_mode"></td>';
+                $output .= '<td><input class="wp-block-button__link" type="submit" value="Orders" name="view_mode"></td>';
                 $output .= '</form>';
                 $output .= '</tr>';
             endwhile;
             wp_reset_query();
             $output .= '</tbody></table></figure>';
 
-            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
@@ -430,7 +427,6 @@ if (!class_exists('courses')) {
             //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
             $output .= '</div>';
             $output .= '</div>';
-            //$output .= '</form>';
             return $output;
         }
         
@@ -619,20 +615,7 @@ if (!class_exists('courses')) {
             ) $charset_collate;";        
             dbDelta($sql);
         }        
-
-        function course_settings_page_callback(){
-            //esc_html_e( 'Admin Page Test', 'textdomain' );  
-            echo do_shortcode('[course-list]');
-        }
     }
     new courses();
-}
-
-/**
- * Display a custom menu page
- */
-function course_settings_page_callback(){
-    //esc_html_e( 'Admin Page Test', 'textdomain' );  
-    //echo do_shortcode('[course-list]');
 }
 ?>

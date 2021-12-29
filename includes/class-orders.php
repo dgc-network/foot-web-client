@@ -1,7 +1,5 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit;
-}
+if (!defined('ABSPATH')) exit;
 
 if (!class_exists('orders')) {
 
@@ -17,9 +15,7 @@ if (!class_exists('orders')) {
 
         function course_learnings( $_id=0 ) {
 
-            if ($_id==0){
-                return '<div>course ID is required</div>';
-            }
+            if ($_id==0) return '<div>course ID is required</div>';
 
             if( isset($_POST['submit_action']) ) {
                 
@@ -120,10 +116,7 @@ if (!class_exists('orders')) {
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
-            //$output .= '</form>';
-            //$output .= '<form method="get">';
             $output .= '<div class="wp-block-button">';
-            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel"';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';

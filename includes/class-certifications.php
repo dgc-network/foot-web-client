@@ -1,7 +1,6 @@
 <?php
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
-}
+if (!defined('ABSPATH')) exit; // Exit if accessed directly.
+
 if (!class_exists('certifications')) {
 
     class certifications {
@@ -15,7 +14,6 @@ if (!class_exists('certifications')) {
         }
 
         function certification_settings_page_callback(){
-            esc_html_e( 'Certification Setting Page', 'textdomain' );  
             echo do_shortcode('[certification-list]');
         }
 
