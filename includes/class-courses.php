@@ -179,7 +179,7 @@ if (!class_exists('courses')) {
             }
 
             /** 
-             * view_mode header
+             * course_learnings header
              */
             $product = wc_get_product( $_id );
             $output  = '<h2>課程vs學習項目設定</h2>';
@@ -191,7 +191,7 @@ if (!class_exists('courses')) {
             $output .= '</tbody></table></figure>';
 
             /** 
-             * course relationship with learnings
+             * course_learnings details
              */
             $TotalHours=0;
             global $wpdb;
@@ -202,6 +202,7 @@ if (!class_exists('courses')) {
                 
                 //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
                 $output .= '<form method="post">';
+                $output .= '<input type="hidden" name="view_mode" value="Setting">';
                 $output .= '<input type="hidden" name="_id" value="'.$results[$index]->learning_id.'">';
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
@@ -217,6 +218,7 @@ if (!class_exists('courses')) {
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
             $output .= '<form method="post">';
+            $output .= '<input type="hidden" name="view_mode" value="Setting">';
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
@@ -229,7 +231,7 @@ if (!class_exists('courses')) {
             $output .= '</tr></tbody></table></figure>';            
 
             /** 
-             * view_mode footer
+             * course_learnings footer
              */
             $output .= '<div class="wp-block-buttons" style="display:flex">';
             $output .= '<div class="wp-block-button">';
