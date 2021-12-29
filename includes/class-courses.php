@@ -633,6 +633,6 @@ if (!class_exists('courses')) {
  */
 function course_settings_page_callback(){
     //esc_html_e( 'Admin Page Test', 'textdomain' );  
-    echo do_shortcode('[course-list]');
+    //echo do_shortcode('[course-list]');
 }
 ?>

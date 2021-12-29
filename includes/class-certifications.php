@@ -14,6 +14,11 @@ if (!class_exists('certifications')) {
             self::create_tables();
         }
 
+        function certification_settings_page_callback(){
+            esc_html_e( 'Certification Setting Page', 'textdomain' );  
+            echo do_shortcode('[certification-list]');
+        }
+
         function available_timeslots( $dateText='' ) {
             $output = '<div style="display:flex">';
             global $wpdb;

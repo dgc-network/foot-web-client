@@ -68,6 +68,15 @@ function my_register_menu_page() {
         //array( $course_page, 'course_settings_page_callback' ),
         array( 'courses', 'course_settings_page_callback' ),
     );
+
+    add_submenu_page(
+        'op-return-page',
+        __( 'Certification Settings', 'textdomain' ),
+        __( 'Certification Settings', 'textdomain' ),
+        'manage_options', 
+        'certification-settings-page',
+        array( 'certifications', 'certification_settings_page_callback' ),
+    );
 }
 add_action( 'admin_menu', 'my_register_menu_page' );
 
