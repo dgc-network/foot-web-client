@@ -126,7 +126,7 @@ if (!class_exists('courses')) {
                 if( $_POST['submit_action']=='Sharing' ) {
                     //unset($_GET['edit_mode']);
                     //unset($_POST['edit_mode']);
-                    return self::profit_sharing();
+                    return self::profit_sharing($_POST['_id']);
                 }
 
                 if( $_POST['submit_action']=='Cancel' ) {
@@ -163,7 +163,8 @@ if (!class_exists('courses')) {
                 if ( !($_POST['_learning_title']=='') ){
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
-                        'course_id' => intval($_GET['_id']),
+                        //'course_id' => intval($_GET['_id']),
+                        'course_id' => intval($_POST['_id']),
                         'learning_title' => sanitize_text_field($_POST['_learning_title']),
                         'learning_hours' => floatval($_POST['_learning_hours']),
                         'learning_link' => sanitize_text_field($_POST['_learning_link']),
