@@ -123,6 +123,12 @@ if (!class_exists('courses')) {
 
             if( isset($_POST['submit_action']) ) {
         
+                if( $_POST['submit_action']=='Sharing' ) {
+                    //unset($_GET['edit_mode']);
+                    //unset($_POST['edit_mode']);
+                    return self::profit_sharing();
+                }
+
                 if( $_POST['submit_action']=='Cancel' ) {
                     unset($_GET['edit_mode']);
                     unset($_POST['edit_mode']);
@@ -174,7 +180,6 @@ if (!class_exists('courses')) {
              */
             $product = wc_get_product( $_id );
             $output  = '<h2>課程vs學習項目設定</h2>';
-            $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
             $output .= '<tr><td>'.'Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
@@ -189,10 +194,13 @@ if (!class_exists('courses')) {
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td></tr>';
+            $output .= '<tr><td>'.'#'.'</td><td>'.'Titles'.'</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td><td>Profit</td></tr>';
             foreach ($results as $index => $result) {
                 
-                $output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                //$output .= '<tr><td><a href="?view_mode=profit_sharing&_id='.$results[$index]->learning_id.'">'.($index+1).'</a></td>';
+                $output .= '<form method="post">';
+                $output .= '<input type="hidden" name="_id" value="'.$results[$index]->learning_id.'">';
+                $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
@@ -200,9 +208,10 @@ if (!class_exists('courses')) {
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                 if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                 $output .= '></td>';
+                $output .= '<td><input type="submit" name="submit_action" value="Sharing"></td>';
                 $output .= '</tr>';
+                $output .= '</form>';                
                 $TotalHours += floatval($results[$index]->learning_hours);
-                
             }
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
@@ -218,6 +227,7 @@ if (!class_exists('courses')) {
             /** 
              * view_mode footer
              */
+            $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
@@ -290,7 +300,7 @@ if (!class_exists('courses')) {
             $output  = '<h2>課程註冊列表</h2>';
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Title:'.'</td><td>'.$product->get_name().'</td></tr>';
+            $output .= '<tr><td>Title: </td><td>'.$product->get_name().'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -316,18 +326,20 @@ if (!class_exists('courses')) {
             }
 
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>'.'Name'.'</td><td>'.'Email'.'</td></tr>';
+            $output .= '<tr><td>#</td><td>Name</td><td>Email</td></tr>';
+            $index=0;
             foreach ( $order_items as $item ) {
                 $order = $item->get_order();
                 $user = $order->get_user();
                 $output .= '<tr>';
+                $output .= '<td>'.($index+1).'</td>';
                 $output .= '<td>'.$user->display_name.'</td>';
                 $output .= '<td>'.$user->user_email.'</td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';            
-            return $output;
-
+            //return $output;
+/*
             $TotalHours=0;
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
@@ -357,13 +369,13 @@ if (!class_exists('courses')) {
             $output .= '<tr><td colspan=2>'.'Total Hours:'.'</td>';
             $output .= '<td>'.$TotalHours.'</td><td></td>';
             $output .= '</tr></tbody></table></figure>';            
-
+*/
             /** 
              * product_item_orders footer
              */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
@@ -399,17 +411,18 @@ if (!class_exists('courses')) {
                 
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Title</td>';
-            $output .= '<td>Learnings</td><td>Orders</td></tr>';
+            $output .= '<tr><td>#</td><td>Title</td><td>Learnings</td><td>Orders</td></tr>';
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
                 $output .= '<tr>';
                 $output .= '<form method="post">';
                 $output .= '<input type="hidden" value="'.$product->get_id().'" name="_id">';
-                $output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
-                $output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
+                //$output .= '<td><a href="?view_mode=item_orders&_id='.$product->get_id().'">'.$product->get_id().'</a></td>';
+                //$output .= '<td><a href="?view_mode=course_learnings&_id='.$product->get_id().'">'.$product->get_name().'</a></td>';
                 //$output .= '<td>'.$product->get_price().'</td>';
+                $output .= '<td>'.$product->get_id().'</td>';
+                $output .= '<td>'.$product->get_name().'</td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Setting" name="view_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Orders" name="view_mode"></td>';
                 $output .= '</form>';
