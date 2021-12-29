@@ -123,6 +123,8 @@ if (!class_exists('courses')) {
 
             if( isset($_POST['submit_action']) ) {
         
+                if ($_POST['view_mode']=='profit_sharing') return self::profit_sharing($_POST['_id']);
+
                 if( $_POST['submit_action']=='Sharing' ) {
                     //unset($_GET['edit_mode']);
                     //unset($_POST['edit_mode']);
@@ -214,6 +216,7 @@ if (!class_exists('courses')) {
                 $output .= '</form>';                
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
+            $output .= '<form method="post">';
             $output .= '<tr><td>'.'#'.'</td>';
             $output .= '<td><input size="20" type="text" name="_learning_title"></td>';
             $output .= '<td><input size="1" type="text" name="_learning_hours"></td>';
@@ -228,8 +231,7 @@ if (!class_exists('courses')) {
             /** 
              * view_mode footer
              */
-            $output .= '<form method="post">';
-            $output .= '<div class="wp-block-buttons">';
+            $output .= '<div class="wp-block-buttons" style="display:flex">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
@@ -432,6 +434,7 @@ if (!class_exists('courses')) {
             wp_reset_query();
             $output .= '</tbody></table></figure>';
 
+            $output .= '<form method="post">';
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
             $output .= '<a class="wp-block-button__link" href="/wp-admin/post-new.php?post_type=product">Create</a>';
@@ -441,6 +444,7 @@ if (!class_exists('courses')) {
             //$output .= '<a class="wp-block-button__link" href="/">Cancel</a>';
             $output .= '</div>';
             $output .= '</div>';
+            $output .= '</form>';
             return $output;
         }
         
