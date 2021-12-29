@@ -164,7 +164,7 @@ if (!class_exists('courses')) {
                     $table = $wpdb->prefix.'course_learnings';
                     $data = array(
                         //'course_id' => intval($_GET['_id']),
-                        'course_id' => intval($_POST['_id']),
+                        'course_id' => intval($_id),
                         'learning_title' => sanitize_text_field($_POST['_learning_title']),
                         'learning_hours' => floatval($_POST['_learning_hours']),
                         'learning_link' => sanitize_text_field($_POST['_learning_link']),
