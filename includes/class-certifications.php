@@ -6,24 +6,18 @@ if (!class_exists('certifications')) {
 
     class certifications {
 
-        private $current_uri;
-
         /**
          * Class constructor
          */
         public function __construct() {
             add_shortcode('certification-list', __CLASS__ . '::list_mode');
             self::create_tables();
-            $parts = parse_url( home_url() );
-            $this->current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
-            //self::$current_uri = "{$parts['scheme']}://{$parts['host']}" . add_query_arg( NULL, NULL );
         }
 
         function available_timeslots( $dateText='' ) {
             $output = '<div style="display:flex">';
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}timeslots WHERE timeslot_session = 1", OBJECT );
-            //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND timeslot_session = 1", OBJECT );
             $output .= '<div style="text-align:center; width:100px">';
             $output .= '<div>上午</div>';
             foreach ( $results as $index=>$result ) {
@@ -56,12 +50,9 @@ if (!class_exists('certifications')) {
 
             if( isset($_POST['submit_action']) ) {
                 if( $_POST['submit_action']=='Cancel' ) {
-                    unset($_GET['view_mode']);
                     unset($_POST['view_mode']);
                     return self::list_mode();
                 }
-
-                // Proceed to the WC_Order_Item to pickup the Reservation product
             }
 
             $user = new WP_User($_id);
@@ -80,18 +71,10 @@ if (!class_exists('certifications')) {
                     }).on("change", function() {
                         //console.log("Got change event from field");
                         var data = {
-			                //'action': 'my_action',
-			                //'whatever': 1234
 			                action: 'my_action',
 			                whatever: 1234
                         }
-	    	            // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-                        //jQuery.post(ajaxurl, data, function(response) {
-/*                            
-                        jQuery.post('admin-ajax.php', data, function(response) {                            
-	    		            alert('Got this from the server: ' + response);
-    		            });
-*/
+
                         jQuery.ajax({
                             type : "post",
                             dataType : "json",
@@ -125,7 +108,6 @@ if (!class_exists('certifications')) {
 
             </script>
             <?php
-
             $output .= '<form method="post">';
             $output .= '<input type="hidden" value="'.$_id.'" name="_id">';
             $output .= '<div class="wp-block-buttons">';
@@ -137,7 +119,6 @@ if (!class_exists('certifications')) {
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-
             return $output;
         }
 
@@ -155,7 +136,6 @@ if (!class_exists('certifications')) {
                         if ($_POST['_available_selected_'.$index]=='true') {
                             $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={$_POST['_available_date']} AND available_time_begin={$result->timeslot_begin}", OBJECT );
                             if (empty($row)) {
-                                //return $_POST['_available_date'];
                                 $table = $wpdb->prefix.'available_timeslots';
                                 $data = array(
                                     'available_host' => $_id,
@@ -179,15 +159,8 @@ if (!class_exists('certifications')) {
                         }
                     }        
                 }
-                //if( $_POST['submit_action']=='Cancel' ) {
-                //}
-                //$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}available_timeslots", OBJECT );
-                //return var_dump($results);
-                unset($_GET['view_mode']);
                 unset($_POST['view_mode']);
                 return self::list_mode();
-
-                // Proceed to the WC_Order_Item to pickup the Reservation product
             }
 
             $user = new WP_User($_id);
@@ -199,9 +172,7 @@ if (!class_exists('certifications')) {
             $output .= '<div><input id="datepicker" type="text" name="_available_date"></div>';
             $output .= '<div>';
             foreach ( $results as $index=>$result ) {
-                //$row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}available_timeslots WHERE available_host={$_id} AND available_date={}", OBJECT );
                 $output .= '<input type="checkbox" value="true" name="_available_selected_'.$index.'"';
-                //if (!empty($row)) {$output .= ' checked';}
                 $output .= '> '.$result->timeslot_begin.' ~ '.$result->timeslot_end.'<br>';
             }
             $output .= '</div>';
@@ -222,18 +193,11 @@ if (!class_exists('certifications')) {
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
-
             return $output;
         }
 
         public function list_mode() {
-/*
-            if( isset($_GET['view_mode']) ) {
-                if ($_GET['view_mode']=='Available') return self::available_setting($_GET['_id']);
-                if ($_GET['view_mode']=='Booking') return self::booking($_GET['_id']);
-                if ($_GET['view_mode']=='More...') return self::see_more($_GET['_id']);
-            }
-*/
+
             if( isset($_POST['view_mode']) ) {
                 if ($_POST['view_mode']=='Available') return self::available_setting($_POST['_id']);
                 if ($_POST['view_mode']=='Booking') return self::booking($_POST['_id']);
@@ -284,23 +248,10 @@ if (!class_exists('certifications')) {
                 $output .= '<img src="'.get_avatar_url($order->get_customer_id()).'">';
                 $output .= '</div>';
                 $output .= '<div>';
-                //$output .= '<div><h2><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h2></div>';
-                //$output .= '<div>'.$item->get_name().'</div>';
-                //return self::$permalink;
-                //$output .= '<h3><a href="?view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-/*
-                $output .= '<h3><a href="';
-                if (strpos($this->current_uri, '?') !== false) {
-                    $output .= '?';
-                } else {
-                    $output .= '&';
-                }
-                $output .= 'view_mode=Available&_id='.$order->get_user_id().'">'.$user->display_name.'</a></h3>';
-*/
+
                 $output .= '<h3>'.$user->display_name.'</h3>';
 
                 $output .= ''.$item->get_name().'';
-                //$output .= '<form method="get">';
                 $output .= '<form method="post">';
                 $output .= '<div class="wp-block-buttons">';
                 $output .= '<div class="wp-block-button">';
@@ -382,7 +333,6 @@ if (!class_exists('certifications')) {
                 PRIMARY KEY  (available_id)
             ) $charset_collate;";        
             dbDelta($sql);
-
         }        
     }
     new certifications();
