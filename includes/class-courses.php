@@ -128,38 +128,41 @@ if (!class_exists('courses')) {
                 if( $_POST['submit_action']=='Sharing' ) {
                     //unset($_GET['edit_mode']);
                     //unset($_POST['edit_mode']);
-                    return self::profit_sharing($_POST['_id']);
+                    return self::profit_sharing($_POST['_learning_id']);
                 }
-
+/*
                 if( $_POST['submit_action']=='Cancel' ) {
                     //unset($_GET['edit_mode']);
                     unset($_POST['edit_mode']);
                     return self::list_mode();
                 }
+*/
+                if ( !($_POST['_learning_id']=='') ){
 
-                global $wpdb;
-                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
-                foreach ($results as $index => $result) {
-                    if (( $_POST['_learning_title_'.$index]=='delete' ) || ( $_POST['_learning_link_'.$index]=='delete' ) ){
-                        $table = $wpdb->prefix.'course_learnings';
-                        $where = array(
-                            'learning_id' => $results[$index]->learning_id
-                        );
-                        $wpdb->delete( $table, $where );    
-                    } else {
-                        $table = $wpdb->prefix.'course_learnings';
-                        $data = array(
-                            'learning_title' => $_POST['_learning_title_'.$index],
-                            'learning_hours' => $_POST['_learning_hours_'.$index],
-                            'learning_link' => $_POST['_learning_link_'.$index],
-                            'teaching_id' => $_POST['_teaching_id_'.$index],
-                            'is_witness' => rest_sanitize_boolean($_POST['_is_witness_'.$index]),
-                        );
-                        $where = array(
-                            'learning_id' => $results[$index]->learning_id
-                        );
-                        $wpdb->update( $table, $data, $where );    
-                    }
+                    global $wpdb;
+                    $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
+                    foreach ($results as $index => $result) {
+                        if (( $_POST['_learning_title_'.$index]=='delete' ) || ( $_POST['_learning_link_'.$index]=='delete' ) ){
+                            $table = $wpdb->prefix.'course_learnings';
+                            $where = array(
+                                'learning_id' => $results[$index]->learning_id
+                            );
+                            $wpdb->delete( $table, $where );    
+                        } else {
+                            $table = $wpdb->prefix.'course_learnings';
+                            $data = array(
+                                'learning_title' => $_POST['_learning_title_'.$index],
+                                'learning_hours' => $_POST['_learning_hours_'.$index],
+                                'learning_link' => $_POST['_learning_link_'.$index],
+                                'teaching_id' => $_POST['_teaching_id_'.$index],
+                                'is_witness' => rest_sanitize_boolean($_POST['_is_witness_'.$index]),
+                            );
+                            $where = array(
+                                'learning_id' => $results[$index]->learning_id
+                            );
+                            $wpdb->update( $table, $data, $where );    
+                        }
+                    }    
                 }
 
                 if ( !($_POST['_learning_title']=='') ){
@@ -198,12 +201,13 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>#</td><td>Titles</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td><td>Profit</td></tr>';
-            $output .= '<form method="post">';
+            //$output .= '<form method="post">';
             foreach ($results as $index => $result) {
                 
-                //$output .= '<form method="post">';
-                //$output .= '<input type="hidden" name="view_mode" value="Learnings">';
-                $output .= '<input type="hidden" name="_id" value="'.$results[$index]->learning_id.'">';
+                $output .= '<form method="post">';
+                $output .= '<input type="hidden" name="view_mode" value="Learnings">';
+                $output .= '<input type="hidden" name="_id" value="'.$_id.'">';
+                $output .= '<input type="hidden" name="_learning_id" value="'.$results[$index]->learning_id.'">';
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
@@ -214,13 +218,13 @@ if (!class_exists('courses')) {
                 $output .= '></td>';
                 $output .= '<td><input type="submit" name="submit_action" value="Sharing"></td>';
                 $output .= '</tr>';
-                //$output .= '</form>';                
+                $output .= '</form>';                
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
             /** 
              * course_learnings footer
              */
-            //$output .= '<form method="post">';
+            $output .= '<form method="post">';
             $output .= '<input type="hidden" name="view_mode" value="Learnings">';
             $output .= '<input type="hidden" name="_id" value="'.$_id.'">';
             $output .= '<tr><td>'.'#'.'</td>';
