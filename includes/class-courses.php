@@ -133,7 +133,7 @@ if (!class_exists('courses')) {
 
                 if( $_POST['submit_action']=='Cancel' ) {
                     //unset($_GET['edit_mode']);
-                    //unset($_POST['edit_mode']);
+                    unset($_POST['edit_mode']);
                     return self::list_mode();
                 }
 
@@ -254,7 +254,7 @@ if (!class_exists('courses')) {
         
                 if( $_POST['submit_action']=='Cancel' ) {
                     //unset($_GET['edit_mode']);
-                    //unset($_POST['edit_mode']);
+                    unset($_POST['edit_mode']);
                     return self::list_mode();
                 }
 
