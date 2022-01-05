@@ -251,7 +251,7 @@ if (!class_exists('courses')) {
             if ($_id==0) return '<div>course ID is required</div>';
 
             if( isset($_POST['submit_action']) ) {
-        
+/*        
                 if( $_POST['submit_action']=='Cancel' ) {
                     //unset($_GET['edit_mode']);
                     unset($_POST['edit_mode']);
@@ -296,6 +296,7 @@ if (!class_exists('courses')) {
                     $format = array('%d', '%s', '%f', '%s', '%d', '%d');
                     $wpdb->insert($table, $data, $format);
                 }
+*/                
             }
 
             /** 
