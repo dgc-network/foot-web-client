@@ -198,10 +198,11 @@ if (!class_exists('courses')) {
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>#</td><td>Titles</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td><td>Profit</td></tr>';
+            $output .= '<form method="post">';
             foreach ($results as $index => $result) {
                 
-                $output .= '<form method="post">';
-                $output .= '<input type="hidden" name="view_mode" value="Learnings">';
+                //$output .= '<form method="post">';
+                //$output .= '<input type="hidden" name="view_mode" value="Learnings">';
                 $output .= '<input type="hidden" name="_id" value="'.$results[$index]->learning_id.'">';
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
@@ -213,13 +214,13 @@ if (!class_exists('courses')) {
                 $output .= '></td>';
                 $output .= '<td><input type="submit" name="submit_action" value="Sharing"></td>';
                 $output .= '</tr>';
-                $output .= '</form>';                
+                //$output .= '</form>';                
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
             /** 
              * course_learnings footer
              */
-            $output .= '<form method="post">';
+            //$output .= '<form method="post">';
             $output .= '<input type="hidden" name="view_mode" value="Learnings">';
             $output .= '<input type="hidden" name="_id" value="'.$_id.'">';
             $output .= '<tr><td>'.'#'.'</td>';
@@ -238,6 +239,7 @@ if (!class_exists('courses')) {
             $output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
             $output .= '</form>';
+
             $output .= '<form method="post">';
             $output .= '<div class="wp-block-button">';
             $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
