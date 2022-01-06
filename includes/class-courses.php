@@ -200,11 +200,12 @@ if (!class_exists('courses')) {
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE course_id = {$_id}", OBJECT );
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Titles</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td><td>Profit</td></tr>';
-            //$output .= '<form method="post">';
+            //$output .= '<tr><td>#</td><td>Titles</td><td>Hours</td><td>Link</td><td>Mentor</td><td>Witness</td><td>Profit</td></tr>';
+            $output .= '<tr><td>#</td><td>Titles</td><td>Hours</td><td>Link</td></tr>';
+            $output .= '<form method="post">';
             foreach ($results as $index => $result) {
                 
-                $output .= '<form method="post">';
+                //$output .= '<form method="post">';
                 $output .= '<input type="hidden" name="view_mode" value="Learnings">';
                 $output .= '<input type="hidden" name="_id" value="'.$_id.'">';
                 $output .= '<input type="hidden" name="_learning_id" value="'.$results[$index]->learning_id.'">';
@@ -212,19 +213,21 @@ if (!class_exists('courses')) {
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
                 $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
                 $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
+/*
                 $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
                 if ($results[$index]->is_witness) {$output .= ' value="true" checked';}
                 $output .= '></td>';
                 $output .= '<td><input type="submit" name="submit_action" value="Sharing"></td>';
+*/                
                 $output .= '</tr>';
-                $output .= '</form>';                
+                //$output .= '</form>';                
                 $TotalHours += floatval($results[$index]->learning_hours);
             }
             /** 
              * course_learnings footer
              */
-            $output .= '<form method="post">';
+            //$output .= '<form method="post">';
             $output .= '<input type="hidden" name="view_mode" value="Learnings">';
             $output .= '<input type="hidden" name="_id" value="'.$_id.'">';
             $output .= '<tr><td>'.'#'.'</td>';
