@@ -211,8 +211,8 @@ if (!class_exists('courses')) {
                 $output .= '<input type="hidden" name="_learning_id" value="'.$results[$index]->learning_id.'">';
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $output .= '<td><input size="20" type="text" name="_learning_title_'.$index.'" value="'.$results[$index]->learning_title.'"></td>';
-                $output .= '<td><input size="1" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
-                $output .= '<td><input size="50" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
+                $output .= '<td><input size="2" type="text" name="_learning_hours_'.$index.'" value="'.$results[$index]->learning_hours.'"></td>';
+                $output .= '<td><input size="60" type="text" name="_learning_link_'.$index.'" value="'.$results[$index]->learning_link.'"></td>';
 /*
                 $output .= '<td><select name="_teaching_id_'.$index.'" style="max-width:80px;">'.self::select_teachings($results[$index]->teaching_id).'</select></td>';
                 $output .= '<td><input type="checkbox" name="_is_witness_'.$index.'"';
