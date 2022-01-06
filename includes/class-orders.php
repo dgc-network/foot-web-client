@@ -65,7 +65,7 @@ if (!class_exists('orders')) {
             }
 
             /** 
-             * course_learnings header
+             * user_course_learnings header
              */
             $current_user_id = get_current_user_id();
             $product = wc_get_product( $_id );
@@ -79,7 +79,7 @@ if (!class_exists('orders')) {
             $output .= '</tbody></table></figure>';
 
             /** 
-             * course learning vs. user detail
+             * user_course_learning detail
              */
             global $wpdb;
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE student_id = {$current_user_id} AND course_id = {$_id}", OBJECT );
@@ -103,14 +103,14 @@ if (!class_exists('orders')) {
                 $output .= '<tr><td>'.($index+1).'</td>';
                 $row = $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE learning_id = {$results[$index]->learning_id}", OBJECT );
                 $output .= '<td><a href="'.$row->learning_link.'">'.$row->learning_title.'</a></td>';
-                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.courses::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
-                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.courses::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
+                $output .= '<td>'.'<select name="_lecturer_id_'.$index.'">'.self::select_lecturers($results[$index]->learning_id, $results[$index]->lecturer_id).'</select></td>';
+                $output .= '<td>'.'<select name="_witness_id_'.$index.'">'.self::select_witnesses($results[$index]->learning_id, $results[$index]->witness_id).'</select></td>';
                 $output .= '</tr>';
             }
             $output .= '</tbody></table></figure>';
             
             /** 
-             * course_learnings footer
+             * user_course_learnings footer
              */
             $output .= '<div class="wp-block-buttons">';
             $output .= '<div class="wp-block-button">';
@@ -180,27 +180,80 @@ if (!class_exists('orders')) {
             return $output;    
         }
 
+        function select_lecturers( $learning_id=null, $default_id=null ) {
+
+            if ($learning_id==null){
+                $output = '<option value="no_select">-- learning id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id}", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($t_results as $t_index => $t_result) {
+                $t_learning_id = $t_results[$t_index]->learning_id;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $results[$index]->student_id == $default_id ) {
+                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
+                    } else {
+                        $output .= '<option value="'.$results[$index]->student_id.'">';
+                    }
+                    $output .= get_userdata($results[$index]->student_id)->display_name;
+                    $output .= '</option>';        
+                }
+                $output .= '<option value="delete_select">-- Remove this --</option>';
+            }
+            return $output;    
+        }
+
+        function select_witnesses( $learning_id=null, $default_id=null ) {
+
+            if ($learning_id==null){
+                $output = '<option value="no_select">-- learning id is required --</option>';
+                return $output;    
+            }
+            global $wpdb;
+            $t_results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}course_learnings WHERE teaching_id={$learning_id} AND is_witness", OBJECT );
+            $output = '<option value="no_select">-- Select an option --</option>';
+            foreach ($t_results as $t_index => $t_result) {
+                $t_learning_id = $t_results[$t_index]->learning_id;
+                $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}user_course_learnings WHERE learning_id={$t_learning_id}", OBJECT );
+                foreach ($results as $index => $result) {
+                    if ( $results[$index]->student_id == $default_id ) {
+                        $output .= '<option value="'.$results[$index]->student_id.'" selected>';
+                    } else {
+                        $output .= '<option value="'.$results[$index]->student_id.'">';
+                    }
+                    $output .= get_userdata($results[$index]->student_id)->display_name;
+                    $output .= '</option>';        
+                }
+                $output .= '<option value="delete_select">-- Remove this --</option>';
+            }
+            return $output;    
+        }
+
         function create_tables() {
         
             global $wpdb;
             $charset_collate = $wpdb->get_charset_collate();
             require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-/*
+
             $sql = "CREATE TABLE `{$wpdb->prefix}user_course_learnings` (
                 u_c_l_id int NOT NULL AUTO_INCREMENT,
                 student_id int NOT NULL,
-                course_id int,
-                learning_id int,
-                learning_date int,
-                lecturer_witness_id int,
+                learning_id int NOT NULL,
+                course_id int NOT NULL,
+                lecturer_id int,
+                lecture_date int,
+                witness_id int,
+                certified_date int,
                 txid varchar(255),
                 is_deleted boolean,
+                teaching_id int,
                 PRIMARY KEY  (u_c_l_id)
             ) $charset_collate;";        
-            dbDelta($sql);
-*/            
-        }
-        
+            dbDelta($sql);            
+        }        
     }
     new orders();
 }
