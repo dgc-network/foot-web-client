@@ -320,6 +320,9 @@ if (!class_exists('courses')) {
             $output .= '<form method="post">';
             $output .= '<figure class="wp-block-table"><table><tbody>';
             $output .= '<tr><td>Title: </td><td>'.$product->get_name().'</td></tr>';
+            $output .= '<tr><td>Created:'.'</td><td>'.$product->get_date_created().'</td></tr>';
+            $output .= '<tr><td>List Price:'.'</td><td>'.$product->get_regular_price().'</td></tr>';
+            $output .= '<tr><td>Sale Price:'.'</td><td>'.$product->get_sale_price().'</td></tr>';
             $output .= '</tbody></table></figure>';
 
             /** 
@@ -366,7 +369,8 @@ if (!class_exists('courses')) {
             //$output .= '<input class="wp-block-button__link" type="submit" value="Submit" name="submit_action">';
             $output .= '</div>';
             $output .= '<div class="wp-block-button">';
-            $output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            //$output .= '<input class="wp-block-button__link" type="submit" value="Cancel" name="submit_action">';
+            $output .= '<input class="wp-block-button__link" type="submit" value="Ok" name="submit_action">';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</form>';
@@ -377,11 +381,12 @@ if (!class_exists('courses')) {
         static function list_mode() {
 
             if( isset($_POST['view_mode']) ) {
-                if ($_POST['view_mode']=='profit_sharing') return self::profit_sharing($_POST['_id']);
-                if ($_POST['view_mode']=='course_learnings') return self::course_learnings($_POST['_id']);
+                //if ($_POST['view_mode']=='profit_sharing') return self::profit_sharing($_POST['_id']);
+                //if ($_POST['view_mode']=='course_learnings') return self::course_learnings($_POST['_id']);
+                //if ($_POST['view_mode']=='item_orders') return self::item_orders($_POST['_id']);
                 if ($_POST['view_mode']=='Learnings') return self::course_learnings($_POST['_id']);
-                if ($_POST['view_mode']=='item_orders') return self::item_orders($_POST['_id']);
                 if ($_POST['view_mode']=='Orders') return self::item_orders($_POST['_id']);
+                if ($_POST['view_mode']=='Sharing') return self::learnings_list($_POST['_id']);
             }
 
             $args = array(
@@ -393,7 +398,7 @@ if (!class_exists('courses')) {
                 
             $output  = '<h2>課程列表</h2>';
             $output .= '<figure class="wp-block-table"><table><tbody>';
-            $output .= '<tr><td>#</td><td>Title</td><td>Course</td><td>Item</td></tr>';
+            $output .= '<tr><td>#</td><td>Title</td><td>Course</td><td>Item</td><td>Profit</td></tr>';
             $loop = new WP_Query( $args );
             while ( $loop->have_posts() ) : $loop->the_post();
                 global $product;
@@ -404,6 +409,7 @@ if (!class_exists('courses')) {
                 $output .= '<td>'.$product->get_name().'</td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Learnings" name="view_mode"></td>';
                 $output .= '<td><input class="wp-block-button__link" type="submit" value="Orders" name="view_mode"></td>';
+                $output .= '<td><input class="wp-block-button__link" type="submit" value="Sharing" name="view_mode"></td>';
                 $output .= '</form>';
                 $output .= '</tr>';
             endwhile;
