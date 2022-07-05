@@ -23,6 +23,7 @@ $channelAccessToken = 'ongg0SgvMZjDQlO3qHvSvGBU/JyMlz2GBiRi9t7iUBHXqZIZAioD9Im7g
 $channelSecret = '1bd1c2ac3b3a36399de32f5a83f135c0';
 
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
+/*
 foreach ($client->parseEvents() as $event) {
     switch ($event['type']) {
         case 'message':
@@ -51,3 +52,4 @@ foreach ($client->parseEvents() as $event) {
             break;
     }
 };
+*/
