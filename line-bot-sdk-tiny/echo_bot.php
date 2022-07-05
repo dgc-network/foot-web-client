@@ -23,7 +23,7 @@ $channelAccessToken = 'ongg0SgvMZjDQlO3qHvSvGBU/JyMlz2GBiRi9t7iUBHXqZIZAioD9Im7g
 $channelSecret = '1bd1c2ac3b3a36399de32f5a83f135c0';
 
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
-var_dump($client);
+var_dump($client->parseEvents());
 /*
 foreach ($client->parseEvents() as $event) {
     
