@@ -17,7 +17,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-//include_once dirname( __FILE__ ) . '/includes/class-timeslots.php';
+include_once dirname( __FILE__ ) . '/line-bot-sdk-tiny/echo_bot.php';
 //include_once dirname( __FILE__ ) . '/includes/class-calendars.php';
 //include_once dirname( __FILE__ ) . '/includes/class-badges.php';
 include_once dirname( __FILE__ ) . '/includes/class-orders.php';
