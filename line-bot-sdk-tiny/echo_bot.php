@@ -23,9 +23,10 @@ $channelAccessToken = 'ongg0SgvMZjDQlO3qHvSvGBU/JyMlz2GBiRi9t7iUBHXqZIZAioD9Im7g
 $channelSecret = '1bd1c2ac3b3a36399de32f5a83f135c0';
 
 $client = new LINEBotTiny($channelAccessToken, $channelSecret);
-
+var_dump($client);
+/*
 foreach ($client->parseEvents() as $event) {
-    /*
+    
     switch ($event['type']) {
         case 'message':
             $message = $event['message'];
@@ -52,5 +53,5 @@ foreach ($client->parseEvents() as $event) {
             error_log('Unsupported event type: ' . $event['type']);
             break;
     }
-    */
+    
 };
