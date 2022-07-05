@@ -17,7 +17,7 @@
  */
 
 //require_once('./LINEBotTiny.php');
-include_once dirname( __FILE__ ) . '/line-bot-sdk-tiny/LINEBotTiny.php';
+include_once dirname( __FILE__ ) . '/LINEBotTiny.php';
 
 $channelAccessToken = 'ongg0SgvMZjDQlO3qHvSvGBU/JyMlz2GBiRi9t7iUBHXqZIZAioD9Im7gJ6MYLBA/Aq5BupS6HEd6U/cxDKvstGnUWPfHcQ9OEpQ3QGK44BUzAkp7s3CXP0G4h2C0/o1UO7xpmiI3RelAJhTWK8khQdB04t89/1O/w1cDnyilFU=';
 $channelSecret = '1bd1c2ac3b3a36399de32f5a83f135c0';
