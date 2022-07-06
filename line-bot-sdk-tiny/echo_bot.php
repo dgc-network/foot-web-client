@@ -27,8 +27,12 @@ $client = new LINEBotTiny($channelAccessToken, $channelSecret);
 foreach ($client->parseEvents() as $event) {
     $getsource = $event['source'];
     $usr_id = $getsource['userId'];
-    $usr_name = $getsource['displayName'];
-        
+    $response = wp_remote_get( 'https://api.line.me/v2/bot/profile/'.$usr_id, array(
+        'header'    => array(
+            'Authentication'    => 'Bearer '.$channelAccessToken
+        )
+    ));
+
     switch ($event['type']) {
         case 'message':
             $message = $event['message'];
@@ -41,7 +45,8 @@ foreach ($client->parseEvents() as $event) {
                         'messages' => [
                             [
                                 'type' => 'text',
-                                'text' => $usr_name.':'.$message['text']
+                                //'text' => $usr_id.':'.$message['text']
+                                'text' => $response
                             ]
                         ]
                     ]);
