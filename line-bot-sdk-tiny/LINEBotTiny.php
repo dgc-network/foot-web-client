@@ -84,7 +84,7 @@ class LINEBotTiny
             error_log('Method not allowed');
             exit();
         }
-
+/*
         $entityBody = file_get_contents('php://input');
 
         if ($entityBody === false || strlen($entityBody) === 0) {
@@ -106,7 +106,7 @@ class LINEBotTiny
             exit();
         }
         return $data['events'];
-        
+*/        
     }
 
     /**
