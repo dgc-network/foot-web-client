@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 include_once dirname( __FILE__ ) . '/line-bot-sdk-tiny/LINEBotTiny.php';
-//include_once dirname( __FILE__ ) . '/line-bot-sdk-tiny/echo_bot.php';
+include_once dirname( __FILE__ ) . '/line-bot-sdk-tiny/echo_bot.php';
 
 //include_once dirname( __FILE__ ) . '/includes/class-orders.php';
 //include_once dirname( __FILE__ ) . '/includes/class-courses.php';
