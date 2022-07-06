@@ -83,31 +83,34 @@ class LINEBotTiny
             http_response_code(405);
             error_log('Method not allowed');
             //exit();
-            exit;
+            return;
         }
-/*
+
         $entityBody = file_get_contents('php://input');
 
         if ($entityBody === false || strlen($entityBody) === 0) {
             http_response_code(400);
             error_log('Missing request body');
-            exit();
+            //exit();
+            return;
         }
 
         if (!hash_equals($this->sign($entityBody), $_SERVER['HTTP_X_LINE_SIGNATURE'])) {
             http_response_code(400);
             error_log('Invalid signature value');
-            exit();
+            //exit();
+            return;
         }
 
         $data = json_decode($entityBody, true);
         if (!isset($data['events'])) {
             http_response_code(400);
             error_log('Invalid request body: missing events property');
-            exit();
+            //exit();
+            return;
         }
         return $data['events'];
-*/        
+   
     }
 
     /**
