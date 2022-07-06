@@ -83,6 +83,7 @@ class LINEBotTiny
             http_response_code(405);
             error_log('Method not allowed');
             //exit();
+            exit;
         }
 /*
         $entityBody = file_get_contents('php://input');
