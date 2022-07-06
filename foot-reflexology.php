@@ -85,6 +85,7 @@ add_action( 'admin_menu', 'my_register_menu_page' );
 /**
  * Add product categories.
  */
+/*
 wp_insert_term( 'Courses', 'product_cat', array(
     'description' => 'Description for category',
     'parent' => 0,
@@ -102,7 +103,7 @@ wp_insert_term( 'Reservation', 'product_cat', array(
     'parent' => 0,
     'slug' => 'reservation'
 ) );
-
+*/
 /**
  * Load jQuery datepicker.
  *
@@ -123,7 +124,7 @@ add_action( 'wp_enqueue_scripts', 'wpse_enqueue_datepicker' );
 /**
  * Automatically add product to cart on visit
  */
-add_action( 'template_redirect', 'add_product_to_cart' );
+//add_action( 'template_redirect', 'add_product_to_cart' );
 function add_product_to_cart($product_id = 295) {
 	if ( ! is_admin() ) {
 		//$product_id = 295; //replace with your own product id
