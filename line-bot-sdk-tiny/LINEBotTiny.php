@@ -83,19 +83,9 @@ class LINEBotTiny
             error_log('Method not allowed');
             exit();
         }
-
+/*
         $entityBody = file_get_contents('php://input');
-/*        
-        global $wp_filesystem;
-        if (empty($wp_filesystem)) {
-            require_once (ABSPATH . '/wp-admin/includes/file.php');
-            WP_Filesystem();
-        }
 
-        //$raw_post_data  = file_get_contents('php://input');
-        //$entityBody = file_get_contents('php://input');
-        $entityBody =  $wp_filesystem->get_contents('php://input');
-*/
         if ($entityBody === false || strlen($entityBody) === 0) {
             http_response_code(400);
             error_log('Missing request body');
@@ -115,6 +105,7 @@ class LINEBotTiny
             exit();
         }
         return $data['events'];
+*/        
     }
 
     /**
