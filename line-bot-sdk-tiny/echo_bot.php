@@ -46,7 +46,7 @@ foreach ($client->parseEvents() as $event) {
                             [
                                 'type' => 'text',
                                 //'text' => $usr_id.':'.$message['text']
-                                'text' => $response
+                                'text' => var_dump($response)
                             ]
                         ]
                     ]);
