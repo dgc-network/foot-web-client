@@ -78,12 +78,13 @@ class LINEBotTiny
      */
     public function parseEvents()
     {
+/*        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             error_log('Method not allowed');
             exit();
         }
-/*
+
         $entityBody = file_get_contents('php://input');
 
         if ($entityBody === false || strlen($entityBody) === 0) {
