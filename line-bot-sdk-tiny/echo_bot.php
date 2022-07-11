@@ -50,10 +50,10 @@ foreach ($client->parseEvents() as $event) {
                             ],
                             array(
                                 'type' => 'image', //訊息類型 (圖片)
-                                //'originalContentUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png', //回覆圖片
-                                //'previewImageUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png' //回覆的預覽圖片
-                                'originalContentUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png', //回覆圖片
-                                'previewImageUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png' //回覆的預覽圖片
+                                'originalContentUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png', //回覆圖片
+                                'previewImageUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png' //回覆的預覽圖片
+                                //'originalContentUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png', //回覆圖片
+                                //'previewImageUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png' //回覆的預覽圖片
                                 
                             )
                         ]
