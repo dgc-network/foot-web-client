@@ -47,8 +47,13 @@ foreach ($client->parseEvents() as $event) {
                                 'type' => 'text',
                                 'text' => $usr_id.':'.$message['text']
                                 //'text' => var_dump($response)
-                            ]
-                        ]
+                            ],
+                            array(
+                                'type' => 'image', //訊息類型 (圖片)
+                                'originalContentUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png', //回覆圖片
+                                'previewImageUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png' //回覆的預覽圖片
+                            )
+                                        ]
                     ]);
                     break;
                 default:
