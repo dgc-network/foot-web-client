@@ -27,12 +27,22 @@ $client = new LINEBotTiny($channelAccessToken, $channelSecret);
 foreach ($client->parseEvents() as $event) {
     $getsource = $event['source'];
     $usr_id = $getsource['userId'];
+/*
+    $response = $bot->getProfile('<userId>');
+    if ($response->isSucceeded()) {
+        $profile = $response->getJSONDecodedBody();
+        echo $profile['displayName'];
+        echo $profile['pictureUrl'];
+        echo $profile['statusMessage'];
+    }
+*/
+/*    
     $response = wp_remote_get( 'https://api.line.me/v2/bot/profile/'.$usr_id, array(
         'header'    => array(
             'Authentication'    => 'Bearer '.$channelAccessToken
         )
     ));
-
+*/
     switch ($event['type']) {
         case 'message':
             $message = $event['message'];
@@ -46,16 +56,7 @@ foreach ($client->parseEvents() as $event) {
                             [
                                 'type' => 'text',
                                 'text' => $usr_id.':'.$message['text']
-                                //'text' => var_dump($response)
-                            ],
-                            array(
-                                'type' => 'image', //訊息類型 (圖片)
-                                'originalContentUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png', //回覆圖片
-                                'previewImageUrl' => 'https://api.reh.tw/images/gonetone/logos/icons/icon-256x256.png' //回覆的預覽圖片
-                                //'originalContentUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png', //回覆圖片
-                                //'previewImageUrl' => 'http://www.scouting.tw/wp-content/uploads/2022/05/%E8%8F%AF%E5%B2%A1%E7%AB%A5%E8%BB%8D.png' //回覆的預覽圖片
-                                
-                            )
+                            ]
                         ]
                     ]);
                     break;
